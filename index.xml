@@ -5,19 +5,30 @@
     <link>https://yike5460.github.io/</link>
     <description>Recent content on Aaron&#39;s Notes</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh_CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Wed, 24 Apr 2019 01:21:39 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 26 Apr 2019 18:27:45 +0800</lastBuildDate>
     
 	<atom:link href="https://yike5460.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>First Message</title>
-      <link>https://yike5460.github.io/post/first-message/</link>
+      <title></title>
+      <link>https://yike5460.github.io/post/tech-arch-of-cosp-and-it/</link>
+      <pubDate>Fri, 26 Apr 2019 18:27:45 +0800</pubDate>
+      
+      <guid>https://yike5460.github.io/post/tech-arch-of-cosp-and-it/</guid>
+      <description> 五分钟见解-运营商和IT公司的技术栈 运营商从过去到现在，承担基础设施并为上层应用提供数据管道，其基本业务仍聚焦在通信行业，比如终端用户的通信费用，企业用户的租赁费用等，CPU等资源虚拟化的兴起让运营商通过白盒（COTS）实现原有业务，扩容新增业务，更新业务架构等在技术上得以实现，从而降低了以往采购路由器，服务器以及周边配件的费用（CAPEX），也降低了前期业务部署，扩容，运维等一系列的人员开销和部署难度（OPEX），缩短了业务的上线时间，提高了整体基础设施的鲁棒性。技术栈来看，除了不断演进的基础的IGP/BGP协议，MPLS/IPSec隧道协议，L4-L7层应用层协议，还有ETSI划定的一系列NFV标准，定义了MANO/VNF/NFVi为基础的软件架构，接口标准（Restful）以及对接OSS/BSS的逻辑。我们看到ONAP为代表的Orchestrator，vGW/vFW等的VNF应用，底层NFVi的开源（OpenStack）或商用项目，运营商的原业务迁移，新业务上云和新市场扩展有了一个相对清晰方向。SDN则提供了集中式控制平面，底层相关的转发协议（Openflow），实现了传统L2/L3层的数据业务打通。
+大的IT厂商利用现有的基础设施，为自身以及其他企业，个人用户提供PaaS/SaaS服务（还记得OTT吗），这里我狭义指的就是公有云/混合云，在这个大的背景下的技术栈更多的体现在云计算，云存储，分布式系统（K-V，存储等），容器，横向的web前端数据库后端的解决方案，垂直行业的业务划分和技术实现等，在上述的零零总总的大方向上引申出来更多背后的技术体系，云计算方面包括基础如KVM/QEMU/Virt-IO/vhost，消息中间件如kafka，rabbitMQ，系统调优如CPU绑定隔离/NUMA亲和/Cache管理等；云存储方面包括存储协议如iSCSI，NVMe，RDMA，端到端硬件如x86/ARM，存储级内存（DCPMM），SATA，SSD，SmartNIC，分布式系统如Ceph，Redis/Memcached，数据库SQL/NoSQL（DynamoDB）等，容器方面包括应用场景上的微服务，支持技术的docker/K8S/Rancher以及数量众多的开源项目。
+5G的到来为上层的应用提供了诸多遐想的空间，AI/IoT/BigData等技术领域，医疗/自动驾驶/零售等垂直行业都是未来IT厂商可以期待的新的利润点，但对于通信运营商来说，如何实现自己的业务转型和开拓新的市场是一个需要解决的的问题。
+下面列出个人整理的云计算和云存储的技术框架： </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://yike5460.github.io/post/notes-about-mec-whitepaper/</link>
       <pubDate>Wed, 24 Apr 2019 01:21:39 +0800</pubDate>
       
-      <guid>https://yike5460.github.io/post/first-message/</guid>
+      <guid>https://yike5460.github.io/post/notes-about-mec-whitepaper/</guid>
       <description>五分钟笔记-《边缘云计算技术及标准化白皮书》 原白皮书链接： www.cesi.cn/images/editor/20181214/20181214115429307.pdf
 文章给出的边缘云的定义如下：
  边缘云计算定义为： 边缘云计算， 简称边缘云，是基于云计算技术的核心和边缘计算的能力，构筑在边缘基础设施之上的云计算平台。形成边缘位置的计算、网络、存储、安全等能力全面的弹性云平台，并与中心云和物联网终端形成“云边端三体协同” 的端到端的技术架构，通过将网络转发、存储、计算，智能化数据分析等工作放在边缘处理，降低响应时延、减轻云端压力、降低带宽成本，并提供全网调度、 算力分发等云服务。
