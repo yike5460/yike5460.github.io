@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Abouts on Aaron&#39;s Notes</title>
+    <link>https://www.cloudnotes.cc/about/</link>
+    <description>Recent content in Abouts on Aaron&#39;s Notes</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>All rights reserved - 2019</copyright>
+    <lastBuildDate>Sat, 27 Apr 2019 00:55:10 +0800</lastBuildDate>
+    
+	<atom:link href="https://www.cloudnotes.cc/about/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>tech enthusiast, try to summarize all mess into a tree</title>
+      <link>https://www.cloudnotes.cc/about/me/</link>
+      <pubDate>Sat, 27 Apr 2019 00:55:10 +0800</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/about/me/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

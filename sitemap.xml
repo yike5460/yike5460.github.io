@@ -3,6 +3,16 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://www.cloudnotes.cc/about/me/</loc>
+    <lastmod>2019-04-27T00:55:10+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://www.cloudnotes.cc/book/2019-booklist/</loc>
+    <lastmod>2019-04-27T00:46:37+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://www.cloudnotes.cc/post/tech-arch-of-cosp-and-it/</loc>
     <lastmod>2019-04-26T18:27:45+08:00</lastmod>
   </url>
@@ -14,7 +24,19 @@
   
   <url>
     <loc>https://www.cloudnotes.cc/</loc>
-    <lastmod>2019-04-26T18:27:45+08:00</lastmod>
+    <lastmod>2019-04-27T00:55:10+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.cloudnotes.cc/about/</loc>
+    <lastmod>2019-04-27T00:55:10+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.cloudnotes.cc/book/</loc>
+    <lastmod>2019-04-27T00:46:37+08:00</lastmod>
     <priority>0</priority>
   </url>
   
