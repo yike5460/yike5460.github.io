@@ -3,6 +3,16 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://www.cloudnotes.cc/post/where-to-post/</loc>
+    <lastmod>2019-04-27T18:35:16+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://www.cloudnotes.cc/post/notes-about-hybrid-whitepaper/</loc>
+    <lastmod>2019-04-27T18:24:02+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://www.cloudnotes.cc/post/cloud-computing/</loc>
     <lastmod>2019-04-27T01:07:49+08:00</lastmod>
   </url>
@@ -29,7 +39,7 @@
   
   <url>
     <loc>https://www.cloudnotes.cc/</loc>
-    <lastmod>2019-04-27T01:07:49+08:00</lastmod>
+    <lastmod>2019-04-27T18:35:16+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -52,7 +62,7 @@
   
   <url>
     <loc>https://www.cloudnotes.cc/post/</loc>
-    <lastmod>2019-04-27T01:07:49+08:00</lastmod>
+    <lastmod>2019-04-27T18:35:16+08:00</lastmod>
     <priority>0</priority>
   </url>
   
