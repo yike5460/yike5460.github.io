@@ -17,7 +17,7 @@
       <pubDate>Mon, 14 Jan 2019 00:00:00 +0000</pubDate>
       
       <guid>https://www.cloudnotes.cc/post/build-ip-san/</guid>
-      <description>拓扑 两个节点，一个initiator，一个target，中间通过交换机或者网线直连 initiator(192.168.1.100) &amp;lt;——–&amp;gt; target (192.168.1.200) 安装配置 target # apt-cache search scsi | grep target # apt-get install</description>
+      <description>拓扑 两个节点，一个initiator，一个target，中间通过交换机或者网线直连 initiator(192.168.1.100) &amp;lt;——–&amp;gt; target (192.168.1.200) 安装配置 ###target # apt-cache search scsi | grep target # apt-get install</description>
     </item>
     
   </channel>

@@ -205,7 +205,6 @@
 <ul>
 <li><a href="#拓扑">拓扑</a></li>
 <li><a href="#安装配置">安装配置</a></li>
-<li><a href="#虚拟出一块10g的磁盘">虚拟出一块10G的磁盘</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -220,14 +219,14 @@
 
 <h2 id="安装配置">安装配置</h2>
 
-<p>target</p>
+<p>###target</p>
 
 <pre><code class="language-shell"># apt-cache search scsi | grep target
 # apt-get install tgt
 # mkdir -p /var/lib/iscsi_disks
 </code></pre>
 
-<h2 id="虚拟出一块10g的磁盘">虚拟出一块10G的磁盘</h2>
+<p>虚拟出一块10G的磁盘</p>
 
 <pre><code class="language-shell"># dd if=/dev/zero of=/var/lib/iscsi_disks/disk01.img count=0 bs=1 seek=10G
 # vim /etc/tgt/conf.d/target01.conf
@@ -284,8 +283,11 @@ Account information:
 ACL information:
 ALL
 iqn.2019-01.net.aaron2cloud.blog:initiator01
-initiator
-# apt-get install open-iscsi
+</code></pre>
+
+<p>###initiator</p>
+
+<pre><code class="language-shell"># apt-get install open-iscsi
 # vim /etc/iscsi/iscsid.conf （注意这里的user/pass需要和target配置对应，作为鉴权信息）
 # To enable CHAP authentication set node.session.auth.authmethod
 # to CHAP. The default is None.
