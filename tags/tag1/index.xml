@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Books on Aaron&#39;s Notes</title>
-    <link>https://www.cloudnotes.cc/book/</link>
-    <description>Recent content in Books on Aaron&#39;s Notes</description>
+    <title>Tag1 on Aaron&#39;s Notes</title>
+    <link>https://www.cloudnotes.cc/tags/tag1/</link>
+    <description>Recent content in Tag1 on Aaron&#39;s Notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 04 Jun 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://www.cloudnotes.cc/book/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.cloudnotes.cc/tags/tag1/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -18,6 +18,15 @@
       
       <guid>https://www.cloudnotes.cc/book/2019-booklist/</guid>
       <description>2019书单（待更新） 技术 软件定义网络 分布式对象存储&amp;ndash;原理，架构及Go语言实现 TensorFlow技术解析与实战 大规模分布式存储</description>
+    </item>
+    
+    <item>
+      <title>An Example Post</title>
+      <link>https://www.cloudnotes.cc/post/read/</link>
+      <pubDate>Mon, 04 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/post/read/</guid>
+      <description></description>
     </item>
     
   </channel>

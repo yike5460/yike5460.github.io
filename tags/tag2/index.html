@@ -15,9 +15,9 @@
     
 
     
-    <meta name="title" content="五分钟见解-运营商和IT公司的技术栈" />
-    <meta property="og:title" content="五分钟见解-运营商和IT公司的技术栈" />
-    <meta property="twitter:title" content="五分钟见解-运营商和IT公司的技术栈" />
+    <meta name="title" content="" />
+    <meta property="og:title" content="" />
+    <meta property="twitter:title" content="" />
     
 
     
@@ -34,9 +34,9 @@
     <meta name="keyword"  content="cloud computing, distributed system, container, lazy shell tools">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>五分钟见解-运营商和IT公司的技术栈-Aaron&#39;s Notes</title>
+    <title>Tag2-Aaron&#39;s Notes</title>
 
-    <link rel="canonical" href="/post/tech-arch-of-cosp-and-it/">
+    <link rel="canonical" href="/tags/tag2/">
 
     <link rel="stylesheet" href="/css/iDisqus.min.css"/>
 	
@@ -147,31 +147,14 @@
 
 
 
-
-<style type="text/css">
-    header.intro-header {
-        background-image: url('/media/cover.jpg')
-    }
-</style>
-<header class="intro-header">
+<header class="intro-header" style="background-image: url('/media/cover.jpg')">
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="post-heading">
-                    <div class="tags">
-                        
-                    </div>
-                    <h1>五分钟见解-运营商和IT公司的技术栈</h1>
-                    <h2 class="subheading"></h2>
-                    <span class="meta">
-			Posted by 
-			
-		            Aaron&#39;s Notes
-			 
-			on 
-			Friday, April 26, 2019
-                        
-                    </span>
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
+                <div class="site-heading">
+                    <h1>Aaron&#39;s Notes </h1>
+                    
+		    <span class="subheading">Just Write It!</span>
                 </div>
             </div>
         </div>
@@ -180,103 +163,159 @@
 
 
 
-
-<article>
-    <div class="container">
-        <div class="row">
-
+  
+<div class="container">
+    <div class="row">
+        
+        
+   	    <div class="
+            col-lg-8 col-lg-offset-1
+            col-md-8 col-md-offset-1
+            col-sm-12
+            col-xs-12
+            post-container
+        ">
             
-            <div class="
-                col-lg-8 col-lg-offset-2
-                col-md-10 col-md-offset-1
-                post-container">
 
-                
-                <header>
-                    <h2>TOC</h2>
-                </header>
-                
-                
-                <p>运营商从过去到现在，承担基础设施并为上层应用提供数据管道，其基本业务仍聚焦在通信行业，比如终端用户的通信费用，企业用户的租赁费用等，CPU等资源虚拟化的兴起让运营商通过白盒（COTS）实现原有业务，扩容新增业务，更新业务架构等在技术上得以实现，从而降低了以往采购路由器，服务器以及周边配件的费用（CAPEX），也降低了前期业务部署，扩容，运维等一系列的人员开销和部署难度（OPEX），缩短了业务的上线时间，提高了整体基础设施的鲁棒性。技术栈来看，除了不断演进的基础的IGP/BGP协议，MPLS/IPSec隧道协议，L4-L7层应用层协议，还有ETSI划定的一系列NFV标准，定义了MANO/VNF/NFVi为基础的软件架构，接口标准（Restful）以及对接OSS/BSS的逻辑。我们看到ONAP为代表的Orchestrator，vGW/vFW等的VNF应用，底层NFVi的开源（OpenStack）或商用项目，运营商的原业务迁移，新业务上云和新市场扩展有了一个相对清晰方向。SDN则提供了集中式控制平面，底层相关的转发协议（Openflow），实现了传统L2/L3层的数据业务打通。</p>
-
-<p>大的IT厂商利用现有的基础设施，为自身以及其他企业，个人用户提供PaaS/SaaS服务（还记得OTT吗），这里我狭义指的就是公有云/混合云，在这个大的背景下的技术栈更多的体现在云计算，云存储，分布式系统（K-V，存储等），容器，横向的web前端数据库后端的解决方案，垂直行业的业务划分和技术实现等，在上述的零零总总的大方向上引申出来更多背后的技术体系，云计算方面包括基础如KVM/QEMU/Virt-IO/vhost，消息中间件如kafka，rabbitMQ，系统调优如CPU绑定隔离/NUMA亲和/Cache管理等；云存储方面包括存储协议如iSCSI，NVMe，RDMA，端到端硬件如x86/ARM，存储级内存（DCPMM），SATA，SSD，SmartNIC，分布式系统如Ceph，Redis/Memcached，数据库SQL/NoSQL（DynamoDB）等，容器方面包括应用场景上的微服务，支持技术的docker/K8S/Rancher以及数量众多的开源项目。</p>
-
-<p>5G的到来为上层的应用提供了诸多遐想的空间，AI/IoT/BigData等技术领域，医疗/自动驾驶/零售等垂直行业都是未来IT厂商可以期待的新的利润点，但对于通信运营商来说，如何实现自己的业务转型和开拓新的市场是一个需要解决的的问题。</p>
-
-<p>下面列出个人整理的云计算和云存储的技术框架：
-<img src="/media/cloud-compute-tech-arch.png" alt="cloud compute tech arch" title="cloud compute tech arch" /></p>
-
-<p><img src="/media/cloud-storage-tech-arch.png" alt="cloud storage tech arch" title="cloud storage tech arch" /></p>
-
-
-                
-
-                <hr>
-                <ul class="pager">
-                    
-                    <li class="previous">
-                        <a href="/post/notes-about-mec-whitepaper/" data-toggle="tooltip" data-placement="top" title="五分钟笔记-《边缘云计算技术及标准化白皮书》">&larr;
-                            Previous Post</a>
-                    </li>
-                    
-                    
-                    <li class="next">
-                        <a href="/post/cloud-computing/" data-toggle="tooltip" data-placement="top" title="五分钟见解-云计算">Next
-                            Post &rarr;</a>
-                    </li>
-                    
-                </ul>
-
-                
-<div id="disqus-comment"></div>
-
-
-
-            </div>
+<div class="post-preview">
+    <a href="https://www.cloudnotes.cc/post/read/">
+        <h2 class="post-title">
+            An Example Post
+        </h2>
+	
+        <div class="post-content-preview">
+	
             
-            <div class="
-                col-lg-8 col-lg-offset-2
-                col-md-10 col-md-offset-1
-                sidebar-container">
-
-                
-                
-                <section>
-                    <hr class="hidden-sm hidden-xs">
-                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
-                    <div class="tags">
-                        
-                        
-                        
-                        <a href="/tags/tag1" title="tag1">
-                            tag1
-                        </a>
-                        
-                        
-                        
-                        <a href="/tags/tag2" title="tag2">
-                            tag2
-                        </a>
-                        
-                        
-                    </div>
-                </section>
-                
-
-                
-                
-                <section>
-                    <hr>
-                    <h5>FRIENDS</h5>
-                    <ul class="list-inline">
-                        
-                    </ul>
-                </section>
-                
-            </div>
+       
         </div>
-    </div>
-</article>
+    </a>
+    <p class="post-meta">
+    Posted by      &#34;&#34; Monday, June 4, 2018
+    </p>
+</div>
+<hr>
+
+
+            
+
+
+
+       	</div>
+        
+
+<div class="
+    col-lg-3 col-lg-offset-0
+    col-md-3 col-md-offset-0
+    col-sm-12
+    col-xs-12
+    sidebar-container
+">
+    
+    
+    <section>
+        <hr class="hidden-sm hidden-xs">
+        <h5>FEATURED TAGS</h5>
+        <div class="tags">
+             
+            
+                
+                    <a href="/tags/tag1" title="tag1">
+                        tag1
+                    </a>
+                
+            
+                
+                    <a href="/tags/tag2" title="tag2">
+                        tag2
+                    </a>
+                
+            
+        </div>
+    </section>
+    
+
+    
+	
+    <section class="visible-md visible-lg">
+	<hr><h5><a href="/top/about">ABOUT ME</a></h5>
+        <div class="short-about">
+            
+            <a href="/top/about">
+               <img src="/media/avatar.jpg" alt="avatar" style="cursor: pointer" />
+            </a>
+            
+            
+                <p>Hands-on Coder &amp; Speaker</p>
+            
+           
+           <ul class="list-inline"> 
+               
+               <li>
+                   <a href="https://www.cloudnotes.cc/tags/tag2/index.xml" rel="alternate" type="application/rss+xml" title="Aaron&#39;s Notes" >
+                       <span class="fa-stack fa-lg">
+                           <i class="fa fa-circle fa-stack-2x"></i>
+                           <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                       </span>
+                   </a>
+               </li>
+               
+               
+               
+               
+               
+               
+               <li>
+                   <a target="_blank" href="/your%20wechat%20qr%20code%20image">
+                       <span class="fa-stack fa-lg">
+                           <i class="fa fa-circle fa-stack-2x"></i>
+                           <i class="fa fa-wechat fa-stack-1x fa-inverse"></i>
+                       </span>
+                   </a>
+               </li>
+               
+               
+               <li>
+                   <a target="_blank" href="https://github.com/yourgithub">
+                       <span class="fa-stack fa-lg">
+                           <i class="fa fa-circle fa-stack-2x"></i>
+                           <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                       </span>
+                   </a>
+               </li>
+               
+               
+               <li>
+                   <a target="_blank" href="https://www.linkedin.com/in/yourlinkedinid">
+                       <span class="fa-stack fa-lg">
+                           <i class="fa fa-circle fa-stack-2x"></i>
+                           <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                       </span>
+                   </a>
+               </li>
+               
+               
+                </ul>
+            </div>
+    </section>
+	
+    
+    
+    <section>
+        <hr class="hidden-sm hidden-xs">
+        <h5>FRIENDS</h5>
+        <ul class="list-inline">
+            
+        </ul>
+    </section>
+    
+
+    
+    
+</div>
+
+	</div>
+</div>
+
 
 
 
@@ -288,7 +327,7 @@
                 <ul class="list-inline text-center">
                    
                    <li>
-                       <a href="" rel="alternate" type="application/rss+xml" title="Aaron&#39;s Notes" >
+                       <a href="https://www.cloudnotes.cc/tags/tag2/index.xml" rel="alternate" type="application/rss+xml" title="Aaron&#39;s Notes" >
                            <span class="fa-stack fa-lg">
                                <i class="fa fa-circle fa-stack-2x"></i>
                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>

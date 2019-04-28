@@ -66,12 +66,21 @@
     </item>
     
     <item>
-      <title></title>
+      <title>An Example Post</title>
       <link>https://www.cloudnotes.cc/book/2019-booklist/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 04 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>https://www.cloudnotes.cc/book/2019-booklist/</guid>
       <description>2019书单（待更新） 技术 软件定义网络 分布式对象存储&amp;ndash;原理，架构及Go语言实现 TensorFlow技术解析与实战 大规模分布式存储</description>
+    </item>
+    
+    <item>
+      <title>An Example Post</title>
+      <link>https://www.cloudnotes.cc/post/read/</link>
+      <pubDate>Mon, 04 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/post/read/</guid>
+      <description></description>
     </item>
     
   </channel>
