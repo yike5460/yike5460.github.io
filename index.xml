@@ -75,12 +75,39 @@
     </item>
     
     <item>
-      <title>An Example Post</title>
-      <link>https://www.cloudnotes.cc/post/read/</link>
-      <pubDate>Mon, 04 Jun 2018 00:00:00 +0000</pubDate>
+      <title>virtio前后端数据结构</title>
+      <link>https://www.cloudnotes.cc/post/virtio-front-back-flow/</link>
+      <pubDate>Tue, 12 Mar 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://www.cloudnotes.cc/post/read/</guid>
-      <description></description>
+      <guid>https://www.cloudnotes.cc/post/virtio-front-back-flow/</guid>
+      <description>vring内存layout如下： virtio前后端代码逻辑如下： 主要函数功能： virtqueue_pop： 1.创建VirtQueueElem</description>
+    </item>
+    
+    <item>
+      <title>搭个redis cluster</title>
+      <link>https://www.cloudnotes.cc/post/build-redis-cluster/</link>
+      <pubDate>Thu, 21 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/post/build-redis-cluster/</guid>
+      <description>Redis由C语言开发，作为分布式K-V和内存型数据库代表，其单进程单线程模型，丰富的value数据类型提供给了用户更快的存取速度和完善的业</description>
+    </item>
+    
+    <item>
+      <title>搭个ip-san（iscsi）</title>
+      <link>https://www.cloudnotes.cc/post/build-ip-san/</link>
+      <pubDate>Mon, 14 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/post/build-ip-san/</guid>
+      <description>拓扑 两个节点，一个initiator，一个target，中间通过交换机或者网线直连 initiator(192.168.1.100) &amp;lt;——–&amp;gt; target (192.168.1.200) 安装配置 target # apt-cache search scsi | grep target # apt-get install</description>
+    </item>
+    
+    <item>
+      <title>聊聊CDN中的加速</title>
+      <link>https://www.cloudnotes.cc/post/talk-about-cdn/</link>
+      <pubDate>Wed, 09 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/post/talk-about-cdn/</guid>
+      <description>什么是CDN CDN全称是content distribution network即内容分发网络的缩写，旨在将原有集中式源站提供文字，图片，视频，文件等资源的方式，改变</description>
     </item>
     
   </channel>

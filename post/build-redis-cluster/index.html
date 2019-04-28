@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+    <meta property="og:site_name" content="Aaron&#39;s Notes">
+    <meta property="og:type" content="article">
+
+    
+    <meta property="og:image" content="https://www.cloudnotes.cc/media/cover.jpg">
+    <meta property="twitter:image" content="https://www.cloudnotes.cc/media/cover.jpg" />
+    
+
+    
+    <meta name="title" content="搭个redis cluster" />
+    <meta property="og:title" content="搭个redis cluster" />
+    <meta property="twitter:title" content="搭个redis cluster" />
+    
+
+    
+    <meta name="description" content="人到中年，容易忘事，做点笔记方便以后查阅">
+    <meta property="og:description" content="人到中年，容易忘事，做点笔记方便以后查阅" />
+    <meta property="twitter:description" content="人到中年，容易忘事，做点笔记方便以后查阅" />
+    
+
+    
+    <meta property="twitter:card" content="summary" />
+    
+    
+
+    <meta name="keyword"  content="cloud computing, distributed system, container, lazy shell tools">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>搭个redis cluster-Aaron&#39;s Notes</title>
+
+    <link rel="canonical" href="/post/build-redis-cluster/">
+
+    <link rel="stylesheet" href="/css/iDisqus.min.css"/>
+	
+    
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    
+    <link rel="stylesheet" href="/css/zanshang.css">
+
+    
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    
+    
+    <script src="/js/jquery.min.js"></script>
+    
+    
+    <script src="/js/bootstrap.min.js"></script>
+    
+    
+    <script src="/js/hux-blog.min.js"></script>
+	
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/docco.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Aaron&#39;s Notes</a>
+        </div>
+
+        
+        
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    
+		    
+                        <li><a href="/book/2019-booklist/">BOOK</a></li>
+                    
+                        <li><a href="/about/me/">ABOUT</a></li>
+                    
+
+                    
+		    <li>
+                        <a href="/search">SEARCH <img src="/img/search.png" height="15" style="cursor: pointer;" alt="Search"></a>
+		    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+    
+</nav>
+<script>
+    
+    
+    
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        
+            $navbar.className = " ";
+            
+            setTimeout(function(){
+                
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+
+
+<style type="text/css">
+    header.intro-header {
+        background-image: url('/media/cover.jpg')
+    }
+</style>
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/redis" title="redis">
+                            redis
+                        </a>
+                        
+                        <a class="tag" href="/tags/hands-on" title="hands-on">
+                            hands-on
+                        </a>
+                        
+                    </div>
+                    <h1>搭个redis cluster</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+			Posted by 
+			
+			         &#34;Aaron&#34;
+			 
+			on 
+			Thursday, February 21, 2019
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+<article>
+    <div class="container">
+        <div class="row">
+
+            
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                
+                <header>
+                    <h2>TOC</h2>
+                </header>
+                
+                
+                <p>Redis由C语言开发，作为分布式K-V和内存型数据库代表，其单进程单线程模型，丰富的value数据类型提供给了用户更快的存取速度和完善的业务应用，加上部署和维护都相对容易，在分布式缓存中应用较为广泛。以下记录了redis cluster搭建和基本操作。</p>
+
+<p>安装必要lib (ubuntu 16.04)</p>
+
+<pre><code class="language-shell"># apt-get install gcc g++
+# apt-get install jemalloc
+# apt-get install libjemalloc-dev
+# apt-get install libhiredis-dev
+# apt-get install tcl
+# apt-get install ruby
+</code></pre>
+
+<p>下载源码编译</p>
+
+<pre><code class="language-shell"># cd $FOLDER
+# wget http://download.redis.io/releases/redis-5.0.3.tar.gz
+# tar -xvf redis-5.0.3.tar.gz
+# cd redis-5.0.3
+# cd .deps
+# make lua jemalloc linenoise lua hiredis
+# cd ..
+# make &amp;&amp; make install 
+</code></pre>
+
+<p>make test会进行基本的功能性测试</p>
+
+<pre><code class="language-shell"># make test
+</code></pre>
+
+<p>我们在一个服务器上模拟三主三从，创建对应的文件夹</p>
+
+<pre><code class="language-shell"># mkdir -p $FOLDER/cluster
+# mkdir -p $FOLDER/cluster/9000 $FOLDER/cluster/9001 $FOLDER/cluster/9002 $FOLDER/cluster/9003 $FOLDER/cluster/9004 $FOLDER/cluster/9005
+# cp $FOLDER/redis-5.0.3/src/redis-server $FOLDER/cluster
+# cd $FOLDER/cluster/$port (9000/9001/9002/9003/9004/9005)
+</code></pre>
+
+<p>基本配置文件如下</p>
+
+<pre><code class="language-shell"># cat &lt;&lt;EOF &gt;nodes-$port.conf
+bind 127.0.0.1
+port [port]
+tcp-backlog 511
+timeout 0
+tcp-keepalive 300
+supervised no
+daemonize yes
+pidfile /var/run/redis_$port.pid
+loglevel notice
+logfile “”
+databases 16
+always-show-logo yes
+save 900 1
+save 300 10
+save 60 10000
+stop-writes-on-bgsave-error yes
+rdbcompression yes
+rdbchecksum yes
+dbfilename dump.rdb
+dir ./
+replica-serve-stale-data yes
+masterauth Beijing1
+replica-read-only yes
+repl-diskless-sync no
+repl-diskless-sync-delay 5
+repl-disable-tcp-nodelay no
+replica-priority 100
+lazyfree-lazy-eviction no
+lazyfree-lazy-expire no
+lazyfree-lazy-server-del no
+replica-lazy-flush no
+appendonly yes
+appendfilename “appendonly.aof”
+appendfsync everysec
+no-appendfsync-on-rewrite no
+auto-aof-rewrite-percentage 100
+auto-aof-rewrite-min-size 64mb
+aof-load-truncated yes
+aof-use-rdb-preamble yes
+lua-time-limit 5000
+
+cluster-enabled yes
+cluster-config-file nodes-$port.conf
+cluster-node-timeout 5000
+
+slowlog-log-slower-than 10000
+slowlog-max-len 128
+latency-monitor-threshold 0
+notify-keyspace-events “”
+hash-max-ziplist-entries 512
+hash-max-ziplist-value 64
+list-max-ziplist-size -2
+list-compress-depth 0
+set-max-intset-entries 512
+zset-max-ziplist-entries 128
+zset-max-ziplist-value 64
+hll-sparse-max-bytes 3000
+stream-node-max-bytes 4096
+stream-node-max-entries 100
+activerehashing yes
+client-output-buffer-limit normal 0 0 0
+client-output-buffer-limit replica 256mb 64mb 60
+client-output-buffer-limit pubsub 32mb 8mb 60
+hz 10
+dynamic-hz yes
+aof-rewrite-incremental-fsync yes
+rdb-save-incremental-fsync yes
+EOF
+</code></pre>
+
+<p>启动进程并查看状态</p>
+
+<pre><code class="language-shell"># ./redis-server ./9000/nodes-9000.conf
+# ./redis-server ./9001/nodes-9001.conf
+# ./redis-server ./9002/nodes-9002.conf
+# ./redis-server ./9003/nodes-9003.conf
+# ./redis-server ./9004/nodes-9004.conf
+# ./redis-server ./9005/nodes-9005.conf
+# redis-cli –cluster create 127.0.0.1:9000 127.0.0.1:9001 127.0.0.1:9002 127.0.0.1:9003 127.0.0.1:9004 127.0.0.1:9005 –cluster-replicas 1
+# redis-cli -p 9000 cluster nodes
+5217913532cd2872f613f73c12e502e3e2af4581 127.0.0.1:9004@19004 slave 4d45abf364e8ec292718510940defb9eeff83a6e 0 1548061099000 5 connected
+638e32844b053a55bc9b4acbf5d87bd2a3c47633 127.0.0.1:9005@19005 slave b81fd7d8d97cf6ed32bcc6e63b6c28a9b4130f7f 0 1548061099756 6 connected
+ffe8e93acda57f4e7d77f4b870d904597ee7ad3c 127.0.0.1:9003@19003 slave e684b4b0b9db123165dfc4074128b660e420dbba 0 1548061099556 4 connected
+b81fd7d8d97cf6ed32bcc6e63b6c28a9b4130f7f 127.0.0.1:9001@19001 master – 0 1548061098052 2 connected 5461-10922
+e684b4b0b9db123165dfc4074128b660e420dbba 127.0.0.1:9002@19002 master – 0 1548061099000 3 connected 10923-16383
+4d45abf364e8ec292718510940defb9eeff83a6e 127.0.0.1:9000@19000 myself,master – 0 1548061097000 1 connected 0-5460
+</code></pre>
+
+<p>创建额外instance并加入到集群中</p>
+
+<pre><code class="language-shell"># redis-cli –cluster add-node 127.0.0.1:9006 127.0.0.1:9000
+&gt;&gt;&gt; Adding node 127.0.0.1:9006 to cluster 127.0.0.1:9000
+&gt;&gt;&gt; Performing Cluster Check (using node 127.0.0.1:9000)
+M: 4d45abf364e8ec292718510940defb9eeff83a6e 127.0.0.1:9000
+slots:[0-5460] (5461 slots) master
+1 additional replica(s)
+S: 5217913532cd2872f613f73c12e502e3e2af4581 127.0.0.1:9004
+slots: (0 slots) slave
+replicates 4d45abf364e8ec292718510940defb9eeff83a6e
+S: 638e32844b053a55bc9b4acbf5d87bd2a3c47633 127.0.0.1:9005
+slots: (0 slots) slave
+replicates b81fd7d8d97cf6ed32bcc6e63b6c28a9b4130f7f
+S: ffe8e93acda57f4e7d77f4b870d904597ee7ad3c 127.0.0.1:9003
+slots: (0 slots) slave
+replicates e684b4b0b9db123165dfc4074128b660e420dbba
+M: b81fd7d8d97cf6ed32bcc6e63b6c28a9b4130f7f 127.0.0.1:9001
+slots:[5461-10922] (5462 slots) master
+1 additional replica(s)
+M: e684b4b0b9db123165dfc4074128b660e420dbba 127.0.0.1:9002
+slots:[10923-16383] (5461 slots) master
+1 additional replica(s)
+[OK] All nodes agree about slots configuration.
+&gt;&gt;&gt; Check for open slots…
+&gt;&gt;&gt; Check slots coverage…
+[OK] All 16384 slots covered.
+&gt;&gt;&gt; Send CLUSTER MEET to node 127.0.0.1:9006 to make it join the cluster.
+[OK] New node added correctly.
+</code></pre>
+
+<p>新加入的节点需要将原有slot重新分配</p>
+
+<pre><code class="language-shell"># redis-cli –cluster reshard 127.0.0.1:9006
+&gt;&gt;&gt; Performing Cluster Check (using node 127.0.0.1:9006)
+M: 0307100ebd0ceb5e15b714b2ad07901c1069f126 127.0.0.1:9006
+slots: (0 slots) master
+M: e684b4b0b9db123165dfc4074128b660e420dbba 127.0.0.1:9002
+slots:[10923-16383] (5461 slots) master
+1 additional replica(s)
+S: 638e32844b053a55bc9b4acbf5d87bd2a3c47633 127.0.0.1:9005
+slots: (0 slots) slave
+replicates b81fd7d8d97cf6ed32bcc6e63b6c28a9b4130f7f
+M: b81fd7d8d97cf6ed32bcc6e63b6c28a9b4130f7f 127.0.0.1:9001
+slots:[5461-10922] (5462 slots) master
+1 additional replica(s)
+S: 5217913532cd2872f613f73c12e502e3e2af4581 127.0.0.1:9004
+slots: (0 slots) slave
+replicates 4d45abf364e8ec292718510940defb9eeff83a6e
+M: 4d45abf364e8ec292718510940defb9eeff83a6e 127.0.0.1:9000
+slots:[0-5460] (5461 slots) master
+1 additional replica(s)
+S: ffe8e93acda57f4e7d77f4b870d904597ee7ad3c 127.0.0.1:9003
+slots: (0 slots) slave
+replicates e684b4b0b9db123165dfc4074128b660e420dbba
+[OK] All nodes agree about slots configuration.
+&gt;&gt;&gt; Check for open slots…
+&gt;&gt;&gt; Check slots coverage…
+[OK] All 16384 slots covered.
+How many slots do you want to move (from 1 to 16384)?
+How many slots do you want to move (from 1 to 16384)? 666
+What is the receiving node ID? 0307100ebd0ceb5e15b714b2ad07901c1069f126
+Please enter all the source node IDs.
+Type ‘all’ to use all the nodes as source nodes for the hash slots.
+Type ‘done’ once you entered all the source nodes IDs.
+Source node #1: all
+
+Ready to move 666 slots.
+Source nodes:
+M: e684b4b0b9db123165dfc4074128b660e420dbba 127.0.0.1:9002
+slots:[10923-16383] (5461 slots) master
+1 additional replica(s)
+M: b81fd7d8d97cf6ed32bcc6e63b6c28a9b4130f7f 127.0.0.1:9001
+slots:[5461-10922] (5462 slots) master
+1 additional replica(s)
+M: 4d45abf364e8ec292718510940defb9eeff83a6e 127.0.0.1:9000
+slots:[0-5460] (5461 slots) master
+1 additional replica(s)
+Destination node:
+M: 0307100ebd0ceb5e15b714b2ad07901c1069f126 127.0.0.1:9006
+slots: (0 slots) master
+Resharding plan:
+Moving slot 5461 from b81fd7d8d97cf6ed32bcc6e63b6c28a9b4130f7f
+…
+Moving slot 5683 from b81fd7d8d97cf6ed32bcc6e63b6c28a9b4130f7f
+Moving slot 10923 from e684b4b0b9db123165dfc4074128b660e420dbba
+…
+Moving slot 11143 from e684b4b0b9db123165dfc4074128b660e420dbba
+Moving slot 0 from 4d45abf364e8ec292718510940defb9eeff83a6e
+…
+Moving slot 220 from 4d45abf364e8ec292718510940defb9eeff83a6e
+Do you want to proceed with the proposed reshard plan (yes/no)? yes
+Moving slot 5461 from 127.0.0.1:9001 to 127.0.0.1:9006:
+…
+Moving slot 5683 from 127.0.0.1:9001 to 127.0.0.1:9006:
+Moving slot 10923 from 127.0.0.1:9002 to 127.0.0.1:9006:
+…
+Moving slot 11143 from 127.0.0.1:9002 to 127.0.0.1:9006:
+Moving slot 0 from 127.0.0.1:9000 to 127.0.0.1:9006:
+…
+Moving slot 220 from 127.0.0.1:9000 to 127.0.0.1:9006:
+</code></pre>
+
+<p>重新查看9006，可见从9000，9001，9002三个主节点分配来了新的slot</p>
+
+<pre><code class="language-shell"># redis-cli -p 9000 cluster nodes
+0307100ebd0ceb5e15b714b2ad07901c1069f126 127.0.0.1:9006@19006 master – 0 1548064154041 7 connected 0-220 5461-5683 10923-11143
+5217913532cd2872f613f73c12e502e3e2af4581 127.0.0.1:9004@19004 slave 4d45abf364e8ec292718510940defb9eeff83a6e 0 1548064154000 5 connected
+638e32844b053a55bc9b4acbf5d87bd2a3c47633 127.0.0.1:9005@19005 slave b81fd7d8d97cf6ed32bcc6e63b6c28a9b4130f7f 0 1548064155044 6 connected
+ffe8e93acda57f4e7d77f4b870d904597ee7ad3c 127.0.0.1:9003@19003 slave e684b4b0b9db123165dfc4074128b660e420dbba 0 1548064155000 4 connected
+b81fd7d8d97cf6ed32bcc6e63b6c28a9b4130f7f 127.0.0.1:9001@19001 master – 0 1548064154000 2 connected 5684-10922
+e684b4b0b9db123165dfc4074128b660e420dbba 127.0.0.1:9002@19002 master – 0 1548064154000 3 connected 11144-16383
+4d45abf364e8ec292718510940defb9eeff83a6e 127.0.0.1:9000@19000 myself,master – 0 1548064153000 1 connected 221-5460
+</code></pre>
+
+<p>设置9006为9000的slave，会因为上面挂载着slot出现错误</p>
+
+<pre><code class="language-shell"># redis-cli -c -p 9006 cluster replicate 4d45abf364e8ec292718510940defb9eeff83a6e
+(error) ERR To set a master the node must be empty and without assigned slots.
+</code></pre>
+
+<p>删除也会遇到同样的错误</p>
+
+<pre><code class="language-shell"># redis-cli –cluster del-node 127.0.0.1:9006 0307100ebd0ceb5e15b714b2ad07901c1069f126
+&gt;&gt;&gt; Removing node 0307100ebd0ceb5e15b714b2ad07901c1069f126 from cluster 127.0.0.1:9006
+[ERR] Node 127.0.0.1:9006 is not empty! Reshard data away and try again.
+</code></pre>
+
+<p>重新将9006上的slot转移到9000（我这里没有找到将9006的slot批量转移到多个节点的命令）</p>
+
+<pre><code class="language-shell"># redis-cli –cluster reshard 127.0.0.1:9006
+&gt;&gt;&gt; Performing Cluster Check (using node 127.0.0.1:9006)
+M: 0307100ebd0ceb5e15b714b2ad07901c1069f126 127.0.0.1:9006
+slots:[0-220],[5461-5683],[10923-11143] (665 slots) master
+M: e684b4b0b9db123165dfc4074128b660e420dbba 127.0.0.1:9002
+slots:[11144-16383] (5240 slots) master
+1 additional replica(s)
+S: 638e32844b053a55bc9b4acbf5d87bd2a3c47633 127.0.0.1:9005
+slots: (0 slots) slave
+replicates b81fd7d8d97cf6ed32bcc6e63b6c28a9b4130f7f
+M: b81fd7d8d97cf6ed32bcc6e63b6c28a9b4130f7f 127.0.0.1:9001
+slots:[5684-10922] (5239 slots) master
+1 additional replica(s)
+S: 5217913532cd2872f613f73c12e502e3e2af4581 127.0.0.1:9004
+slots: (0 slots) slave
+replicates 4d45abf364e8ec292718510940defb9eeff83a6e
+M: 4d45abf364e8ec292718510940defb9eeff83a6e 127.0.0.1:9000
+slots:[221-5460] (5240 slots) master
+1 additional replica(s)
+S: ffe8e93acda57f4e7d77f4b870d904597ee7ad3c 127.0.0.1:9003
+slots: (0 slots) slave
+replicates e684b4b0b9db123165dfc4074128b660e420dbba
+[OK] All nodes agree about slots configuration.
+&gt;&gt;&gt; Check for open slots…
+&gt;&gt;&gt; Check slots coverage…
+[OK] All 16384 slots covered.
+How many slots do you want to move (from 1 to 16384)? 666
+What is the receiving node ID? 4d45abf364e8ec292718510940defb9eeff83a6e （9000）
+Please enter all the source node IDs.
+Type ‘all’ to use all the nodes as source nodes for the hash slots.
+Type ‘done’ once you entered all the source nodes IDs.
+Source node #1: 0307100ebd0ceb5e15b714b2ad07901c1069f126 （9006）
+Source node #2: done
+
+Ready to move 666 slots.
+Source nodes:
+M: 0307100ebd0ceb5e15b714b2ad07901c1069f126 127.0.0.1:9006
+slots:[0-220],[5461-5683],[10923-11143] (665 slots) master
+Destination node:
+M: 4d45abf364e8ec292718510940defb9eeff83a6e 127.0.0.1:9000
+slots:[221-5460] (5240 slots) master
+1 additional replica(s)
+Resharding plan:
+…
+Do you want to proceed with the proposed reshard plan (yes/no)? yes
+…
+</code></pre>
+
+<p>9006已经重新变成空的master，可以执行删除等操作</p>
+
+<pre><code class="language-shell"># redis-cli -p 9006 cluster nodes
+e684b4b0b9db123165dfc4074128b660e420dbba 127.0.0.1:9002@19002 master – 0 1548065230757 3 connected 11144-16383
+638e32844b053a55bc9b4acbf5d87bd2a3c47633 127.0.0.1:9005@19005 slave b81fd7d8d97cf6ed32bcc6e63b6c28a9b4130f7f 0 1548065230000 2 connected
+b81fd7d8d97cf6ed32bcc6e63b6c28a9b4130f7f 127.0.0.1:9001@19001 master – 0 1548065231760 2 connected 5684-10922
+5217913532cd2872f613f73c12e502e3e2af4581 127.0.0.1:9004@19004 slave 4d45abf364e8ec292718510940defb9eeff83a6e 0 1548065230000 8 connected
+0307100ebd0ceb5e15b714b2ad07901c1069f126 127.0.0.1:9006@19006 myself,master – 0 1548065229000 7 connected
+4d45abf364e8ec292718510940defb9eeff83a6e 127.0.0.1:9000@19000 master – 0 1548065231000 8 connected 0-5683 10923-11143
+ffe8e93acda57f4e7d77f4b870d904597ee7ad3c 127.0.0.1:9003@19003 slave e684b4b0b9db123165dfc4074128b660e420dbba 0 1548065230256 3 connected
+</code></pre>
+
+<p>执行命令使9006变成9000的slave</p>
+
+<pre><code class="language-shell"># redis-cli -c -p 9006 cluster replicate 4d45abf364e8ec292718510940defb9eeff83a6e
+OK
+# redis-cli -p 9006 cluster nodes
+e684b4b0b9db123165dfc4074128b660e420dbba 127.0.0.1:9002@19002 master – 0 1548065356057 3 connected 11144-16383
+638e32844b053a55bc9b4acbf5d87bd2a3c47633 127.0.0.1:9005@19005 slave b81fd7d8d97cf6ed32bcc6e63b6c28a9b4130f7f 0 1548065356659 2 connected
+b81fd7d8d97cf6ed32bcc6e63b6c28a9b4130f7f 127.0.0.1:9001@19001 master – 0 1548065357061 2 connected 5684-10922
+5217913532cd2872f613f73c12e502e3e2af4581 127.0.0.1:9004@19004 slave 4d45abf364e8ec292718510940defb9eeff83a6e 0 1548065356000 8 connected
+0307100ebd0ceb5e15b714b2ad07901c1069f126 127.0.0.1:9006@19006 myself,slave 4d45abf364e8ec292718510940defb9eeff83a6e 0 1548065356000 7 connected
+4d45abf364e8ec292718510940defb9eeff83a6e 127.0.0.1:9000@19000 master – 0 1548065357000 8 connected 0-5683 10923-11143
+ffe8e93acda57f4e7d77f4b870d904597ee7ad3c 127.0.0.1:9003@19003 slave e684b4b0b9db123165dfc4074128b660e420dbba 0 1548065357561 3 connected
+</code></pre>
+
+<p>删除节点后，重新启动9006，我们会注意到9006启动时仍会有集群的信息，并未删除干净</p>
+
+<pre><code class="language-shell"># redis-cli –cluster del-node 127.0.0.1:9006 0307100ebd0ceb5e15b714b2ad07901c1069f126
+&gt;&gt;&gt; Removing node 0307100ebd0ceb5e15b714b2ad07901c1069f126 from cluster 127.0.0.1:9006
+&gt;&gt;&gt; Sending CLUSTER FORGET messages to the cluster…
+&gt;&gt;&gt; SHUTDOWN the node.
+# ./redis-server ./9006/nodes-9006.conf
+</code></pre>
+
+<p>其他节点如9000已经没有9006的信息了</p>
+
+<pre><code class="language-shell"># redis-cli -p 9000 cluster nodes
+5217913532cd2872f613f73c12e502e3e2af4581 127.0.0.1:9004@19004 slave 4d45abfnodes-9006.conf364e8ec292718510940defb9eeff83a6e 0 1548065550416 8 connected
+638e32844b053a55bc9b4acbf5d87bd2a3c47633 127.0.0.1:9005@19005 slave b81fd7d8d97cf6ed32bcc6e63b6c28a9b4130f7f 0 1548065551418 6 connected
+ffe8e93acda57f4e7d77f4b870d904597ee7ad3c 127.0.0.1:9003@19003 slave e684b4b0b9db123165dfc4074128b660e420dbba 0 1548065552421 4 connected
+b81fd7d8d97cf6ed32bcc6e63b6c28a9b4130f7f 127.0.0.1:9001@19001 master – 0 1548065551018 2 connected 5684-10922
+e684b4b0b9db123165dfc4074128b660e420dbba 127.0.0.1:9002@19002 master – 0 1548065551000 3 connected 11144-16383
+4d45abf364e8ec292718510940defb9eeff83a6e 127.0.0.1:9000@19000 myself,master – 0 1548065551000 8 connected 0-5683 10923-11143
+</code></pre>
+
+<p>9006启动时仍会有集群的信息，并未删除干净</p>
+
+<pre><code class="language-shell"># redis-cli -p 9006 cluster nodes
+0307100ebd0ceb5e15b714b2ad07901c1069f126 127.0.0.1:9006@19006 myself,slave 4d45abf364e8ec292718510940defb9eeff83a6e 0 1548065540767 7 connected
+e684b4b0b9db123165dfc4074128b660e420dbba 127.0.0.1:9002@19002 master – 0 1548065569000 3 connected 11144-16383
+ffe8e93acda57f4e7d77f4b870d904597ee7ad3c 127.0.0.1:9003@19003 slave e684b4b0b9db123165dfc4074128b660e420dbba 0 1548065568536 3 connected
+638e32844b053a55bc9b4acbf5d87bd2a3c47633 127.0.0.1:9005@19005 slave b81fd7d8d97cf6ed32bcc6e63b6c28a9b4130f7f 0 1548065568536 2 connected
+b81fd7d8d97cf6ed32bcc6e63b6c28a9b4130f7f 127.0.0.1:9001@19001 master – 0 1548065569539 2 connected 5684-10922
+4d45abf364e8ec292718510940defb9eeff83a6e 127.0.0.1:9000@19000 master – 0 1548065568000 8 connected 0-5683 10923-11143
+5217913532cd2872f613f73c12e502e3e2af4581 127.0.0.1:9004@19004 slave 4d45abf364e8ec292718510940defb9eeff83a6e 0 1548065568737 8 connected
+</code></pre>
+
+<p>因为9006的在del-node仅仅关闭了实例，实际的信息仍旧记录在$FOLDER/cluster/nodes-9006.conf中，下次启动时会从该文件获取集群信息</p>
+
+<pre><code class="language-shell"># less $FOLDER/cluster/nodes-9006.conf
+# kill 9006 process and delete $FOLDER/cluster/nodes-9006.conf, then restart 9006 again
+# ./redis-server ./9006/nodes-9006.conf
+</code></pre>
+
+<p>现在的集群重新变成孤岛节点，删除完毕</p>
+
+<pre><code class="language-shell"># redis-cli -p 9006 cluster nodes
+37b472747a0eb39527142fd13cd8716cac4f40cf :9006@19006 myself,master – 0 0 0 connected
+</code></pre>
+
+
+                
+
+                <hr>
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/post/build-ip-san/" data-toggle="tooltip" data-placement="top" title="搭个ip-san（iscsi）">&larr;
+                            Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/post/virtio-front-back-flow/" data-toggle="tooltip" data-placement="top" title="virtio前后端数据结构">Next
+                            Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+<div id="disqus-comment"></div>
+
+
+
+            </div>
+            
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                        
+                        
+                        
+                        
+                        <a href="/tags/hands-on" title="hands-on">
+                            hands-on
+                        </a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                </section>
+                
+
+                
+                
+                <section>
+                    <hr>
+                    <h5>FRIENDS</h5>
+                    <ul class="list-inline">
+                        
+                    </ul>
+                </section>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                   
+                   <li>
+                       <a href="" rel="alternate" type="application/rss+xml" title="Aaron&#39;s Notes" >
+                           <span class="fa-stack fa-lg">
+                               <i class="fa fa-circle fa-stack-2x"></i>
+                               <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                           </span>
+                       </a>
+                   </li>
+                   
+                    
+                    <li>
+                        <a href="mailto:youremail@gmail.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+                    
+                    
+                    
+                    
+
+                    
+
+		    
+                    
+                    <li>
+                        <a target="_blank" href="/your%20wechat%20qr%20code%20image">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-wechat fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/yourgithub">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+                    
+                    <li>
+                        <a target="_blank" href="https://www.linkedin.com/in/yourlinkedinid">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+                    
+                </ul>
+		<p class="copyright text-muted">
+                    Copyright &copy; Aaron&#39;s Notes 2019
+                    <br>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+
+
+
+
+
+<script>
+    
+    if($('#tag_cloud').length !== 0){
+        async("/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+
+<script>
+    async("https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+
+
+
+
+</body>
+</html>

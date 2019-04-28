@@ -6,26 +6,53 @@
     <description>Recent content in Tags on Aaron&#39;s Notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 04 Jun 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 09 Jan 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://www.cloudnotes.cc/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Tag1</title>
-      <link>https://www.cloudnotes.cc/tags/tag1/</link>
-      <pubDate>Mon, 04 Jun 2018 00:00:00 +0000</pubDate>
+      <title>CDN</title>
+      <link>https://www.cloudnotes.cc/tags/cdn/</link>
+      <pubDate>Wed, 09 Jan 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://www.cloudnotes.cc/tags/tag1/</guid>
+      <guid>https://www.cloudnotes.cc/tags/cdn/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Tag2</title>
-      <link>https://www.cloudnotes.cc/tags/tag2/</link>
-      <pubDate>Mon, 04 Jun 2018 00:00:00 +0000</pubDate>
+      <title>Hands-on</title>
+      <link>https://www.cloudnotes.cc/tags/hands-on/</link>
+      <pubDate>Thu, 21 Feb 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://www.cloudnotes.cc/tags/tag2/</guid>
+      <guid>https://www.cloudnotes.cc/tags/hands-on/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ip-san</title>
+      <link>https://www.cloudnotes.cc/tags/ip-san/</link>
+      <pubDate>Mon, 14 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/tags/ip-san/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Redis</title>
+      <link>https://www.cloudnotes.cc/tags/redis/</link>
+      <pubDate>Thu, 21 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/tags/redis/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Virtio</title>
+      <link>https://www.cloudnotes.cc/tags/virtio/</link>
+      <pubDate>Tue, 12 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/tags/virtio/</guid>
       <description></description>
     </item>
     

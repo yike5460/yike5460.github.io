@@ -15,9 +15,9 @@
     
 
     
-    <meta name="title" content="2019书单（待更新）" />
-    <meta property="og:title" content="2019书单（待更新）" />
-    <meta property="twitter:title" content="2019书单（待更新）" />
+    <meta name="title" content="聊聊CDN中的加速" />
+    <meta property="og:title" content="聊聊CDN中的加速" />
+    <meta property="twitter:title" content="聊聊CDN中的加速" />
     
 
     
@@ -34,9 +34,9 @@
     <meta name="keyword"  content="cloud computing, distributed system, container, lazy shell tools">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>2019书单（待更新）-Aaron&#39;s Notes</title>
+    <title>聊聊CDN中的加速-Aaron&#39;s Notes</title>
 
-    <link rel="canonical" href="/book/2019-booklist/">
+    <link rel="canonical" href="/post/talk-about-cdn/">
 
     <link rel="stylesheet" href="/css/iDisqus.min.css"/>
 	
@@ -156,8 +156,12 @@
                 <div class="post-heading">
                     <div class="tags">
                         
+                        <a class="tag" href="/tags/cdn" title="CDN">
+                            CDN
+                        </a>
+                        
                     </div>
-                    <h1>2019书单（待更新）</h1>
+                    <h1>聊聊CDN中的加速</h1>
                     <h2 class="subheading"></h2>
                     <span class="meta">
 			Posted by 
@@ -165,7 +169,7 @@
 			         &#34;Aaron&#34;
 			 
 			on 
-			Saturday, April 27, 2019
+			Wednesday, January 9, 2019
                         
                     </span>
                 </div>
@@ -195,34 +199,65 @@
 <ul>
 <li>
 <ul>
-<li><a href="#技术">技术</a></li>
-<li><a href="#人文">人文</a></li>
+<li><a href="#什么是cdn">什么是CDN</a></li>
+<li><a href="#cdn的加速">CDN的加速</a></li>
+<li><a href="#自己用起来">自己用起来</a></li>
 </ul></li>
 </ul>
 </nav>
                 
                 
 
-<h2 id="技术">技术</h2>
+<h2 id="什么是cdn">什么是CDN</h2>
 
-<ol>
-<li>软件定义网络</li>
-<li>分布式对象存储&ndash;原理，架构及Go语言实现</li>
-<li>TensorFlow技术解析与实战</li>
-<li>大规模分布式存储系统原理解析与架构实践</li>
-<li>人月神话</li>
-<li>数据存储与技术实践</li>
-<li>PaaS实现与运维管理：基于Mesos +Docker+ELK的实战指南</li>
-</ol>
+<p>CDN全称是content distribution network即内容分发网络的缩写，旨在将原有集中式源站提供文字，图片，视频，文件等资源的方式，改变成由分布在各个离用户最近（网络最近，成本最低，路由最优）的边缘节点来提供，好处显而易见，用户获得了更快的响应时间，源站缓解了高峰访问压力，网络提供商降低了网络占用率和拥塞。我们看到，不论是产品的软件架构还是技术的应用场景，其演进总是合久必分，分久必合，集中式时间长了发现资源太过庞大不好分拆缺乏灵活性，分散时间长了发现资源太过零散不好整合缺乏统一性，唯有找到当中各个考量指标的平衡点，才能真正让应用为人接受。就比如运营商常说的边缘节点下沉，具体怎么下沉，下沉到哪个级别（市县还是乡村），下沉后带来而外的运维开销如何核算，都是需要综合考虑平衡的东西。</p>
 
-<h2 id="人文">人文</h2>
+<h2 id="cdn的加速">CDN的加速</h2>
 
-<ol>
-<li>人类简史</li>
-<li>未来简史</li>
-<li>浪潮之巅</li>
-<li>数学之美</li>
-</ol>
+<p>基于从上到下的软件栈，我们分为应用优化，软件优化，驱动优化，操作系统优化以及运用的软件加速技术。这里我们主要谈的较为通用的底层优化，包括驱动优化，操作系统优化以及对应的软件加速部分。驱动层包括SATA/SDD磁盘驱动，网卡驱动，以及加速方案如DPDK，SPDK的LIB库和软件适配层。驱动优化依赖于底层硬件的选型，主流SATA/SDD磁盘以及网卡驱动均已内置在内核模块，依赖内核实现硬件发现和报文收发等基本功能。
+针对CDN场景下用户最后一公里的高IO，低时延，成本控制等需求，通用存储解决方案采用SATA加NVMeSSD混合模式，以在合理成本下最大提高磁盘的IO性能，结合SPDK用户空间协议栈，通过避免报文处理时内核的上下文切换与中断处理，缩短上层服务应用与底层硬件的IO路径，进一步发掘NVMe SSD的性能上限。网络解决方案采用DPDK加速技术，通过避免中断，减少上下文切换和内存拷贝实现网络协议栈的优化，进一步提升网卡对报文的处理，转发能力，降低了传输时延，提升用户感受。操作系统优化涉及方面较多，针对CDN场景，我们从CPU，内存，网卡和内核参数等几个方面来做基本介绍：
+- CPU的隔离，通过isolcpus，rcu_nocbs等启动参数设置将某些CPU核隔离出来，专用于业务进程；
+- CPU的绑定，通过taskset等命令实现CPU对业务进程的亲和性；
+- CPU的Cgroup绑定，优先NUMA节点的本地访问，防止跨CPU迁移，以更好利用内存和缓存；
+- 内存SWAP使用策略调整，如vm.swappiness的关闭；
+- 巨页（hugepage）内存的使用和配置，使用DPDK进行网卡加速是，巨页的配置是基础前提；
+- L3 Cache的管理和隔离，具体将在后节CAS方案中描述；
+- 内核参数优化，包括IO调度，如使用noop调度器替代内核默认的cfq；预读，如针对read_ahead_kb设置更大的值；内核pid上限；CPU频率，调整scaling_governor使其运行在最高性能，等等；
+- 多队列网卡的CPU中断亲和性，通过smp_affinity将网卡特定队列绑定到相同的CPU核或同socket的CPU组上实现IRQ balance；
+- 传输层优化，通过TCP协议栈参数如initcwnd，handshaketime等调整实现基于业务的连接加速和传输路径优化；</p>
+
+<p>软件加速方案部分，我们会谈到某厂商的DCPM，QAT，SPDK，DPDK，RDT等，从优化缓存管理，加速缓存效率，提升安全性能，优化软件协议栈和数据存储方面来阐述对应方案带来的整体作用。</p>
+
+<p>CDN节点主要包含两个部分，全局负载均衡设备（GSLB）和高速缓存服务器，提供缓存代理，安全连接，路由加速等功能，主要应用在网站的动静态加速，流媒体，大文件如视频下载服务等方面，涵盖的技术如多级缓存，数据冷热隔离，压缩加解密硬件卸载等旨在实现更加高性能低时延的内容分发，可靠高效的内容存储和灵活智能的内容分发。</p>
+
+<p>CDN基本架构及HTTP请求流程如下图所示，CDN一体机下沉到区县一级实现终端用户就近获取需要访问的数据。在用户请求到达CDN接入节点时，如何快速检索磁盘缓存内容并返回给用户，成为提升最后一公里的用户体验的关键因素之一。
+<img src="/media/cdn-arch.png" alt="CDN arch" title="CDN arch" /></p>
+
+<p>在缓存管理和加速方面，某厂商Optane™ DC Persistent Memory利用业界独有的内存介质和先进的内置内存控制器，提供了性能媲美DRAM但容量更大造价更低的非易失内存解决方案。DCPM（DC Persistent Memory）结合厂商缓存加速软件（CAS），通过冷热数据的多级缓存以及智能热数据预判，相对普通的DRAM+SSD方案，其提供了更大的数据缓存空间，更为快速的缓存寻址时间。
+<img src="/media/dcpmcas.png" alt="DCPM+CAS in CDN" title="DCPM+CAS in CDN" />
+同时通过某厂商的Resource DirectorTechnology（RDT）提供的底层LLC（L3 Cache）监控，动态隔离和分区等功能，CDN节点能够以更小粒度对CPU缓存资源进行优化配置，实现应用性能的进一步提升。</p>
+
+<p><img src="/media/rdt.png" alt="RDT in CDN" title="RDT in CDN" />
+在数据安全方面，在当前CDN网络支持使能HTTPS一个较大的挑战是HTTPS对后端web服务器计算资源的消耗导致边缘节点对于接入用户的处理速度下降。QAT（QuickAssist Technology）作为某厂商基于硬件卸载的加速方案，通过将数据压缩，加密解密等CPU计算密集型业务下沉到主板芯片或专有PCIe接口硬件，以提升边缘节点服务器可支持的并发HTTPS连接数，降低整机系统CPU占用率。</p>
+
+<p><img src="/media/qat.png" alt="QAT in CDN" title="QAT in CDN" />
+图4 QAT在数据安全及传输中的应用
+在数据传输方面，数据解压缩功能常用在：1）减少缓存服务器和源站之间镜像同步的数据量；2）对静态文件进行压缩以减少用户传输内容大小；3）向移动端用户传输数据时实现图片，视频等的自适应压缩。在以上场景对QAT的运用可以极大提高CDN节点的处理能力，实现智能解压缩的同时为用户提供更为快速的相应时间。</p>
+
+<p>在整体软件协议栈方面，为了减少内核上下文切换，中断响应及内存拷贝给数据访问带来的性能瓶颈和处理时延，我们通过结合DPDK，SPDK来绕过原有内核处理，实现从应用访问到数据落盘的全用户态软件栈。其中SPDK作为英特尔的开源项目，提供了从底层驱动（包括NVMe, VirtIO等）到上层协议（包括vhost，iSCSI，NVMe和Linux nbd）的源代码，API文档和相关CLI管理测试工具，结合NVMeSSD或者DCPM提供端到端高性能，高可扩展的存储解决方案。</p>
+
+<p>在数据存储方面，CDN系统主要涉及到两方面的存储：内容源的存储和内容在缓存中的存储。前者存储的容量规模大，访问量相对集中且数据块较大，同后者形成分布式存储系统，缓存中的存储作为用户访问的第一跳，需要支持多种内容格式，同时提供针对性读写优化，另外一个需要考虑的是存储的可靠性，在掉电等情况下能够及时恢复数据，DCPM在提供了接近DRAM性能的同时也提供了非易失性（non-volatile）的特点，保证数据在掉电时能保存下来，而不用重新去硬盘获取，降低了服务的间断时间，提升了节点的可靠性。</p>
+
+<h2 id="自己用起来">自己用起来</h2>
+
+<p>CDN其实离我们很近，近到我们平时刷微博，看头条而不自知。如果你拥有自己的网站，并且已经形成一定的规模，想要得到更好的用户体验，国内各个CSP平台已经提供了CDN加速服务。以xx云为例，你需要的是：</p>
+
+<ul>
+<li>开通xx云的CDN服务，基本都是按量付费；</li>
+<li>填写你的个人网站域名，获取到对应的CNAME（有的服务提供商会针对图片小文件，大文件下载，视频直播，全站等类型做相应的加速优化）</li>
+<li>在你的个人网站域名的DNS解析信息中加入该CNAME</li>
+<li>配置CNAME后，不同的DNS服务商CNAME配置生效的时间也不同，可以 ping或 dig所添加的加速域名来查看网站是否已经重定向到对应的加速节点。</li>
+</ul>
 
 
                 
@@ -230,6 +265,11 @@
                 <hr>
                 <ul class="pager">
                     
+                    
+                    <li class="next">
+                        <a href="/post/build-ip-san/" data-toggle="tooltip" data-placement="top" title="搭个ip-san（iscsi）">Next
+                            Post &rarr;</a>
+                    </li>
                     
                 </ul>
 

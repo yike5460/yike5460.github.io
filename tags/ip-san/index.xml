@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ip-san on Aaron&#39;s Notes</title>
+    <link>https://www.cloudnotes.cc/tags/ip-san/</link>
+    <description>Recent content in Ip-san on Aaron&#39;s Notes</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 14 Jan 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://www.cloudnotes.cc/tags/ip-san/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>搭个ip-san（iscsi）</title>
+      <link>https://www.cloudnotes.cc/post/build-ip-san/</link>
+      <pubDate>Mon, 14 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/post/build-ip-san/</guid>
+      <description>拓扑 两个节点，一个initiator，一个target，中间通过交换机或者网线直连 initiator(192.168.1.100) &amp;lt;——–&amp;gt; target (192.168.1.200) 安装配置 target # apt-cache search scsi | grep target # apt-get install</description>
+    </item>
+    
+  </channel>
+</rss>

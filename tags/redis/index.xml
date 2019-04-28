@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Redis on Aaron&#39;s Notes</title>
+    <link>https://www.cloudnotes.cc/tags/redis/</link>
+    <description>Recent content in Redis on Aaron&#39;s Notes</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 21 Feb 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://www.cloudnotes.cc/tags/redis/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>搭个redis cluster</title>
+      <link>https://www.cloudnotes.cc/post/build-redis-cluster/</link>
+      <pubDate>Thu, 21 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/post/build-redis-cluster/</guid>
+      <description>Redis由C语言开发，作为分布式K-V和内存型数据库代表，其单进程单线程模型，丰富的value数据类型提供给了用户更快的存取速度和完善的业</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -38,8 +38,23 @@
   </url>
   
   <url>
-    <loc>https://www.cloudnotes.cc/post/read/</loc>
-    <lastmod>2018-06-04T00:00:00+00:00</lastmod>
+    <loc>https://www.cloudnotes.cc/post/virtio-front-back-flow/</loc>
+    <lastmod>2019-03-12T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://www.cloudnotes.cc/post/build-redis-cluster/</loc>
+    <lastmod>2019-02-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://www.cloudnotes.cc/post/build-ip-san/</loc>
+    <lastmod>2019-01-14T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://www.cloudnotes.cc/post/talk-about-cdn/</loc>
+    <lastmod>2019-01-09T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -61,7 +76,25 @@
   </url>
   
   <url>
+    <loc>https://www.cloudnotes.cc/tags/cdn/</loc>
+    <lastmod>2019-01-09T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://www.cloudnotes.cc/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.cloudnotes.cc/tags/hands-on/</loc>
+    <lastmod>2019-02-21T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.cloudnotes.cc/tags/ip-san/</loc>
+    <lastmod>2019-01-14T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -72,26 +105,20 @@
   </url>
   
   <url>
-    <loc>https://www.cloudnotes.cc/tags/tag1/</loc>
-    <lastmod>2018-06-04T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.cloudnotes.cc/tags/tag2/</loc>
-    <lastmod>2018-06-04T00:00:00+00:00</lastmod>
+    <loc>https://www.cloudnotes.cc/tags/redis/</loc>
+    <lastmod>2019-02-21T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://www.cloudnotes.cc/tags/</loc>
-    <lastmod>2018-06-04T00:00:00+00:00</lastmod>
+    <lastmod>2019-01-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://www.cloudnotes.cc/categories/tech/</loc>
-    <lastmod>2018-06-04T00:00:00+00:00</lastmod>
+    <loc>https://www.cloudnotes.cc/tags/virtio/</loc>
+    <lastmod>2019-03-12T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

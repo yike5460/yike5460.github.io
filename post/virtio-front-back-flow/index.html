@@ -15,9 +15,9 @@
     
 
     
-    <meta name="title" content="2019书单（待更新）" />
-    <meta property="og:title" content="2019书单（待更新）" />
-    <meta property="twitter:title" content="2019书单（待更新）" />
+    <meta name="title" content="virtio前后端数据结构" />
+    <meta property="og:title" content="virtio前后端数据结构" />
+    <meta property="twitter:title" content="virtio前后端数据结构" />
     
 
     
@@ -34,9 +34,9 @@
     <meta name="keyword"  content="cloud computing, distributed system, container, lazy shell tools">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>2019书单（待更新）-Aaron&#39;s Notes</title>
+    <title>virtio前后端数据结构-Aaron&#39;s Notes</title>
 
-    <link rel="canonical" href="/book/2019-booklist/">
+    <link rel="canonical" href="/post/virtio-front-back-flow/">
 
     <link rel="stylesheet" href="/css/iDisqus.min.css"/>
 	
@@ -156,8 +156,12 @@
                 <div class="post-heading">
                     <div class="tags">
                         
+                        <a class="tag" href="/tags/virtio" title="virtio">
+                            virtio
+                        </a>
+                        
                     </div>
-                    <h1>2019书单（待更新）</h1>
+                    <h1>virtio前后端数据结构</h1>
                     <h2 class="subheading"></h2>
                     <span class="meta">
 			Posted by 
@@ -165,7 +169,7 @@
 			         &#34;Aaron&#34;
 			 
 			on 
-			Saturday, April 27, 2019
+			Tuesday, March 12, 2019
                         
                     </span>
                 </div>
@@ -195,34 +199,57 @@
 <ul>
 <li>
 <ul>
-<li><a href="#技术">技术</a></li>
-<li><a href="#人文">人文</a></li>
+<li><a href="#vring内存layout如下">vring内存layout如下：</a></li>
+<li><a href="#virtio前后端代码逻辑如下">virtio前后端代码逻辑如下：</a>
+<ul>
+<li><a href="#virtqueue-pop">virtqueue_pop：</a></li>
+<li><a href="#iov-from-buf">iov_from_buf：</a></li>
+<li><a href="#virtqueue-fill">virtqueue_fill：</a></li>
+<li><a href="#virtqueue-flush">virtqueue_flush：</a></li>
+<li><a href="#virtio-notify">virtio_notify：</a></li>
+</ul></li>
 </ul></li>
 </ul>
 </nav>
                 
                 
 
-<h2 id="技术">技术</h2>
+<h2 id="vring内存layout如下">vring内存layout如下：</h2>
 
-<ol>
-<li>软件定义网络</li>
-<li>分布式对象存储&ndash;原理，架构及Go语言实现</li>
-<li>TensorFlow技术解析与实战</li>
-<li>大规模分布式存储系统原理解析与架构实践</li>
-<li>人月神话</li>
-<li>数据存储与技术实践</li>
-<li>PaaS实现与运维管理：基于Mesos +Docker+ELK的实战指南</li>
-</ol>
+<p><img src="/media/virtio.jpg" alt="memory layout" title="memory layout" /></p>
 
-<h2 id="人文">人文</h2>
+<h2 id="virtio前后端代码逻辑如下">virtio前后端代码逻辑如下：</h2>
 
-<ol>
-<li>人类简史</li>
-<li>未来简史</li>
-<li>浪潮之巅</li>
-<li>数学之美</li>
-</ol>
+<p>主要函数功能：</p>
+
+<h3 id="virtqueue-pop">virtqueue_pop：</h3>
+
+<p>1.创建VirtQueueElement，即我们图中的逻辑buffer，来存储guest物理地址信息out_addr/in_addr（virtqueue_alloc_element）；</p>
+
+<p>2.将guest物理地址映射至host物理地址（virtqueue_map_desc-&gt;dma_memory_map）；</p>
+
+<p>3.设置last_avail_idx来实现向guest的通知（vring_set_avail_event）。</p>
+
+<h3 id="iov-from-buf">iov_from_buf：</h3>
+
+<p>负责将报文拷贝进map的buffer中，实现向guest物理地址的写入；</p>
+
+<h3 id="virtqueue-fill">virtqueue_fill：</h3>
+
+<p>负责数据写入完成时撤销映射，更新VRingAvail.ring[]的相关字段；</p>
+
+<h3 id="virtqueue-flush">virtqueue_flush：</h3>
+
+<p>负责更新VRingUsed.ring的idx，表明这些buffer 已经消费，可以回收；</p>
+
+<h3 id="virtio-notify">virtio_notify：</h3>
+
+<p>负责最后的kick知会前端用户。</p>
+
+<p>对于报文接收流程，前端将空白物理块加入avail ring中，提供给后端用来接收报文，后端接收完报文会放入used ring。可以看出都是后端用完前端的avail ring的内容放入used ring。used ring的最后一个元素avail_event_idx用来告诉前端驱动后端处理到哪个avail ring上的元素了。</p>
+
+<p>对于报文发送流程，前端的基本流程为：start_xmit-&gt;xmit_skb-&gt;virtqueue_add_outbuf-&gt;virtqueue_add 组装数据，最后调用start_xmit中的(virtqueue_kick_prepare(sq-&gt;vq) &amp;&amp; virtqueue_notify(sq-&gt;vq))逻辑进行kick
+<img src="/media/virtio-flow.jpg" alt="code flow" title="code flow" /></p>
 
 
                 
@@ -230,6 +257,16 @@
                 <hr>
                 <ul class="pager">
                     
+                    <li class="previous">
+                        <a href="/post/build-redis-cluster/" data-toggle="tooltip" data-placement="top" title="搭个redis cluster">&larr;
+                            Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/post/notes-about-mec-whitepaper/" data-toggle="tooltip" data-placement="top" title="五分钟笔记-《边缘云计算技术及标准化白皮书》">Next
+                            Post &rarr;</a>
+                    </li>
                     
                 </ul>
 
