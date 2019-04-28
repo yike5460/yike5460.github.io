@@ -6,7 +6,6 @@
     <description>Recent content in Books on Aaron&#39;s Notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 27 Apr 2019 00:46:37 +0800</lastBuildDate>
     
 	<atom:link href="https://www.cloudnotes.cc/book/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,7 +13,7 @@
     <item>
       <title></title>
       <link>https://www.cloudnotes.cc/book/2019-booklist/</link>
-      <pubDate>Sat, 27 Apr 2019 00:46:37 +0800</pubDate>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://www.cloudnotes.cc/book/2019-booklist/</guid>
       <description>2019书单（待更新） 技术 软件定义网络 分布式对象存储&amp;ndash;原理，架构及Go语言实现 TensorFlow技术解析与实战 大规模分布式存储</description>
