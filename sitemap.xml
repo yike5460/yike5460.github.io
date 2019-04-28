@@ -13,6 +13,16 @@
   </url>
   
   <url>
+    <loc>https://www.cloudnotes.cc/book/2019-booklist/</loc>
+    <lastmod>2019-04-27T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://www.cloudnotes.cc/about/me/</loc>
+    <lastmod>2019-04-27T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://www.cloudnotes.cc/post/cloud-computing/</loc>
     <lastmod>2019-04-27T01:07:49+08:00</lastmod>
   </url>
@@ -28,29 +38,25 @@
   </url>
   
   <url>
-    <loc>https://www.cloudnotes.cc/book/2019-booklist/</loc>
-    <lastmod>2018-06-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://www.cloudnotes.cc/post/read/</loc>
     <lastmod>2018-06-04T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://www.cloudnotes.cc/about/me/</loc>
-    <lastmod>2018-06-04T00:00:00+00:00</lastmod>
+    <loc>https://www.cloudnotes.cc/</loc>
+    <lastmod>2019-04-27T18:35:16+08:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
     <loc>https://www.cloudnotes.cc/about/</loc>
-    <lastmod>2018-06-04T00:00:00+00:00</lastmod>
+    <lastmod>2019-04-27T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://www.cloudnotes.cc/book/</loc>
-    <lastmod>2018-06-04T00:00:00+00:00</lastmod>
+    <lastmod>2019-04-27T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -86,12 +92,6 @@
   <url>
     <loc>https://www.cloudnotes.cc/categories/tech/</loc>
     <lastmod>2018-06-04T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.cloudnotes.cc/</loc>
-    <lastmod>2019-04-27T18:35:16+08:00</lastmod>
     <priority>0</priority>
   </url>
   

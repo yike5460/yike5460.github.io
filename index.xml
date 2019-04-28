@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>https://www.cloudnotes.cc</title>
+    <title>Aaron&#39;s Notes</title>
     <link>https://www.cloudnotes.cc/</link>
-    <description>Recent content on https://www.cloudnotes.cc</description>
+    <description>Recent content on Aaron&#39;s Notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 27 Apr 2019 18:35:16 +0800</lastBuildDate>
@@ -27,6 +27,24 @@
       
       <guid>https://www.cloudnotes.cc/post/notes-about-hybrid-whitepaper/</guid>
       <description>原白皮书链接：https://www.zstack.io/templets/default/pdf/wp.pdf 混合云定义：云与传统IT资源</description>
+    </item>
+    
+    <item>
+      <title>2019书单（待更新）</title>
+      <link>https://www.cloudnotes.cc/book/2019-booklist/</link>
+      <pubDate>Sat, 27 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/book/2019-booklist/</guid>
+      <description>技术 软件定义网络 分布式对象存储&amp;ndash;原理，架构及Go语言实现 TensorFlow技术解析与实战 大规模分布式存储系统原理解析与架构实践</description>
+    </item>
+    
+    <item>
+      <title>人到中年，容易忘事，做点笔记方便以后查阅</title>
+      <link>https://www.cloudnotes.cc/about/me/</link>
+      <pubDate>Sat, 27 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/about/me/</guid>
+      <description></description>
     </item>
     
     <item>
@@ -57,29 +75,11 @@
     </item>
     
     <item>
-      <title>2019书单（待更新）</title>
-      <link>https://www.cloudnotes.cc/book/2019-booklist/</link>
-      <pubDate>Mon, 04 Jun 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://www.cloudnotes.cc/book/2019-booklist/</guid>
-      <description>技术 软件定义网络 分布式对象存储&amp;ndash;原理，架构及Go语言实现 TensorFlow技术解析与实战 大规模分布式存储系统原理解析与架构实践</description>
-    </item>
-    
-    <item>
       <title>An Example Post</title>
       <link>https://www.cloudnotes.cc/post/read/</link>
       <pubDate>Mon, 04 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>https://www.cloudnotes.cc/post/read/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>人到中年，容易忘事，做点笔记方便以后查阅</title>
-      <link>https://www.cloudnotes.cc/about/me/</link>
-      <pubDate>Mon, 04 Jun 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://www.cloudnotes.cc/about/me/</guid>
       <description></description>
     </item>
     
