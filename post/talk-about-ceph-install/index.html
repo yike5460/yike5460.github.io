@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+    <meta property="og:site_name" content="Aaron&#39;s Notes">
+    <meta property="og:type" content="article">
+
+    
+    <meta property="og:image" content="https://www.cloudnotes.cc/media/cover.jpg">
+    <meta property="twitter:image" content="https://www.cloudnotes.cc/media/cover.jpg" />
+    
+
+    
+    <meta name="title" content="聊聊Ceph（安装）" />
+    <meta property="og:title" content="聊聊Ceph（安装）" />
+    <meta property="twitter:title" content="聊聊Ceph（安装）" />
+    
+
+    
+    <meta name="description" content="人到中年，容易忘事，做点笔记方便以后查阅">
+    <meta property="og:description" content="人到中年，容易忘事，做点笔记方便以后查阅" />
+    <meta property="twitter:description" content="人到中年，容易忘事，做点笔记方便以后查阅" />
+    
+
+    
+    <meta property="twitter:card" content="summary" />
+    
+    
+
+    <meta name="keyword"  content="cloud computing, distributed system, container, lazy shell tools">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>聊聊Ceph（安装）-Aaron&#39;s Notes</title>
+
+    <link rel="canonical" href="/post/talk-about-ceph-install/">
+
+    <link rel="stylesheet" href="/css/iDisqus.min.css"/>
+	
+    
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    
+    <link rel="stylesheet" href="/css/zanshang.css">
+
+    
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    
+    
+    <script src="/js/jquery.min.js"></script>
+    
+    
+    <script src="/js/bootstrap.min.js"></script>
+    
+    
+    <script src="/js/hux-blog.min.js"></script>
+	
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/docco.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Aaron&#39;s Notes</a>
+        </div>
+
+        
+        
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    
+		    
+                        <li><a href="/book/2019-booklist/">BOOK</a></li>
+                    
+                        <li><a href="/about/me/">ABOUT</a></li>
+                    
+
+                    
+		    <li>
+                        <a href="/search">SEARCH <img src="/img/search.png" height="15" style="cursor: pointer;" alt="Search"></a>
+		    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+    
+</nav>
+<script>
+    
+    
+    
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        
+            $navbar.className = " ";
+            
+            setTimeout(function(){
+                
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+
+
+<style type="text/css">
+    header.intro-header {
+        background-image: url('/media/cover.jpg')
+    }
+</style>
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/ceph" title="ceph">
+                            ceph
+                        </a>
+                        
+                        <a class="tag" href="/tags/hands-on" title="hands-on">
+                            hands-on
+                        </a>
+                        
+                    </div>
+                    <h1>聊聊Ceph（安装）</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+			Posted by 
+			
+			         &#34;&#34;
+			 
+			on 
+			Thursday, December 27, 2018
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+<article>
+    <div class="container">
+        <div class="row">
+
+            
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                
+                <header>
+                    <h2>TOC</h2>
+                </header>
+                <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#简介">简介</a></li>
+<li><a href="#集群拓扑">集群拓扑</a></li>
+<li><a href="#安装过程">安装过程</a>
+<ul>
+<li><a href="#安装ceph-deploy-所有节点">安装ceph-deploy（所有节点）：</a></li>
+<li><a href="#管理节点上-admin-node">管理节点上（admin node）</a></li>
+</ul></li>
+<li><a href="#检查ceph状态">检查Ceph状态</a></li>
+<li><a href="#删除osd节点并重建服务">删除OSD节点并重建服务</a>
+<ul>
+<li><a href="#osd节点">osd节点</a></li>
+<li><a href="#admin节点">admin节点</a></li>
+</ul></li>
+<li><a href="#基本的rbd操作">基本的RBD操作</a></li>
+<li><a href="#radosgw安装-nginx">radosgw安装（nginx）</a>
+<ul>
+<li><a href="#mon节点">mon节点</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+                
+                
+
+<h2 id="简介">简介</h2>
+
+<p>Ceph作为开源社区的分布式存储系统，其架构，设计思想被很多厂商借鉴甚至直接采纳，它提供了块存储，对象存储和文件系统三个基本服务，利用CRUSH数据分布算法提供了一个简洁而层次清晰的设备描述，包括存储集群和副本防治策略，为对象存储的一致性提供了保障。
+理解任何系统或服务最好的办法就是自己动手来部署，结合模块交互，软件架构以及实际应用场景来加深理解，如下是利用ceph-deploy实现的部署，仅包括基本模块（RBD）</p>
+
+<h2 id="集群拓扑">集群拓扑</h2>
+
+<pre><code class="language-shell">ca-01 ———- cm-01
+       |—- co-01
+       |—- co-02
+</code></pre>
+
+<h2 id="安装过程">安装过程</h2>
+
+<h3 id="安装ceph-deploy-所有节点">安装ceph-deploy（所有节点）：</h3>
+
+<pre><code class="language-shell">echo deb http://download.ceph.com/debian-infernalis/ $(lsb_release -sc) main | sudo tee /etc/apt/sources.list.d/ceph.list
+wget -q -O- ‘https://download.ceph.com/keys/release.asc’ | sudo apt-key add –
+sudo apt-get update &amp;&amp; sudo apt-get install ceph-deploy -y
+</code></pre>
+
+<h3 id="管理节点上-admin-node">管理节点上（admin node）</h3>
+
+<p>配置ssh key</p>
+
+<pre><code class="language-shell">#ssh-keygen
+#ssh-copy-id ceph-bj-monitor-01
+#ssh-copy-id ceph-bj-osd-01
+#ssh-copy-id ceph-bj-osd-02
+</code></pre>
+
+<p>配置~/.ssh/config如下：</p>
+
+<pre><code class="language-shell">Host ceph-bj-monitor-01
+  Hostname ceph-bj-monitor-01
+  User root
+  
+Host ceph-bj-osd-01
+  Hostname ceph-bj-osd-01
+  User root
+
+Host ceph-bj-osd-02
+  Hostname ceph-bj-osd-01
+  User root
+</code></pre>
+
+<p>设置本地repo</p>
+
+<pre><code class="language-shell">#export CEPH_DEPLOY_REPO_URL=http://mirrors.163.com/ceph/debian-luminous/
+#export CEPH_DEPLOY_GPG_URL=https://mirrors.163.com/ceph/keys/release.asc
+</code></pre>
+
+<p>开始部署monitor</p>
+
+<pre><code class="language-shell">#ceph-deploy new ceph-bj-monitor-01
+</code></pre>
+
+<p>我的ceph.conf如下：</p>
+
+<pre><code class="language-json">[global]
+fsid = 144cec2f-ceae-460c-84f7-5df374685e9d
+mon_initial_members = ceph-bj-monitor-01
+mon_host = 172.16.182.175
+auth_cluster_required = cephx
+auth_service_required = cephx
+auth_client_required = cephx
+public network = 172.16.182.0/24
+</code></pre>
+
+<p>由于我当前只有两个OSD，这里配置成2
+osd pool default size = 2</p>
+
+<p>如果OSD采用的ext4，注意推荐加入以下两行，原因参考
+<a href="http://docs.ceph.com/docs/jewel/rados/configuration/filesystem-recommendations/" title="http://docs.ceph.com/docs/jewel/rados/configuration/filesystem-recommendations/">http://docs.ceph.com/docs/jewel/rados/configuration/filesystem-recommendations/</a></p>
+
+<pre><code class="language-shell">osd_max_object_name_len = 256
+osd_max_object_namespace_len = 64
+osd journal size = 1024
+filestore xattr use omap = true
+osd pool default min size = 1
+osd pool default pg num = 333
+osd pool default pgp num = 333
+osd crush chooseleaf type = 1
+</code></pre>
+
+<p>开始部署服务，注意如果你的服务器在有网络代理的话需要加上 –no-adjust-repos</p>
+
+<pre><code class="language-shell">#ceph-deploy install dcg-bj-02 ceph-bj-monitor-01 ceph-bj-osd-01 ceph-bj-osd-02 –no-adjust-repos
+#ceph-deploy mon create-initial
+#ceph-deploy disk zap ceph-bj-osd-01:nvme0n1
+#ceph-deploy disk zap ceph-bj-osd-01:nvme1n1
+#ceph-deploy disk zap ceph-bj-osd-02:nvme0n1
+#ceph-deploy disk zap ceph-bj-osd-02:nvme1n1
+#ceph-deploy osd prepare ceph-bj-osd-01:/dev/nvme0n1:/dev/nvme1n1 ceph-bj-osd-02:/dev/nvme0n1:/dev/nvme1n1
+#ceph-deploy osd activate ceph-bj-osd-01:/dev/nvme0n1p1:/dev/nvme1n1p1 ceph-bj-osd-02:/dev/nvme0n1p1:/dev/nvme1n1p1
+</code></pre>
+
+<p>分发key</p>
+
+<pre><code class="language-shell">#ceph-deploy admin dcg-bj-02 ceph-bj-monitor-01 ceph-bj-osd-01 ceph-bj-osd-02
+#sudo chmod +r /etc/ceph/ceph.client.admin.keyring
+</code></pre>
+
+<h2 id="检查ceph状态">检查Ceph状态</h2>
+
+<pre><code class="language-shell"># ceph health（health ok就是安装成功了）
+# ceph -w
+
+    cluster 44eb667d-b061-4ef0-900b-6a173559d702
+
+    health HEALTH_OK
+
+    monmap e1: 1 mons at {ceph-bj-monitor-01=172.16.182.175:6789/0}
+
+            election epoch 4, quorum 0 ceph-bj-monitor-01
+
+    osdmap e17: 2 osds: 2 up, 2 in
+
+            flags sortbitwise,require_jewel_osds
+
+      pgmap v2095: 64 pgs, 1 pools, 0 bytes data, 0 objects
+
+            15476 MB used, 862 GB / 924 GB avail
+
+                  64 active+clean
+
+2018-10-25 03:14:06.925774  [INF] pgmap v2095: 64 pgs: 64 active+clean; 0 bytes data, 15476 MB used, 862 GB / 924 GB avail
+
+# ceph osd tree
+
+ID WEIGHT  TYPE NAME              UP/DOWN REWEIGHT PRIMARY-AFFINITY
+
+-1 0.90309 root default
+
+-2 0.45689    host ceph-bj-osd-01
+
+0 0.45689        osd.0                up  1.00000          1.00000
+
+-3 0.44620    host ceph-bj-osd-02
+
+1 0.44620        osd.1                up  1.00000          1.00000
+</code></pre>
+
+<h2 id="删除osd节点并重建服务">删除OSD节点并重建服务</h2>
+
+<h3 id="osd节点">osd节点</h3>
+
+<pre><code class="language-shell">#sudo rm -rf –one-file-system – /var/lib/ceph
+#sudo rm -rf –one-file-system – /etc/ceph/
+#rm -rf ./my_ceph
+</code></pre>
+
+<h3 id="admin节点">admin节点</h3>
+
+<pre><code class="language-shell"># ceph-deploy uninstall dcg-bj-02 ceph-bj-monitor-01 ceph-bj-osd-01 ceph-bj-osd-02
+# ceph-deploy purgedata dcg-bj-02 ceph-bj-monitor-01 ceph-bj-osd-01 ceph-bj-osd-02
+# ceph osd tree
+ID WEIGHT TYPE NAME UP/DOWN REWEIGHT PRIMARY-AFFINITY
+-1 3.63699 root default
+-2 1.81850 host ceph-bj-osd-01
+0 1.81850 osd.0 up 1.00000 1.00000
+-3 1.81850 host ceph-bj-osd-02
+1 1.81850 osd.1 down 0 1.00000
+# ceph health
+HEALTH_ERR 64 pgs are stuck inactive for more than 300 seconds; 64 pgs degraded; 64 pgs stuck degraded; 64 pgs stuck inactive; 64 pgs stuck unclean; 64 pgs stuck undersized; 64 pgs undersized
+# ceph osd out osd.1
+osd.1 is already out.
+# ceph osd crush remove osd.1
+removed item id 1 name ‘osd.1’ from crush map
+# ceph auth del osd.1
+updated
+# ceph osd rm 1
+removed osd.1
+# ceph osd tree
+ID WEIGHT TYPE NAME UP/DOWN REWEIGHT PRIMARY-AFFINITY
+-1 1.81850 root default
+-2 1.81850 host ceph-bj-osd-01
+0 1.81850 osd.0 up 1.00000 1.00000
+-3 0 host ceph-bj-osd-02
+</code></pre>
+
+<p>重建OSD</p>
+
+<pre><code class="language-shell"># ceph-deploy install ceph-bj-osd-02
+# ceph-deploy disk zap ceph-bj-osd-02:nvme0n1
+# ceph-deploy disk zap ceph-bj-osd-02:nvme1n1
+# ceph-deploy osd prepare ceph-bj-osd-02:/dev/nvme0n1:/dev/nvme1n1
+# ceph-deploy osd activate ceph-bj-osd-02:/dev/nvme0n1p1:/dev/nvme1n1p1
+# ceph osd crush add-bucket ceph-bj-osd-02 host
+# ceph osd crush move ceph-bj-osd-02 root=default
+# ceph osd crush add osd.1 1.0 host=ceph-bj-osd-02
+</code></pre>
+
+<h2 id="基本的rbd操作">基本的RBD操作</h2>
+
+<pre><code class="language-shell"># rbd create test_image –size 10240
+# rbd list
+test_image
+</code></pre>
+
+<p>查看image的order和object大小，注意这里出了一点问题</p>
+
+<pre><code class="language-shell"># rbd info test_image
+
+rbd image ‘test_image’:
+
+        size 10GiB in 2560 objects
+
+        order 22 (4MiB objects)
+
+        block_name_prefix: rbd_data.37196b8b4567
+
+        format: 2
+
+        features: layering, exclusive-lock, object-map, fast-diff, deep-flatten
+
+        flags:
+
+issue happened when mapping to block
+
+# rbd map test_image
+
+rbd: sysfs write failed
+
+RBD image feature set mismatch. Try disabling features unsupported by the kernel with “rbd feature disable”.
+
+In some cases useful info is found in syslog – try “dmesg | tail”.
+
+rbd: map failed: (6) No such device or address
+
+# dmesg | tail
+
+[351821.997061] usb 3-7: Manufacturer: Dell
+
+[351821.997310] usb 3-7: ep 0x81 – rounding interval to 128 microframes, ep desc says 192 microframes
+
+[351822.023940] input: Dell Dell USB Keyboard as /devices/pci0000:00/0000:00:14.0/usb3/3-7/3-7:1.0/0003:413C:2105.0003/input/input3
+
+[351822.078560] hid-generic 0003:413C:2105.0003: input,hidraw2: USB HID v1.10 Keyboard [Dell Dell USB Keyboard] on usb-0000:00:14.0-7/input0
+
+[351833.800882] usb 3-7: USB disconnect, device number 3
+
+[1109182.054573] Key type ceph registered
+
+[1109182.055604] libceph: loaded (mon/osd proto 15/24)
+
+[1109182.059629] rbd: loaded
+
+[1109682.929947] libceph: client14108 fsid 44eb667d-b061-4ef0-900b-6a173559d702
+
+[1109682.932270] libceph: mon0 172.16.182.175:6789 session established
+
+# rbd showmapped
+</code></pre>
+
+<p>通过手动加入image-feature解决</p>
+
+<pre><code class="language-shell"># rbd create test_image2 –size 10G –image-format 2 –image-feature layering
+# rbd ls
+test_image
+test_image2
+# rbd map test_image2
+/dev/rbd0
+# rbd showmapped
+id pool image      snap device
+
+0  rbd  test_image2 –    /dev/rbd0
+# fdisk -l
+Disk /dev/sda: 931.5 GiB, 1000204886016 bytes, 1953525168 sectors
+
+Units: sectors of 1 * 512 = 512 bytes
+
+Sector size (logical/physical): 512 bytes / 512 bytes
+
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+Disklabel type: dos
+
+Disk identifier: 0x67de61a9
+
+Device    Boot      Start        End    Sectors  Size Id Type
+
+/dev/sda1  *          2048 1951522815 1951520768 930.6G 83 Linux
+
+/dev/sda2      1951524862 1953523711    1998850  976M  5 Extended
+
+/dev/sda5      1951524864 1953523711    1998848  976M 82 Linux swap / Solaris
+
+Disk /dev/rbd0: 10 GiB, 10737418240 bytes, 20971520 sectors
+
+Units: sectors of 1 * 512 = 512 bytes
+
+Sector size (logical/physical): 512 bytes / 512 bytes
+
+I/O size (minimum/optimal): 4194304 bytes / 4194304 bytes
+
+# ll /dev/rbd0
+
+brw-rw—- 1 root disk 251, 0 Oct 24 19:33 /dev/rbd0
+
+# rados mkpool pool
+
+successfully created pool pool
+
+# rados lspools
+
+rbd
+
+pool
+
+# rbd create pool/image1 –size 1G –image-format 2 –image-feature layering
+
+# rbd list
+
+test_image
+
+test_image2
+
+# rbd list pool
+
+image1
+
+# rbd info pool/image1
+
+rbd image ‘image1’:
+
+        size 1GiB in 256 objects
+
+        order 22 (4MiB objects)
+
+        block_name_prefix: rbd_data.37276b8b4567
+
+        format: 2
+
+        features: layering
+
+        flags:
+
+# rbd create pool/image2 –size 1G –order 24 –image-format 2 –image-feature layering
+
+rbd: –order is deprecated, use –object-size
+
+# rbd list pool
+
+image1
+
+image2
+
+# rbd info pool/image2
+
+rbd image ‘image2’:
+
+        size 1GiB in 64 objects
+
+        order 24 (16MiB objects)
+
+        block_name_prefix: rbd_data.372b6b8b4567
+
+        format: 2
+
+        features: layering
+
+        flags:
+
+# rbd rm pool/image2
+
+Removing image: 100% complete…done.
+</code></pre>
+
+<p>下面是对RBD的快照操作</p>
+
+<pre><code class="language-shell"># rbd snap create pool/image1@image1_snap
+# rbd snap list
+
+rbd: image name was not specified
+# rbd snap list pool/image1
+
+SNAPID NAME        SIZE TIMESTAMP
+
+    4 image1_snap 1GiB
+
+# rbd ls pool -l
+
+NAME              SIZE PARENT FMT PROT LOCK
+
+image1            1GiB          2
+
+image1@image1_snap 1GiB          2
+
+# rbd info pool/image1@image1_snap
+
+rbd image ‘image1’:
+
+        size 1GiB in 256 objects
+
+        order 22 (4MiB objects)
+
+        block_name_prefix: rbd_data.37276b8b4567
+
+        format: 2
+
+        features: layering
+
+        flags:
+
+        protected: False
+
+# rbd snap protect pool/image1@image1_snap
+# rbd info pool/image1@image1_snap
+
+rbd image ‘image1’:
+
+        size 1GiB in 256 objects
+
+        order 22 (4MiB objects)
+
+        block_name_prefix: rbd_data.37276b8b4567
+
+        format: 2
+
+        features: layering
+
+        flags:
+
+        protected: True
+
+# rbd clone pool/image1@image1_snap rbd/image2
+# rbd ls rbd -l
+
+NAME        SIZE PARENT                  FMT PROT LOCK
+
+image2      1GiB pool/image1@image1_snap  2
+
+test_image  10GiB                          2
+
+test_image2 10GiB                          2
+
+# rbd children pool/image1@image1_snap
+rbd/image2
+# rbd flatten rbd/image2
+
+Image flatten: 100% complete…done.
+
+# rbd ls rbd -l
+
+NAME        SIZE PARENT FMT PROT LOCK
+
+image2      1GiB          2
+
+test_image  10GiB          2
+
+test_image2 10GiB          2
+</code></pre>
+
+<p>RBD的导入和导出操作</p>
+
+<pre><code class="language-shell"># rbd export pool/image1 /tmp/image1_export
+
+Exporting image: 100% complete…done.
+
+# ls -alh /tmp/image1_export
+
+-rw-r–r– 1 root root 1.0G Oct 24 19:47 /tmp/image1_export
+
+# rbd import /tmp/image1_export pool/image2 –image-format 2
+
+Importing image: 100% complete…done.
+
+# rbd ls pool -l
+
+NAME              SIZE PARENT FMT PROT LOCK
+
+image1            1GiB          2
+
+image1@image1_snap 1GiB          2 yes
+
+image2            1GiB          2
+
+# rbd ls -l
+
+NAME        SIZE PARENT FMT PROT LOCK
+
+image2      1GiB          2
+
+test_image  10GiB          2
+
+test_image2 10GiB          2
+</code></pre>
+
+<h2 id="radosgw安装-nginx">radosgw安装（nginx）</h2>
+
+<h3 id="mon节点">mon节点</h3>
+
+<pre><code class="language-shell"># ceph-authtool –create-keyring /etc/ceph/ceph.client.mongw.keyring
+# chown ceph:ceph /etc/ceph/ceph.client.mongw.keyring
+# chmod +r /etc/ceph/ceph.client.mongw.keyring
+# ceph-authtool /etc/ceph/ceph.client.mongw.keyring -n client.mongw.ceph-bj-monitor-01 –gen-key 
+# ceph-authtool -n client.mongw.ceph-bj-monitor-01 –cap osd ‘allow rwx’ –cap mon ‘allow rwx’ /etc/ceph/ceph.client.mongw.keyring
+# ceph -k /etc/ceph/ceph.client.admin.keyring auth add client.mongw.ceph-bj-monitor-01 -i /etc/ceph/ceph.client.mongw.keyring
+</code></pre>
+
+<p>配置ceph和nginx</p>
+
+<pre><code class="language-shell"># cat /etc/ceph/ceph.conf
+
+…
+
+[client.mongw.ceph-bj-monitor-01]
+rgw frontends=fastcgi
+socket_port=9000
+socket_host=0.0.0.0
+host=ceph-bj-monitor-01
+keyring=/etc/ceph/ceph.client.mongw.keyring
+log file=/var/log/radosgw/client.mongw.ceph-bj-monitor-01.log
+rgw print continue=false
+rgw content length compat = true
+
+# cat /etc/nginx/conf.d/mongw.conf
+server {
+
+listen 80;
+
+server_name ceph-bj-monitor-01;
+
+location / {
+
+fastcgi_pass_header Authorization;
+
+fastcgi_pass_request_headers on;
+
+fastcgi_param QUERY_STRING $query_string;
+
+fastcgi_param REQUEST_METHOD $request_method;
+
+fastcgi_param CONTENT_LENGTH $content_length;
+
+fastcgi_param CONTENT_LENGTH $content_length;
+
+if ($request_method = PUT) {
+
+rewrite ^ /PUT$request_uri;
+
+}
+
+include fastcgi_params;
+
+fastcgi_pass 127.0.0.1:9000;
+
+}
+
+location /PUT/ {
+
+internal;
+
+fastcgi_pass_header Authorization;
+
+fastcgi_pass_request_headers on;
+
+include fastcgi_params;
+
+fastcgi_param QUERY_STRING $query_string;
+
+fastcgi_param REQUEST_METHOD $request_method;
+
+fastcgi_param CONTENT_LENGTH $content_length;
+
+fastcgi_param CONTENT_TYPE $content_type;
+
+fastcgi_pass 127.0.0.1:9000;
+
+}
+
+}
+
+# systemctl start nginx
+# systemctl enable nginx
+# systemctl start ceph-radosgw@mongw.ceph-bj-monitor-01′
+</code></pre>
+
+
+                
+
+                <hr>
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/post/talk-about-memory-page/" data-toggle="tooltip" data-placement="top" title="聊聊内存（分页）">&larr;
+                            Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/post/talk-about-site-building/" data-toggle="tooltip" data-placement="top" title="聊聊建站">Next
+                            Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+<div id="disqus-comment"></div>
+
+
+
+            </div>
+            
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <a href="/tags/hands-on" title="hands-on">
+                            hands-on
+                        </a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <a href="/tags/virtio" title="virtio">
+                            virtio
+                        </a>
+                        
+                        
+                    </div>
+                </section>
+                
+
+                
+                
+                <section>
+                    <hr>
+                    <h5>FRIENDS</h5>
+                    <ul class="list-inline">
+                        
+                        <li><a target="_blank" href="https://www.jianshu.com/u/92bb7713098d">Blog in jianshu</a></li>
+                        
+                    </ul>
+                </section>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                   
+                   <li>
+                       <a href="" rel="alternate" type="application/rss+xml" title="Aaron&#39;s Notes" >
+                           <span class="fa-stack fa-lg">
+                               <i class="fa fa-circle fa-stack-2x"></i>
+                               <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                           </span>
+                       </a>
+                   </li>
+                   
+                    
+                    <li>
+                        <a href="mailto:youremail@gmail.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+                    
+                    
+                    
+                    
+
+                    
+
+		    
+                    
+                    <li>
+                        <a target="_blank" href="/your%20wechat%20qr%20code%20image">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-wechat fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/yourgithub">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+                    
+                    <li>
+                        <a target="_blank" href="https://www.linkedin.com/in/yourlinkedinid">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+                    
+                </ul>
+		<p class="copyright text-muted">
+                    Copyright &copy; Aaron&#39;s Notes 2019
+                    <br>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+
+
+
+
+
+<script>
+    
+    if($('#tag_cloud').length !== 0){
+        async("/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+
+<script>
+    async("https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+
+
+
+
+</body>
+</html>

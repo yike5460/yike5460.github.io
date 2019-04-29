@@ -15,9 +15,9 @@
     
 
     
-    <meta name="title" content="五分钟笔记-《混合云白皮书》" />
-    <meta property="og:title" content="五分钟笔记-《混合云白皮书》" />
-    <meta property="twitter:title" content="五分钟笔记-《混合云白皮书》" />
+    <meta name="title" content="聊聊内存（分页）" />
+    <meta property="og:title" content="聊聊内存（分页）" />
+    <meta property="twitter:title" content="聊聊内存（分页）" />
     
 
     
@@ -34,9 +34,9 @@
     <meta name="keyword"  content="cloud computing, distributed system, container, lazy shell tools">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>五分钟笔记-《混合云白皮书》-Aaron&#39;s Notes</title>
+    <title>聊聊内存（分页）-Aaron&#39;s Notes</title>
 
-    <link rel="canonical" href="/post/notes-about-hybrid-whitepaper/">
+    <link rel="canonical" href="/post/talk-about-memory-page/">
 
     <link rel="stylesheet" href="/css/iDisqus.min.css"/>
 	
@@ -156,16 +156,20 @@
                 <div class="post-heading">
                     <div class="tags">
                         
+                        <a class="tag" href="/tags/memory" title="memory">
+                            memory
+                        </a>
+                        
                     </div>
-                    <h1>五分钟笔记-《混合云白皮书》</h1>
+                    <h1>聊聊内存（分页）</h1>
                     <h2 class="subheading"></h2>
                     <span class="meta">
 			Posted by 
 			
-		            Aaron&#39;s Notes
+			         &#34;Aaron&#34;
 			 
 			on 
-			Saturday, April 27, 2019
+			Thursday, December 27, 2018
                         
                     </span>
                 </div>
@@ -191,40 +195,73 @@
                 <header>
                     <h2>TOC</h2>
                 </header>
+                <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#分页单元">分页单元</a></li>
+<li><a href="#物理地址扩展-pae-分页机制">物理地址扩展（PAE）分页机制</a></li>
+<li><a href="#linux中的分页">Linux中的分页</a></li>
+<li><a href="#cpu-cache-硬件高速缓存">CPU Cache（硬件高速缓存）</a></li>
+</ul></li>
+</ul>
+</nav>
                 
                 
-                <p>原白皮书链接：<a href="https://www.zstack.io/templets/default/pdf/wp.pdf" title="https://www.zstack.io/templets/default/pdf/wp.pdf">https://www.zstack.io/templets/default/pdf/wp.pdf</a></p>
 
-<p>混合云定义：云与传统IT资源的整合，目前的主流表现形式为公有云+私有云，相对于公有云和私有云有自己的商用平台（AWS）或者开源项目（OpenStack），混合云更像是一种业务部署，迁移，管理的方式，通过VPN/专线将拉通公有云和私有云资源，继承了公有云的资源可伸缩和私有云的安全性。</p>
+<h2 id="分页单元">分页单元</h2>
 
-<p>混合云发展：混合云的发展依赖于公有云和私有云在技术架构，商业模式上的成熟。其中公有云的迅速发展依赖于网络环境的更新换代，技术方案的成熟，行业标准的制定推出，市场上消费的主要客户来源于大量中小型企业推出的互联网应用，比如O2O，B2B/B2C等等。私有云的发展可以参见中国信息通信研究院的2018《中国私有云发展调查报告》，其主要目标在于提升IT运行效率，降低IT运营成本，应用在于企业内部管理系统和办公系统运维始终是私有云展开的痛点，同时安全领域始终是私有云未来重点。</p>
+<p>分页单元把线性地址转化成物理地址，其关键任务之一就是将所请求的访问类型同线性地址的权限相比较，如果该次内存访问是无效的，就会产生一个缺页异常。分页单元把所有内存分成固定长度的页框（物理页），每个页框包含一个页，即页框的长度同页的长度一致。线性地址被分成固定长度为单位的组，称为页。页内部连续的线性地址被映射到连续的物理地址当中。</p>
 
-<blockquote>
-<p>MarketsandMarkets 预测，到 2021 年，混合云的支出将年均增长 22.5%，达到近 920 亿美元
-云计算开源产业联盟
-2017 年中国私有云市场规模达到 426.8 亿元，相比 2016 年增长 23.8%。预计 2018-2021 年中国私有云市场仍将保持稳定增长
-<strong>中国信息通信研究院</strong></p>
-</blockquote>
+<p>80386开始的常规分页以4K为单位，32bit的线性地址被分成目录（directory），页表（table）和偏移量（offset）三个区域，长度分别是10bit，10bit和12bit。应用分级页表的主要考虑是缩减每个进程页表需要占用的内存数量，比如简单的采用一级页表，需要2的20次方个表项（按照每个表项4K大小计算，需要4MB的内存空间）来表示每个进程的页表，分级页表通过只为进程实际使用的那些虚拟内存区请求页表来减少内存容量。</p>
 
-<p>可以看出公有云的发展速度和市场占比都是排在私有云和混合云前列，相对私有云，混合云的体量更大，而且发展速度更快（私有云的体量基本在2016，2017年维持不变）</p>
+<p><img src="/media/memory-01.png" alt="常规分页" title="常规分页" /></p>
 
-<p>混合云的优势：公有云无法很好适应企业的IT合规政策，私有云仅仅将原有物理设备虚拟化后进行统一管理，做到了资源的局部最优，但在大的业务场景下无法做到资源的scale in/out，限制了成本的进一步降低。同时在针对内部DevOps方面，混合云的部署方式为企业的新业务上云和原有业务迁移提供了一种过渡的方案。</p>
+<p>之前提到缺页异常，它的产生与否是由页目录项和页表项中的present标识决定的，如果执行一个地址转换所需的页表项或页目录项中该标志为0，则分页单元就把该线性地址存放到CR2寄存器中，并产生14号异常，即缺页异常。在页目录项和页表项中还有access，dirty等标识，这些标识在选中的页被交换出去时有操作系统获取做进一步操作，比如针对dirty的同步，刷新等操作。</p>
 
-<p>混合云的商用产品目前提供的功能大同小异，核心都在于将公有云和私有云在IaaS上拉通，举例如下：
-- AWS（Snowball EDGE，Greengrass）
-- 阿里云，其中Cloudlink作为专线网络提供
-- 华为FusionBridge，个人理解本质是架设在公有云和私有元的上一层管理层，或者类似glue layer来接收用户的需求并转换成对应下层云平台的api调用，比如OpenStack API+AWS API。更多参见<a href="https://e.huawei.com/cn/cloud-computing/fusionbridge">https://e.huawei.com/cn/cloud-computing/fusionbridge</a>
-- 腾讯云的黑石系列，注意到其物理服务器全系采用Intel的skylake或e5系列</p>
+<p>相比较常规分页，扩展分页将页大小从4K扩展到4M，删除了中间页表的转换，该情况下32bit的线性地址被划分成10bit的页目录项和22bit的偏移量。通过设置CR4处理器寄存器的PSE标志能使常规分页和扩展分页共存。</p>
 
-<p>混合云的特性：需要拥有统一管理界面，实现多云平台，异构资源的整合，提供良好的服务编排和运维监控，让用户无需感知资源的底层实现而专注在上层的业务开发；白皮书中提出的高密度高效率（多核）和超融合架构，个人认为并非混合云的特性或者优势。多核的需求需要考虑到实际的应用，类似于公有云中的计算性实例，对于计算密集型或实时性要求较高的场景比如AI，自动驾驶，生命科学等，需要多核来实现任务的多并发，配合类似mapreduce的软件充分发挥出其效能，但不能简单对应多核就是高密度高效率，甚至划分成混合云的典型特性。</p>
+<p><img src="/media/memory-02.png" alt="扩展分页" title="扩展分页" /></p>
 
-<p>混合云的关键实现：加密IP网络（IPSec）或者专线，要实现多云平台的融合，首先要实现公有云和私有云两者网络的打通，之前提到的各个主流厂商都有自己的方案，但都依赖当前的运营商网络。白皮书中提到以来云网融合，但具体概念和实施细节并未作出说明，个人理解当前不论是走IP网的VPN还是走专线，都能较好的覆盖不同用户的需求，所提出的不足在当前的应用场景下看并没有实质的瓶颈，随着网络运营商的硬件设施升级，相应带来的带宽，时延，成本的优势会承接上新应用的更高要求。</p>
+<h2 id="物理地址扩展-pae-分页机制">物理地址扩展（PAE）分页机制</h2>
 
-<p>混合云的发展趋势（直接引用）：</p>
+<p>由于用户空间线性地址空间的需要，内核不能直接对1GB以上的内存进行寻址，同时受限于地址总线上的地址管线数限制，内存的最大容量不能超过4GB。从Pentium Pro开始，Intel引入了PAE（Physical Address Extension，设置CR4寄存器中的PAE标志进行激活），通过改变原有分页机制允许内核使用更大容量的内存（64GB），但注意用户态运行下进程的线性地址空间维持不变，仍是4GB，只有内核能够修改进程的页表。具体实现如下：</p>
 
-<p>混合云的发展趋势是进一步屏蔽底层物理细节和实现细节，减少用户的试错成本，帮助用户关注基于跨云的业务实现而不是关注如何部署一个跨云服务，从而真正将私有云的定制能力和公有云的共享及生态能力有机融合
-&gt; 混合云的发展趋势是进一步屏蔽底层物理细节和实现细节，减少用户的试错成本，帮助用户关注基于跨云的业务实现而不是关注如何部署一个跨云服务，从而真正将私有云的定制能力和公有云的共享及生态能力有机融合
-<strong>云计算开源产业联盟云计算开源产业联盟</strong></p>
+<ol>
+<li>64GB的内存被分成2的24次方个页框，页表项的物理地址从20bit扩展至24bit，加上PAE页表项的12个标志位（dirty比如） 页表项大小从32bit变成64bit增加一倍，导致原有4KB的页表包含的表项数量从1024变成512；</li>
+<li>引入页目录指针表（Page Directory Pointer Table，PDPT）的页表新级别，由4个64位表项组成；</li>
+<li>CR3控制器包含一个27bit的PDPT基地址字段；</li>
+</ol>
+
+<p>不同页大小的线性地址解析如下：</p>
+
+<p><img src="/media/memory-03.png" alt="PAE下的地址解析" title="PAE下的地址解析" /></p>
+
+<p>针对64位系统，X86平台采用页大小：4K；寻址用位数：48bit；分页级别数：4；线性地址分级：9+9+9+9+12；的分页级别，至于为什么64位只用了48bit进行寻址，知乎有文章详细讨论：<a href="https://www.zhihu.com/question/28638698" title="https://www.zhihu.com/question/28638698">https://www.zhihu.com/question/28638698</a></p>
+
+<h2 id="linux中的分页">Linux中的分页</h2>
+
+<p>2.6.11版本开始采用了四级分页模型，分别是：页全局目录，页上级目录，页中间目录和页表，具体结构如下：</p>
+
+<p><img src="/media/memory-04.png" alt="多级分页" title="多级分页" /></p>
+
+<p>对于没有启用物理地址扩展的32位系统，Linux使页上级目录，页中间目录位全为0，同时保留它们在指针序列中的位置，以同时兼容32位和64位系统。内核为页上级目录，页中间目录保留了一个位置，通过设置对应的目录项数为1，把这两个目录项映射到项全局目录的一个表项。</p>
+
+<p>启用物理地址扩展（PAE）的32位系统使用了三级页表。Linux的页全局目录对应80×86的页目录指针表（PDPT），页上级目录被取消，页中间目录对应80×86的页目录，Linux的页表对应80×86的页表。64位系统使用几级页表取决于硬件对于线性地址的位的划分。该场景下，当内核创建一个新的也全局目录时，同时也分配4个相应的页中间目录，只要当页全局目录被释放时，这4个页中间目录才得以释放。</p>
+
+<p>当发生进程切换时，Linux把CR3控制寄存器的内容保存在前一个执行进程的描述符中，然后把下一个要执行进程的描述符的值装入CR3寄存器中。</p>
+
+<p>Linux下存在很多宏来定义对应，访问对应的内存结构，比如PTRS_PER_PTE/PTRE_PER_PMD/PTRE_PER_PUD/PTRE_PER_PGD来分别表示页表，页中间目录，页上级目录和页全局目录表中表项的个数。当PAE不使能时，它们的值分别是1024，1，1，1024；当PAE使能时，它们的值分别是512，512，1，4（参照图3，图4）。</p>
+
+<h2 id="cpu-cache-硬件高速缓存">CPU Cache（硬件高速缓存）</h2>
+
+<p>这里细节说一下我们常用的CPU cache，其主要作用在于用来屏蔽CPU和内存读写速度的差异（X100），采用LRU等策略实现Cache内容的更新，换出。80×86引入了cache line的概念，以比如64字节的大小在慢速RAM（内存）和片上静态RAM（SRAM）之间传送。CPU cache按照cache line被分成若干子集，一种情况下，CPU cache是可以直接映射到对应的内存中的完全相同的位置，我们叫direct mapped；另一种情况下，CPU cache是充分关联的（full associative），内存中的任意一行（64字节比如）可以存放在cache中的任意位置；还有一种情况下，CPU cache是N路关联的（N-way set associative），内存中的任意一行可以存放在cache的N个cache line的中的任意一行。</p>
+
+<p>CPU cache插在分页单元和内存之间，包括两部分：缓存内存（CPU cache）和缓存控制器（cache controller）。缓存内存存放cache line，缓存控制器存放一个表项数组，每个表项对应缓存内存中的一个行。每个表项有一个标签（entry label）和描述缓存内存行状态的几个标志，其中标签由若干位组成，这些位让缓存控制器能辨别有这个行当前所映射的内存单元。这种内存物理地址通常分成3组：最高几位对应标签（memory tag），中间几位对应缓存控制器的子集索引，最低几位对应cache line中的偏移量。当访问一个内存单元时，CPU从物理地址中提取出子集的索引，查询对应子集后获取该子集所有行的标签（entry label），再与物理地址的高几位（memory tag）相比较。如果发现某一个行的标签与这个物理地址的高几位相同，则成为CPU cache命中，否则，CPU cache miss。当命中cache时，缓存控制器一般有两种策略选择：write-though和write back，前者既写内存又写cache，后者仅写cache，内存仅在sync或者flush情况下更新；当cache不命中时，cache line写回到内存中，同时正确的行从内存取出放入cache中更新。处理器的CR0寄存器的CD标志位用来启动或者禁用CPU cache，NW标志位指明cache使用是 write-though还是write back。</p>
+
+<p><img src="/media/memory-05.png" alt="内部结构" title="内部结构" /></p>
+
+<p>除我们通用的CPU cache外，80×86还包含了TLB（translation lookaside buffer）的高速缓存用于加快线性地址的转换。当一个线性地址第一次被使用时，通过内存的页表计算出对应的物理地址，通过该内存地址存在在一个TLB表项中，后续针对同一个线性地址的访问可以不用查询页表而直接获取内存地址，加快了访问速率。多核系统下，每个CPU core都有自己的TLB，各TLB互相不做同步，主要是因为现有CPU的进程可以使用同一线性地址与不同的物理地址进行映射。</p>
 
 
                 
@@ -233,13 +270,13 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/post/cloud-computing/" data-toggle="tooltip" data-placement="top" title="五分钟见解-云计算">&larr;
+                        <a href="/post/talk-about-virtio/" data-toggle="tooltip" data-placement="top" title="聊聊virtio">&larr;
                             Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/post/where-to-post/" data-toggle="tooltip" data-placement="top" title="从哪开始写你的第一篇文章">Next
+                        <a href="/post/talk-about-ceph-install/" data-toggle="tooltip" data-placement="top" title="聊聊Ceph（安装）">Next
                             Post &rarr;</a>
                     </li>
                     

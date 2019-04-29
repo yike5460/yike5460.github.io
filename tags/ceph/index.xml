@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ceph on Aaron&#39;s Notes</title>
+    <link>https://www.cloudnotes.cc/tags/ceph/</link>
+    <description>Recent content in Ceph on Aaron&#39;s Notes</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 27 Dec 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://www.cloudnotes.cc/tags/ceph/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>聊聊Ceph（安装）</title>
+      <link>https://www.cloudnotes.cc/post/talk-about-ceph-install/</link>
+      <pubDate>Thu, 27 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/post/talk-about-ceph-install/</guid>
+      <description>简介 Ceph作为开源社区的分布式存储系统，其架构，设计思想被很多厂商借鉴甚至直接采纳，它提供了块存储，对象存储和文件系统三个基本服务，利用C</description>
+    </item>
+    
+  </channel>
+</rss>

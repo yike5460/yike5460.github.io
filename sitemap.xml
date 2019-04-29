@@ -63,6 +63,21 @@
   </url>
   
   <url>
+    <loc>https://www.cloudnotes.cc/post/talk-about-ceph-install/</loc>
+    <lastmod>2018-12-27T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://www.cloudnotes.cc/post/talk-about-memory-page/</loc>
+    <lastmod>2018-12-27T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://www.cloudnotes.cc/post/talk-about-virtio/</loc>
+    <lastmod>2018-12-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://www.cloudnotes.cc/</loc>
     <lastmod>2019-04-27T18:35:16+08:00</lastmod>
     <priority>0</priority>
@@ -92,6 +107,12 @@
   </url>
   
   <url>
+    <loc>https://www.cloudnotes.cc/tags/ceph/</loc>
+    <lastmod>2018-12-27T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://www.cloudnotes.cc/tags/hands-on/</loc>
     <lastmod>2019-02-21T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -100,6 +121,12 @@
   <url>
     <loc>https://www.cloudnotes.cc/tags/ip-san/</loc>
     <lastmod>2019-01-14T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.cloudnotes.cc/tags/memory/</loc>
+    <lastmod>2018-12-27T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+    <meta property="og:site_name" content="Aaron&#39;s Notes">
+    <meta property="og:type" content="article">
+
+    
+    <meta property="og:image" content="https://www.cloudnotes.cc/media/cover.jpg">
+    <meta property="twitter:image" content="https://www.cloudnotes.cc/media/cover.jpg" />
+    
+
+    
+    <meta name="title" content="聊聊virtio" />
+    <meta property="og:title" content="聊聊virtio" />
+    <meta property="twitter:title" content="聊聊virtio" />
+    
+
+    
+    <meta name="description" content="人到中年，容易忘事，做点笔记方便以后查阅">
+    <meta property="og:description" content="人到中年，容易忘事，做点笔记方便以后查阅" />
+    <meta property="twitter:description" content="人到中年，容易忘事，做点笔记方便以后查阅" />
+    
+
+    
+    <meta property="twitter:card" content="summary" />
+    
+    
+
+    <meta name="keyword"  content="cloud computing, distributed system, container, lazy shell tools">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>聊聊virtio-Aaron&#39;s Notes</title>
+
+    <link rel="canonical" href="/post/talk-about-virtio/">
+
+    <link rel="stylesheet" href="/css/iDisqus.min.css"/>
+	
+    
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    
+    <link rel="stylesheet" href="/css/zanshang.css">
+
+    
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    
+    
+    <script src="/js/jquery.min.js"></script>
+    
+    
+    <script src="/js/bootstrap.min.js"></script>
+    
+    
+    <script src="/js/hux-blog.min.js"></script>
+	
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/docco.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Aaron&#39;s Notes</a>
+        </div>
+
+        
+        
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    
+		    
+                        <li><a href="/book/2019-booklist/">BOOK</a></li>
+                    
+                        <li><a href="/about/me/">ABOUT</a></li>
+                    
+
+                    
+		    <li>
+                        <a href="/search">SEARCH <img src="/img/search.png" height="15" style="cursor: pointer;" alt="Search"></a>
+		    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+    
+</nav>
+<script>
+    
+    
+    
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        
+            $navbar.className = " ";
+            
+            setTimeout(function(){
+                
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+
+
+<style type="text/css">
+    header.intro-header {
+        background-image: url('/media/cover.jpg')
+    }
+</style>
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/virtio" title="virtio">
+                            virtio
+                        </a>
+                        
+                    </div>
+                    <h1>聊聊virtio</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+			Posted by 
+			
+			         &#34;Aaron&#34;
+			 
+			on 
+			Tuesday, December 25, 2018
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+<article>
+    <div class="container">
+        <div class="row">
+
+            
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                
+                <header>
+                    <h2>TOC</h2>
+                </header>
+                <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#virtio简介">virtio简介</a></li>
+<li><a href="#参考文章或书籍">参考文章或书籍：</a></li>
+</ul></li>
+</ul>
+</nav>
+                
+                
+
+<h2 id="virtio简介">virtio简介</h2>
+
+<p>virtio作为一种半虚拟化（para-virtualization）的标准框架，统一了虚机中不同设备的实现标准，为未来新设备的扩展提供了便利，主要作用在于: 1）统一的驱动，之前各个虚拟化系统Vmware，Xen，KVM都有自己的块设备，网络设备等的驱动，virto做了统一的整合；2）提供统一接口实现缓存buffer的发布和使用；3）设备发现和配置 。之所以说是半虚拟化是因为virtio虚拟化的实现需要宿主机的感知，guest中的virtio driver和host中的virtio device通过virtqueue进行通信（见图1）。</p>
+
+<p><img src="/media/virtio-01.png" alt="virtio软件栈" title="virtio软件栈" /></p>
+
+<p>其中virtqueue作为guest OS内存的一部分用来实现前后端（guest OS和QEMU）的连接，virtqueue的内存分布内部通过vring的一个数据结构来提炼。用户通过add_buf和kick实现数据从guest OS向QEMU的写入，通过get_buf实现数据从QEMU的读取（图2）。</p>
+
+<p><img src="/media/virtio-02.png" alt="virtqueue操作函数" title="virtqueue操作函数" /></p>
+
+<p>guest virtio driver通过访问port地址空间向QEMU的virtio device发送IO发起消息。而设备通过读写irqfd或者IOCTL fd_vm将I/O的完成情况通知给guest的驱动。irqfd和ioeventfd是KVM为用户程序基于内核eventfd机制提供的通知机制，以实现异步的IO处理(这样发起IO请求的vcpu将不会阻塞)。guest通过KVM提供的通知机制向QEMU发送I/O消息，从guest切换到KVM，再由KVM切换到用户空间的QEMU进程，QEMU完成对设备的读写（图3）。
+有兴趣可以阅读想法原作者 Rusty Russell 的论文 <a href="https://ozlabs.org/~rusty/virtio-spec/virtio-paper.pdf" title="https://ozlabs.org/~rusty/virtio-spec/virtio-paper.pdf">https://ozlabs.org/~rusty/virtio-spec/virtio-paper.pdf</a>，里面详细的说明了virtio的产生背景以及具体设计上的考虑。</p>
+
+<p><img src="/media/virtio-03.png" alt="virtio+KVM调用路径" title="virtio+KVM调用路径" /></p>
+
+<p>相比利用KVM+QEMU全虚拟化的方案（图4），我们可以看到virtio标准框架的引入，统一了guest也就是虚拟机与宿主机内核通信的流程，便于今后新设备加入的支持。图4中KVM通过操作与CPU共享的数据结构实现指令集和MMU的虚拟化，捕捉guest设备的IO指令（port IO，MMAP IO）并与QEMU进程进行通信。QEMU实现IO设备的模拟，解释从KVM发送过来的IO指令再将其转换成系统调用或者库函数至宿主机驱动来实现最终的IO操作。</p>
+
+<p><img src="/media/virtio-04.png" alt="KVM+QEMU调用路径" title="KVM+QEMU调用路径" /></p>
+
+<p>virtio中实现数据交互的virtqueue数据结构包括：1）描述符表（descriptor table）；2）可用环（available ring）；3）已用环（used ring），数据组织结构以及代码定义如下：</p>
+
+<pre><code class="language-c">Descriptor Table	Available Ring (…padding…)	Used Ring
+struct virtq {
+// The actual descriptors (16 bytes each)
+struct virtq_desc desc[ Queue Size ];
+// A ring of available descriptor heads with free-running index.
+struct virtq_avail avail;
+// Padding to the next Queue Align boundary.
+u8 pad[ Padding ];
+// A ring of used descriptor heads with free-running index.
+struct virtq_used used;
+}
+</code></pre>
+
+<p>我们进一步查看每个数据结构的详细定义，如下：</p>
+
+<pre><code class="language-c">struct virtq_desc {
+/* Address (guest-physical). */
+le64 addr;
+/* Length. */
+le32 len;
+/* This marks a buffer as continuing via the next field. */
+#define VIRTQ_DESC_F_NEXT 1
+/* This marks a buffer as device write-only (otherwise device read-only). */
+#define VIRTQ_DESC_F_WRITE 2
+/* This means the buffer contains a list of buffer descriptors. */
+#define VIRTQ_DESC_F_INDIRECT 4
+/* The flags as indicated above. */
+le16 flags;
+/* Next field if flags &amp; NEXT */
+le16 next;
+};
+</code></pre>
+
+<p>描述符表指的是驱动程序用于设备的缓冲区。 addr是一个物理地址，和缓冲区可以通过next链接。每个描述符描述一个对设备只读 （“设备可读”）或只写（“设备可写”）
+的缓冲区 ，描述符链可以同时包含设备可读和设备可写缓冲区。提供给设备的内存的实际内容取决于设备类型。最常见的是以报文头开始的数据（包含little-endian字段）以供设备读取，并在字尾加上状态通知设备写入。其中需要注意在这个数据结构中有间接描述符的一个用法，其中addr和len这时指向的是间接描述符表的地址和长度，间接描述符表是由virtq_desc组成的数组结构，从index 0开始到index len/16（len在就是我们刚才提到的上一级描述符表的len）访问真正的vring.desc结构，最后一个desc通过VIRTQ_DESC_F_NEXT识别，如图5所示。</p>
+
+<p><img src="/media/virtio-05.jpg" alt="vring indirect数据结构" title="vring indirect数据结构" /></p>
+
+<pre><code class="language-c">struct virtq_avail {
+#define VIRTQ_AVAIL_F_NO_INTERRUPT 1
+le16 flags;
+le16 idx;
+le16 ring[ /* Queue Size */ ];
+le16 used_event; /* Only if VIRTIO_F_EVENT_IDX */
+};
+</code></pre>
+
+<p>驱动使用可用环为设备提供缓冲区：每个环条目指的是描述符链的头部 。它仅由驱动程序写入并由设备读取。 idx字段知名驱动将下一个描述符条目放入环中的位置（以队列大小取模），其从0开始并递增。</p>
+
+<p><img src="/media/virtio-06.jpg" alt="available ring数据结构" title="available ring数据结构" /></p>
+
+<pre><code class="language-c">struct virtq_used {
+#define VIRTQ_USED_F_NO_NOTIFY 1
+le16 flags;
+le16 idx;
+struct virtq_used_elem ring[ /* Queue Size */];
+le16 avail_event; /* Only if VIRTIO_F_EVENT_IDX */
+}; 
+/* le32 is used here for ids for padding reasons. */ 
+struct virtq_used_elem {
+/* Index of start of used descriptor chain. */
+le32 id;
+/* Total length of the descriptor chain which was used (written to) */
+le32 len;
+}; 
+</code></pre>
+
+<p>已用环是设备在处理完并返回缓冲区的地方：它仅由设备写入，并由驱动读取。环中的每个条目都是一对：id表示描述缓冲区的描述符链的初始条目（对应guest虚机放置在可用环中的条目）len代表写入缓存的字节总数。需要额外注意的是，len对于使用不受信任缓冲区的驱动特别有用。如果驱动并不知道确切写入缓存的数量，驱动必须提前将缓冲区归零以确保数据不会泄漏。idx字段告知驱动下一个放入环中描述符条目的位置（以队列大小取模），其从0开始并递增。
+在协议定义中，提到了针对vring的内存对齐和大小规范，以及相应的宏。</p>
+
+<p><img src="/media/virtio-07.png" alt="virtqueue数据对齐和大小" title="virtqueue数据对齐和大小" /></p>
+
+<pre><code class="language-c">#define ALIGN(x) (((x) + qalign) &amp; ~qalign)
+static inline unsigned virtq_size(unsigned int qsz)
+{
+return ALIGN(sizeof(struct virtq_desc)*qsz + sizeof(u16)*(3 + qsz))
++ ALIGN(sizeof(u16)*3 + sizeof(struct virtq_used_elem)*qsz);
+}
+</code></pre>
+
+<p>可以看到，实际分配的内存大小要多于定义数据结构的大小，比如Available Ring实际大小是2字节flag加上2字节index，再加上u16的ring数组，但实际的内存size是6+2*（Queue Size），中间通过padding来对齐，在原作者的论文当中提到，padding的作用是为了避免由于cache的原因导致两个环（可用环，已用环）直接写到内存的同一块地址。整体的读写过程如下（图8），类似生产者-消费者模型，一端写入，一端读取。</p>
+
+<p><strong>Guest 向设备提供 buffer</strong>
+1. 把 buffer 添加到 description table 中，填充 addr，len，flags
+2. 更新 available ring head
+3. 更新 available ring 中的 index
+4. 通知 device，通过写入 virtqueue index 到 Queue Notify 寄存器</p>
+
+<p><strong>Device 使用 buffer 并填充 used ring</strong>
+1. virtqueue_pop()——从描述符表格（descriptor table）中找到 available ring 中添加的 buffers，映射内存
+2. 从分散-聚集的 buffer 读取数据
+3. virtqueue_fill()——取消内存映射，更新 ring[idx]中的 id 和 len 字段
+4. virtqueue_flush()——更新 vring_used 中的 idx
+5. virtio_notify()——如果需要的话，在 ISR 状态位写入 1，通知 guest 描述符已经使用
+需要额外提到的一个feature bit是 VIRTIO_F_EVENT_IDX，通过该bit的设置与否，在driver和device两个方向上来开启或关闭对应的中断和通告消息的发送，即interrupt suppression和notification suppression（driver-&gt;device方向是notification即通告，device-&gt;driver方向是interrupt即中断）。</p>
+
+<p><img src="/media/virtio-08.png" alt="virio框架" title="virio框架" /></p>
+
+<p>我们知道，在virtio的框架下称虚机中实现的前端驱动为virtio driver，宿主机实现的后端驱动叫做virtio-device，后端驱动在架构，性能上经历了virtio-net，vhost和vhost-user的演变。在了解vhost前，我们分析一下当前模型下数据转发和消息通知路径上的主要开销。</p>
+
+<ul>
+<li>数据通道：TAP设备-&gt;QEMU-&gt;guest，其中涉及两次报文拷贝；</li>
+<li>消息通道：TAP设备-&gt;Kernel/QEMU-&gt;KVM（QEMU利用IOCTL）-&gt;guest</li>
+</ul>
+
+<p>vhost内核模块主要是把virtio后端驱动的数据平面迁移到了内核中，而控制平面还在QEMU中，所以就需要一些列的注册把相关信息记录在内核中，如虚拟机内存布局，设备关联的eventfd等。虽然KVM中有虚拟机的内存布局，但是由于vhost并非在KVM中，而是单独的一个内核模块，所以需要QEMU单独处理。且目前vhost只支持网络部分，块设备等其他部分尚不支持。</p>
+
+<p>通过卸载原有virtio-net报文收发，消息通知及中断的工作至vhost，将QEMU从虚拟队列的工作中解放出来，减少了上下文切换和数据包拷贝，从而提到了报文整体的收发性能，修改后的通道路径如下：</p>
+
+<ul>
+<li>数据通道：TAP设备-&gt;vhost-&gt;guest，vhost负责将报文拷贝到virtqueue中的buffer中；</li>
+<li>消息通道：TAP设备-&gt;vhost-&gt;KVM-&gt;guest</li>
+</ul>
+
+<p><img src="/media/virtio-09.png" alt="vhost内核态实现" title="vhost内核态实现" /></p>
+
+<p>vhost-user相对于上述的内核态vhost，通过share memory实现共享的虚拟队列来完成报文的收发和控制，消除了由内核完成报文拷贝和消息处理的开销。vhost-user的提交者是Luke Gorrie，他也是snabbswitch的作者。vhost-backend从原来kernel中的vhost-net变成了用户空间的snabbswitch，snabbswitch直接接管物理网卡的驱动，从而直接控制网络信息的输入输出。snabbswitch主要使用了下面的技术来提高性能：</p>
+
+<ul>
+<li>采用了大页来作为host和vm之间通信的内存空间</li>
+<li>用户态操作网卡，使用类似于netmap的zero copy技术来加速对物理设备的访问</li>
+<li>使用numa技术，加快中断响应速率</li>
+</ul>
+
+<p>值得一提的是使用snabbswitch后，不用再使用原来的tap设备模拟的网卡。
+使用vhost-user技术，从虚拟机到host上实现了数据的zero copy（通过大页共享），host到NIC的zero copy（snabbswitch实现的驱动），能进一步加快数据的传输。需要提到的是，不论是用户态vhost还是内核态vhost，都需要QEMU能共享如下资源作为前提：</p>
+
+<ol>
+<li>Guest上的内存空间分布，指GPA到HPA的转换；</li>
+<li>虚拟队列地址，由于虚拟队列的地址是QEMU进程上的虚拟空间中的地址，实际使用是需要转换成vhost所在进程的虚拟地址；</li>
+<li>KVM中配置的用于向客户机上的virtio-net发送中断的事件文件描述符（eventfd）；</li>
+<li>KVM中配置的用于virtio-net PCI配置空间写操作出发的事件文件描述符</li>
+</ol>
+
+<p><img src="/media/virtio-10.png" alt="用户态vhost实现" title="用户态vhost实现" /></p>
+
+<p>DPDK便是一个在用户态可以直接操作物理网卡的库函数，它和vhost-user结合便可以实现类似于snabbswitch一样性能强劲的用户态交换机。SPDK基于相同的软件优化考虑，为QEMU提供对应的存储驱动（virtio blk，virtio scsi和尚在试验阶段的virto NVMe），对应用户态target（vhost-user-scsi-pci，vhost-user-blk-pci和 尚在试验阶段的vhost-user-nvme）和一个基本的设备抽象层bdev（图11）。对SPDK更为详尽的软件架构，应用场景等介绍会在后续文章中提到。</p>
+
+<p><img src="/media/virtio-11.png" alt="QEMU vhost调用路径" title="QEMU vhost调用路径" /></p>
+
+<h2 id="参考文章或书籍">参考文章或书籍：</h2>
+
+<ul>
+<li><a href="http://docs.oasis-open.org/virtio/virtio/v1.0/virtio-v1.0.html" title="http://docs.oasis-open.org/virtio/virtio/v1.0/virtio-v1.0.html">http://docs.oasis-open.org/virtio/virtio/v1.0/virtio-v1.0.html</a></li>
+<li><a href="www.ozlabs.org/~rusty/virtio-spec/virtio-paper.pdf" title="www.ozlabs.org/~rusty/virtio-spec/virtio-paper.pdf">www.ozlabs.org/~rusty/virtio-spec/virtio-paper.pdf</a></li>
+<li><a href="https://www.ibm.com/developerworks/cn/linux/1402_caobb_virtio/index.html" title="https://www.ibm.com/developerworks/cn/linux/1402_caobb_virtio/index.html">https://www.ibm.com/developerworks/cn/linux/1402_caobb_virtio/index.html</a></li>
+<li><a href="https://blog.csdn.net/wj_j2ee/article/details/7978259" title="https://blog.csdn.net/wj_j2ee/article/details/7978259">https://blog.csdn.net/wj_j2ee/article/details/7978259</a></li>
+<li><a href="https://www.cnblogs.com/ck1020/p/7204769.html" title="https://www.cnblogs.com/ck1020/p/7204769.html">https://www.cnblogs.com/ck1020/p/7204769.html</a></li>
+<li>《深入浅出DPDK》</li>
+<li><a href="https://spdk.io/doc" title="https://spdk.io/doc">https://spdk.io/doc</a></li>
+</ul>
+
+
+                
+
+                <hr>
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/post/talk-about-memory-page/" data-toggle="tooltip" data-placement="top" title="聊聊内存（分页）">Next
+                            Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+<div id="disqus-comment"></div>
+
+
+
+            </div>
+            
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <a href="/tags/hands-on" title="hands-on">
+                            hands-on
+                        </a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <a href="/tags/virtio" title="virtio">
+                            virtio
+                        </a>
+                        
+                        
+                    </div>
+                </section>
+                
+
+                
+                
+                <section>
+                    <hr>
+                    <h5>FRIENDS</h5>
+                    <ul class="list-inline">
+                        
+                        <li><a target="_blank" href="https://www.jianshu.com/u/92bb7713098d">Blog in jianshu</a></li>
+                        
+                    </ul>
+                </section>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                   
+                   <li>
+                       <a href="" rel="alternate" type="application/rss+xml" title="Aaron&#39;s Notes" >
+                           <span class="fa-stack fa-lg">
+                               <i class="fa fa-circle fa-stack-2x"></i>
+                               <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                           </span>
+                       </a>
+                   </li>
+                   
+                    
+                    <li>
+                        <a href="mailto:youremail@gmail.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+                    
+                    
+                    
+                    
+
+                    
+
+		    
+                    
+                    <li>
+                        <a target="_blank" href="/your%20wechat%20qr%20code%20image">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-wechat fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/yourgithub">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+                    
+                    <li>
+                        <a target="_blank" href="https://www.linkedin.com/in/yourlinkedinid">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+                    
+                </ul>
+		<p class="copyright text-muted">
+                    Copyright &copy; Aaron&#39;s Notes 2019
+                    <br>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+
+
+
+
+
+<script>
+    
+    if($('#tag_cloud').length !== 0){
+        async("/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+
+<script>
+    async("https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+
+
+
+
+</body>
+</html>

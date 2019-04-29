@@ -21,6 +21,15 @@
     </item>
     
     <item>
+      <title>Ceph</title>
+      <link>https://www.cloudnotes.cc/tags/ceph/</link>
+      <pubDate>Thu, 27 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/tags/ceph/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Hands-on</title>
       <link>https://www.cloudnotes.cc/tags/hands-on/</link>
       <pubDate>Thu, 21 Feb 2019 00:00:00 +0000</pubDate>
@@ -35,6 +44,15 @@
       <pubDate>Mon, 14 Jan 2019 00:00:00 +0000</pubDate>
       
       <guid>https://www.cloudnotes.cc/tags/ip-san/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Memory</title>
+      <link>https://www.cloudnotes.cc/tags/memory/</link>
+      <pubDate>Thu, 27 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/tags/memory/</guid>
       <description></description>
     </item>
     

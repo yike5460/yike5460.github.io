@@ -20,5 +20,14 @@
       <description>vring内存layout如下： virtio前后端代码逻辑如下： 主要函数功能： virtqueue_pop： 1.创建VirtQueueElem</description>
     </item>
     
+    <item>
+      <title>聊聊virtio</title>
+      <link>https://www.cloudnotes.cc/post/talk-about-virtio/</link>
+      <pubDate>Tue, 25 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/post/talk-about-virtio/</guid>
+      <description>virtio简介 virtio作为一种半虚拟化（para-virtualization）的标准框架，统一了虚机中不同设备的实现标准，为未来新设</description>
+    </item>
+    
   </channel>
 </rss>
