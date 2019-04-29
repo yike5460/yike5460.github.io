@@ -29,5 +29,14 @@
       <description>拓扑 两个节点，一个initiator，一个target，中间通过交换机或者网线直连 initiator(192.168.1.100) &amp;lt;——–&amp;gt; target (192.168.1.200) 安装配置 ###target # apt-cache search scsi | grep target # apt-get install</description>
     </item>
     
+    <item>
+      <title>聊聊建站</title>
+      <link>https://www.cloudnotes.cc/post/talk-about-site-building/</link>
+      <pubDate>Sun, 30 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/post/talk-about-site-building/</guid>
+      <description>公有云的出现（云主机ECS，虚拟网卡，云存储RBD/RDS，公网IP等）以及相应的一站式建站解决方案（域名解析，安全防护，资源监控等），为个</description>
+    </item>
+    
   </channel>
 </rss>

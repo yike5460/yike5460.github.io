@@ -92,5 +92,14 @@
       <description>什么是CDN CDN全称是content distribution network即内容分发网络的缩写，旨在将原有集中式源站提供文字，图片，视频，文件等资源的方式，改变</description>
     </item>
     
+    <item>
+      <title>聊聊建站</title>
+      <link>https://www.cloudnotes.cc/post/talk-about-site-building/</link>
+      <pubDate>Sun, 30 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/post/talk-about-site-building/</guid>
+      <description>公有云的出现（云主机ECS，虚拟网卡，云存储RBD/RDS，公网IP等）以及相应的一站式建站解决方案（域名解析，安全防护，资源监控等），为个</description>
+    </item>
+    
   </channel>
 </rss>
