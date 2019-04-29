@@ -26,7 +26,7 @@
       <pubDate>Tue, 25 Dec 2018 00:00:00 +0000</pubDate>
       
       <guid>https://www.cloudnotes.cc/post/talk-about-virtio/</guid>
-      <description>virtio简介 virtio作为一种半虚拟化（para-virtualization）的标准框架，统一了虚机中不同设备的实现标准，为未来新设</description>
+      <description>virtio virtio作为一种半虚拟化（para-virtualization）的标准框架，统一了虚机中不同设备的实现标准，为未来新设备的扩展提供了</description>
     </item>
     
   </channel>

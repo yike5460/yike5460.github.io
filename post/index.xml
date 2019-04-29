@@ -6,19 +6,10 @@
     <description>Recent content in Posts on Aaron&#39;s Notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 27 Apr 2019 18:35:16 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 27 Apr 2019 18:24:02 +0800</lastBuildDate>
     
 	<atom:link href="https://www.cloudnotes.cc/post/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>从哪开始写你的第一篇文章</title>
-      <link>https://www.cloudnotes.cc/post/where-to-post/</link>
-      <pubDate>Sat, 27 Apr 2019 18:35:16 +0800</pubDate>
-      
-      <guid>https://www.cloudnotes.cc/post/where-to-post/</guid>
-      <description>对我来说，在哪里写下自己平时的一些只言片语，比起写什么，怎么写似乎更加重要，自媒体横行的年代，似乎每个技术人都热衷将自己的工程经验，行业见解</description>
-    </item>
     
     <item>
       <title>五分钟笔记-《混合云白皮书》</title>
@@ -54,6 +45,15 @@
       
       <guid>https://www.cloudnotes.cc/post/notes-about-mec-whitepaper/</guid>
       <description>原白皮书链接： www.cesi.cn/images/editor/20181214/20181214115429307.pdf 文章给出的边缘云的定义如下： 边缘云计算定义为： 边缘云计算， 简称边缘云，是基于云计算技术的核心和边缘计算的能力，构筑在边缘基础</description>
+    </item>
+    
+    <item>
+      <title>从哪开始写你的第一篇文章</title>
+      <link>https://www.cloudnotes.cc/post/where-to-post/</link>
+      <pubDate>Wed, 17 Apr 2019 18:35:16 +0800</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/post/where-to-post/</guid>
+      <description>对我来说，在哪里写下自己平时的一些只言片语，比起写什么，怎么写似乎更加重要，自媒体横行的年代，似乎每个技术人都热衷将自己的工程经验，行业见解</description>
     </item>
     
     <item>
@@ -125,7 +125,7 @@
       <pubDate>Tue, 25 Dec 2018 00:00:00 +0000</pubDate>
       
       <guid>https://www.cloudnotes.cc/post/talk-about-virtio/</guid>
-      <description>virtio简介 virtio作为一种半虚拟化（para-virtualization）的标准框架，统一了虚机中不同设备的实现标准，为未来新设</description>
+      <description>virtio virtio作为一种半虚拟化（para-virtualization）的标准框架，统一了虚机中不同设备的实现标准，为未来新设备的扩展提供了</description>
     </item>
     
   </channel>

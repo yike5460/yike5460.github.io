@@ -199,7 +199,8 @@
 <ul>
 <li>
 <ul>
-<li><a href="#virtio简介">virtio简介</a></li>
+<li><a href="#virtio">virtio</a></li>
+<li><a href="#vhost">vhost</a></li>
 <li><a href="#参考文章或书籍">参考文章或书籍：</a></li>
 </ul></li>
 </ul>
@@ -207,7 +208,7 @@
                 
                 
 
-<h2 id="virtio简介">virtio简介</h2>
+<h2 id="virtio">virtio</h2>
 
 <p>virtio作为一种半虚拟化（para-virtualization）的标准框架，统一了虚机中不同设备的实现标准，为未来新设备的扩展提供了便利，主要作用在于: 1）统一的驱动，之前各个虚拟化系统Vmware，Xen，KVM都有自己的块设备，网络设备等的驱动，virto做了统一的整合；2）提供统一接口实现缓存buffer的发布和使用；3）设备发现和配置 。之所以说是半虚拟化是因为virtio虚拟化的实现需要宿主机的感知，guest中的virtio driver和host中的virtio device通过virtqueue进行通信（见图1）。</p>
 
@@ -332,6 +333,8 @@ return ALIGN(sizeof(struct virtq_desc)*qsz + sizeof(u16)*(3 + qsz))
 <li>数据通道：TAP设备-&gt;QEMU-&gt;guest，其中涉及两次报文拷贝；</li>
 <li>消息通道：TAP设备-&gt;Kernel/QEMU-&gt;KVM（QEMU利用IOCTL）-&gt;guest</li>
 </ul>
+
+<h2 id="vhost">vhost</h2>
 
 <p>vhost内核模块主要是把virtio后端驱动的数据平面迁移到了内核中，而控制平面还在QEMU中，所以就需要一些列的注册把相关信息记录在内核中，如虚拟机内存布局，设备关联的eventfd等。虽然KVM中有虚拟机的内存布局，但是由于vhost并非在KVM中，而是单独的一个内核模块，所以需要QEMU单独处理。且目前vhost只支持网络部分，块设备等其他部分尚不支持。</p>
 
