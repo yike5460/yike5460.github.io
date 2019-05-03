@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Introspection on Aaron&#39;s Notes</title>
+    <link>https://www.cloudnotes.cc/tags/introspection/</link>
+    <description>Recent content in Introspection on Aaron&#39;s Notes</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 03 May 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://www.cloudnotes.cc/tags/introspection/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>平衡</title>
+      <link>https://www.cloudnotes.cc/post/about-balance/</link>
+      <pubDate>Fri, 03 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/post/about-balance/</guid>
+      <description>平衡 国人喜欢中庸，很多成语不愠不火，张弛有道，恰到好处等等这些成语揭示的都是对于万事万物的平衡的期许，对于打破平衡，走向极端的情况我们也会有</description>
+    </item>
+    
+  </channel>
+</rss>
