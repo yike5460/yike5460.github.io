@@ -6,10 +6,19 @@
     <description>Recent content in Posts on Aaron&#39;s Notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 03 May 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 05 May 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://www.cloudnotes.cc/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>OpenStack部署笔记</title>
+      <link>https://www.cloudnotes.cc/post/install-openstack/</link>
+      <pubDate>Sun, 05 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/post/install-openstack/</guid>
+      <description>Topology 单控制节点加单计算节点（节点的说法不太准确，节点的角色应以上面部署的服务来定义，这里控制节点指主要业务如nova，neutron等服务部署</description>
+    </item>
     
     <item>
       <title>平衡</title>
