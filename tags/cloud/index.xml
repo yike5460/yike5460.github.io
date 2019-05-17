@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cloud on </title>
+    <link>https://www.cloudnotes.cc/tags/cloud/</link>
+    <description>Recent content in Cloud on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 17 May 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://www.cloudnotes.cc/tags/cloud/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>五分钟见解-云计算续</title>
+      <link>https://www.cloudnotes.cc/post/cloud-computing-v2/</link>
+      <pubDate>Fri, 17 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/post/cloud-computing-v2/</guid>
+      <description>云计算为什么出现 云计算概念的提出早在2005年由IBM，Google和亚马逊提出，真正成为焦点进入我们视线的应该是最近五年时间，任何技术的繁</description>
+    </item>
+    
+  </channel>
+</rss>

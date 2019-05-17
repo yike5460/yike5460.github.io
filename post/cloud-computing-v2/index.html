@@ -15,9 +15,9 @@
     
 
     
-    <meta name="title" content="" />
-    <meta property="og:title" content="" />
-    <meta property="twitter:title" content="" />
+    <meta name="title" content="五分钟见解-云计算续" />
+    <meta property="og:title" content="五分钟见解-云计算续" />
+    <meta property="twitter:title" content="五分钟见解-云计算续" />
     
 
     
@@ -34,9 +34,9 @@
     <meta name="keyword"  content="cloud computing, distributed system, container, lazy shell tools">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>CDN-Aaron&#39;s Notes</title>
+    <title>五分钟见解-云计算续-Aaron&#39;s Notes</title>
 
-    <link rel="canonical" href="/tags/cdn/">
+    <link rel="canonical" href="/post/cloud-computing-v2/">
 
     <link rel="stylesheet" href="/css/iDisqus.min.css"/>
 	
@@ -147,14 +147,39 @@
 
 
 
-<header class="intro-header" style="background-image: url('/media/cover.jpg')">
+
+<style type="text/css">
+    header.intro-header {
+        background-image: url('/media/cover.jpg')
+    }
+</style>
+<header class="intro-header">
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
-                <div class="site-heading">
-                    <h1> </h1>
-                    
-		    <span class="subheading"></span>
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/cloud" title="cloud">
+                            cloud
+                        </a>
+                        
+                        <a class="tag" href="/tags/notes" title="notes">
+                            notes
+                        </a>
+                        
+                    </div>
+                    <h1>五分钟见解-云计算续</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+			Posted by 
+			
+			         Aaron
+			 
+			on 
+			Friday, May 17, 2019
+                        
+                    </span>
                 </div>
             </div>
         </div>
@@ -163,179 +188,164 @@
 
 
 
-  
-<div class="container">
-    <div class="row">
-        
-        
-   	    <div class="
-            col-lg-8 col-lg-offset-1
-            col-md-8 col-md-offset-1
-            col-sm-12
-            col-xs-12
-            post-container
-        ">
-            
 
-<div class="post-preview">
-    <a href="https://www.cloudnotes.cc/post/talk-about-cdn/">
-        <h2 class="post-title">
-            聊聊CDN中的加速
-        </h2>
-	
-        <div class="post-content-preview">
-	
-            什么是CDN CDN全称是content distribution network即内容分发网络的缩写，旨在将原有集中式源站提供文字，图片，视频，文件等资源的方式，改变
-       
-        </div>
-    </a>
-    <p class="post-meta">
-    Posted by      &#34;Aaron&#34; Wednesday, January 9, 2019
-    </p>
-</div>
-<hr>
-
+<article>
+    <div class="container">
+        <div class="row">
 
             
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                
+                <header>
+                    <h2>TOC</h2>
+                </header>
+                <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#云计算为什么出现">云计算为什么出现</a></li>
+<li><a href="#云计算的核心">云计算的核心</a></li>
+<li><a href="#云计算带来额外思考">云计算带来额外思考</a></li>
+</ul></li>
+</ul>
+</nav>
+                
+                
+
+<h2 id="云计算为什么出现">云计算为什么出现</h2>
+
+<p>云计算概念的提出早在2005年由IBM，Google和亚马逊提出，真正成为焦点进入我们视线的应该是最近五年时间，任何技术的繁荣依赖的是对应底层基础设施的成熟和商业市场的推动，包括：</p>
+
+<ol>
+<li><p>CPU能力，不论是客户端还是数据中心，CPU的处理能力相较2005年有了数量级的提升，尤其是在用户消费终端方面（PC端和移动终端），CPU性能的提升为客户端向云端的数据接入提供了计算能力方面的保障，比如用户端的数据解压缩，加解密，图像渲染等等功能。简单对比一下Intel在2006年发布的奔腾D系列（9XX系列）和2015年发布的Core i7系列：</p>
+
+<p>Presler (Pentium D) 65 nm
+2 physical cores without HT
+2MB+2MB L2 cache
+800 MHz system bus</p>
+
+<p>Skylake (Core i7 6th Generation) 14nm
+4 physical cores/8 threads
+8 MB L3 cache
+2-channel DDR3L-<sup>1333</sup>&frasl;<sub>1600</sub>, DDR4-<sup>1866</sup>&frasl;<sub>2133</sub>
+Integrated GPU Intel HD Graphics 530</p></li>
+
+<li><p>网络能力，家用或商用的网络带宽和速度从之前的1M到现今的百兆，千兆，移动端的数据接入也从之前的2G到今天的4G和进行中的5G，网络速度，带宽和稳定性的提升为数据向云端的迁移提供了必要的迁移，不论是娱乐，办公，人们已经感知不到应用在本地和云端在体验上的区别</p></li>
+
+<li><p>存储能力，随着存储介质的演进（SATA-SSD），分布式存储软件（HDFS，Ceph）的成熟，支撑上层业务的存储在容量，吞吐和时延方面都有了成倍的提升，更大的容量意味着支持数量更多，质量更高的媒体流，更多的吞吐意味着更高的数据通道效率和更低的运营成本，更低的时延意味着更多的用户可容忍场景和潜在垂直行业的兴起</p></li>
+
+<li><p>行业标准，跟传统的通信行业的标准组织一样，有了标准意味有了生态，有了生态意味有了商业市场，有了商业市场才能让技术真正从实验室和PPT走到消费者的手上</p></li>
+</ol>
+
+<h2 id="云计算的核心">云计算的核心</h2>
+
+<ol>
+<li><p>存储，高可用，高可靠，高持久作为基本的KPI考核，同时设备本身的针对终端用户的便携性也是需要考虑的一个因素（SSD替代SATA）</p></li>
+
+<li><p>资源处理，包括分布式系统，物理资源的虚拟化和管理系统</p></li>
+
+<li><p>信息安全，包括用户/服务端加解密，用户的鉴权，服务的划分，网络的隔离</p></li>
+
+<li><p>系统工程，包括数据中心本身的建设，基础通信设施如光纤，基站的架设</p></li>
+
+<li><p>API接口，服务的可消费性，云计算子模块提供的对内或者对外的服务需要通过类似RESTful API的机制暴露给消费端</p></li>
+
+<li><p>行业标准，统一的行业标准包括服务能力，质量评价，运行维护，安全管理和能效管理</p></li>
+</ol>
+
+<h2 id="云计算带来额外思考">云计算带来额外思考</h2>
+
+<p>云计算的兴起带来了应用服务的上云，轻客户端的趋势慢慢已经形成，浏览器成为用户访问数据最好的窗口，现在除了Google，暂时还没有看到哪家能将云计算平台（Google Cloud）和浏览器Cloud(Chrome)两项业务收纳在自己手中。
+云平台或者说公有云/私有云的出现铺垫好了未来应用服务发展的基础设施，上层的开发应用平台（PaaS）的推广和普及才是能真正保证企业开发粘性，应用生态健康发展的重要指标。现在针对不同业务或垂直行业（比如针对特定AI场景）的PaaS在国内有将近千家，然而按照市场发展的普遍规律看，极有可能是第一名抢占50%左右市场，第二名抢占20～30%市场，剩下的前十企业瓜分剩下的20%甚至更少的市场。</p>
 
 
+                
 
-       	</div>
-        
-
-<div class="
-    col-lg-3 col-lg-offset-0
-    col-md-3 col-md-offset-0
-    col-sm-12
-    col-xs-12
-    sidebar-container
-">
-    
-    
-    <section>
-        <hr class="hidden-sm hidden-xs">
-        <h5>FEATURED TAGS</h5>
-        <div class="tags">
-             
-            
-                
-            
-                
-            
-                
-            
-                
-            
-                
-                    <a href="/tags/hands-on" title="hands-on">
-                        hands-on
-                    </a>
-                
-            
-                
-            
-                
-            
-                
-            
-                
-            
-                
-            
-                
-                    <a href="/tags/virtio" title="virtio">
-                        virtio
-                    </a>
-                
-            
-        </div>
-    </section>
-    
-
-    
-	
-    <section class="visible-md visible-lg">
-	<hr><h5><a href="/about/me">ABOUT ME</a></h5>
-        <div class="short-about">
-            
-            <a href="/about/me">
-               <img src="/media/avatar.jpg" alt="avatar" style="cursor: pointer" />
-            </a>
-            
-            
-                <p>Hands-on Coder &amp; Speaker</p>
-            
-           
-           <ul class="list-inline"> 
-               
-               <li>
-                   <a href="https://www.cloudnotes.cc/tags/cdn/index.xml" rel="alternate" type="application/rss+xml" title="" >
-                       <span class="fa-stack fa-lg">
-                           <i class="fa fa-circle fa-stack-2x"></i>
-                           <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
-                       </span>
-                   </a>
-               </li>
-               
-               
-               
-               
-               
-               
-               <li>
-                   <a target="_blank" href="/your%20wechat%20qr%20code%20image">
-                       <span class="fa-stack fa-lg">
-                           <i class="fa fa-circle fa-stack-2x"></i>
-                           <i class="fa fa-wechat fa-stack-1x fa-inverse"></i>
-                       </span>
-                   </a>
-               </li>
-               
-               
-               <li>
-                   <a target="_blank" href="https://github.com/yourgithub">
-                       <span class="fa-stack fa-lg">
-                           <i class="fa fa-circle fa-stack-2x"></i>
-                           <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                       </span>
-                   </a>
-               </li>
-               
-               
-               <li>
-                   <a target="_blank" href="https://www.linkedin.com/in/yourlinkedinid">
-                       <span class="fa-stack fa-lg">
-                           <i class="fa fa-circle fa-stack-2x"></i>
-                           <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
-                       </span>
-                   </a>
-               </li>
-               
-               
+                <hr>
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/post/install-openstack/" data-toggle="tooltip" data-placement="top" title="OpenStack部署笔记">&larr;
+                            Previous Post</a>
+                    </li>
+                    
+                    
                 </ul>
+
+                
+<div id="disqus-comment"></div>
+
+
+
             </div>
-    </section>
-	
-    
-    
-    <section>
-        <hr class="hidden-sm hidden-xs">
-        <h5>FRIENDS</h5>
-        <ul class="list-inline">
             
-            <li><a target="_blank" href="https://www.jianshu.com/u/92bb7713098d">Blog in jianshu</a></li>
-            
-        </ul>
-    </section>
-    
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
 
-    
-    
-</div>
+                
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <a href="/tags/hands-on" title="hands-on">
+                            hands-on
+                        </a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <a href="/tags/virtio" title="virtio">
+                            virtio
+                        </a>
+                        
+                        
+                    </div>
+                </section>
+                
 
-	</div>
-</div>
-
+                
+                
+                <section>
+                    <hr>
+                    <h5>FRIENDS</h5>
+                    <ul class="list-inline">
+                        
+                        <li><a target="_blank" href="https://www.jianshu.com/u/92bb7713098d">Blog in jianshu</a></li>
+                        
+                    </ul>
+                </section>
+                
+            </div>
+        </div>
+    </div>
+</article>
 
 
 
@@ -347,7 +357,7 @@
                 <ul class="list-inline text-center">
                    
                    <li>
-                       <a href="https://www.cloudnotes.cc/tags/cdn/index.xml" rel="alternate" type="application/rss+xml" title="" >
+                       <a href="" rel="alternate" type="application/rss+xml" title="" >
                            <span class="fa-stack fa-lg">
                                <i class="fa fa-circle fa-stack-2x"></i>
                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
