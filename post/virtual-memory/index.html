@@ -15,9 +15,9 @@
     
 
     
-    <meta name="title" content="有关于我" />
-    <meta property="og:title" content="有关于我" />
-    <meta property="twitter:title" content="有关于我" />
+    <meta name="title" content="内存映射" />
+    <meta property="og:title" content="内存映射" />
+    <meta property="twitter:title" content="内存映射" />
     
 
     
@@ -34,9 +34,9 @@
     <meta name="keyword"  content="cloud computing, distributed system, container, lazy shell tools">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>有关于我-Aaron&#39;s Notes</title>
+    <title>内存映射-Aaron&#39;s Notes</title>
 
-    <link rel="canonical" href="/about/me/">
+    <link rel="canonical" href="/post/virtual-memory/">
 
     <link rel="stylesheet" href="/css/iDisqus.min.css"/>
 	
@@ -160,8 +160,16 @@
                 <div class="post-heading">
                     <div class="tags">
                         
+                        <a class="tag" href="/tags/linux" title="linux">
+                            linux
+                        </a>
+                        
+                        <a class="tag" href="/tags/memory" title="memory">
+                            memory
+                        </a>
+                        
                     </div>
-                    <h1>有关于我</h1>
+                    <h1>内存映射</h1>
                     <h2 class="subheading"></h2>
                     <span class="meta">
 			Posted by 
@@ -169,7 +177,7 @@
 			         Aaron
 			 
 			on 
-			Saturday, April 27, 2019
+			Wednesday, May 29, 2019
                         
                     </span>
                 </div>
@@ -199,95 +207,137 @@
 <ul>
 <li>
 <ul>
-<li><a href="#关于我">关于我</a></li>
-<li><a href="#在做的事">在做的事</a>
-<ul>
-<li><a href="#业务">业务</a>
-<ul>
-<li><a href="#公有-混合云">公有/混合云</a></li>
-<li><a href="#缓存系统">缓存系统</a></li>
-</ul></li>
-<li><a href="#工程">工程</a>
-<ul>
-<li><a href="#虚拟化">虚拟化</a></li>
-<li><a href="#分布式系统">分布式系统</a></li>
-<li><a href="#中间件">中间件</a></li>
-<li><a href="#加速技术">加速技术</a></li>
-</ul></li>
-</ul></li>
-<li><a href="#想做的事">想做的事</a></li>
+<li><a href="#内存管理目的">内存管理目的</a></li>
+<li><a href="#内存管理机制">内存管理机制</a></li>
+<li><a href="#为何使用虚拟地址">为何使用虚拟地址</a></li>
+<li><a href="#tlb">TLB</a></li>
+<li><a href="#页表">页表</a></li>
+<li><a href="#虚拟内存地址向物理内存地址的转换">虚拟内存地址向物理内存地址的转换</a></li>
 </ul></li>
 </ul>
 </nav>
                 
                 
 
-<h2 id="关于我">关于我</h2>
+<h2 id="内存管理目的">内存管理目的</h2>
 
-<p>混迹通信行业近十年，做过驱动，做过适配，做过协议栈，彷徨中不知道未来道路时，尝试向行业业务，方案架构方向探索，而今折腾到半IT领域，开始研究不同的技术体系，实践新的工程方案</p>
+<ol>
+<li>基于编程的抽象</li>
+<li>最小的开销获取最大的执行效率
+<img src="/media/virtual-memory-01.png" alt="Memory Layout" title="Memory Layout" /></li>
+</ol>
 
-<h2 id="在做的事">在做的事</h2>
+<h2 id="内存管理机制">内存管理机制</h2>
 
-<h3 id="业务">业务</h3>
+<ol>
+<li>物理和虚拟地址</li>
+<li>固定分区和可变分区</li>
+<li>页表</li>
+</ol>
 
-<h4 id="公有-混合云">公有/混合云</h4>
+<h2 id="为何使用虚拟地址">为何使用虚拟地址</h2>
 
-<ul>
-<li>AWS</li>
-<li>Azure</li>
-<li>AliCloud</li>
-</ul>
+<ol>
+<li>节省内存，程序只有在需要访问代码段和数据段时才分配内存</li>
+<li>优化内存分配，操作系统根据run-time来调整内存分配，允许应用访问超出或少于实际物理内存的地址</li>
+<li>应用的隔离，进程间除共享内存外，互相的内存访问是隔离的</li>
+<li>应用的保护，限制对某些物理内存的访问</li>
+</ol>
 
-<h4 id="缓存系统">缓存系统</h4>
+<h2 id="tlb">TLB</h2>
 
-<ul>
-<li>Redis</li>
-<li>Memcache</li>
-</ul>
+<p>虚拟地址和实际物理地址的转换是通过CPU内部的一个器件MMU（memory management unit）来实现的，具体的寻址模式取决于芯片架构（x86比如）。为了提升寻址效率，芯片用硬件缓存（transition lookaside buffer）来存储最近的虚拟地址和物理地址的转换表，以实现99%的地址转换在一个CPU时钟周期内完成。TLB的换出策略通过硬件控制，如果CPU在TLB中查找不到对应的转换表，那么会继续到内存中查询页表（10～200个CPU时钟周期）。
+<img src="/media/virtual-memory-02.png" alt="Page Table Entry" title="Page Table Entry" />
+<img src="/media/virtual-memory-03.png" alt="TLB Module" title="TLB Module" />
+TLB本身就是一种cache，根据cache与内存映射算法的不同，cache分成全关联型（full associative），直接关联型（direct mapped）和组关联型（N-ways associative）三种，通过进一步了解不同架构不同型号芯片所使用的TLB类型，我们可以更好的了解实际系统的处理能力。从<a href="https://software.intel.com/en-us/articles/how-memory-is-accessed" title="https://software.intel.com/en-us/articles/how-memory-is-accessed">https://software.intel.com/en-us/articles/how-memory-is-accessed</a>
+摘录intel某款芯片TLB规格如下：
+&gt; For example the Intel® Core™ i7-6700 processor has two levels of TLBs:
+First level
+TLBs for data can map 1-GB sets of contiguous pages (4-way set associative, 4 entries) or 4-KB pages (4-way set associative, 64 entries)
+TLBs for instructions can map 4-KB pages (8-way set associative, 64 entries)
+Second level has TLBs for both data and instructions and can map either 4-KB or 2-MB pages (6-way associative, 1536 entries) and 1-GB pages (4-way associative, 16 entries)</p>
 
-<hr />
+<h2 id="页表">页表</h2>
 
-<h3 id="工程">工程</h3>
+<p>注意到物理内存中的页面是不连续的，应用中只能访问其看到的虚拟地址，实现了内存访问的隔离性。
+<img src="/media/virtual-memory-04.png" alt="Paging Layout" title="Paging Layout" />
+页表的地址转换，其中虚拟地址包括VPN（virtual page number）和offset两部分，VPN用于指向PTE（page table entry）以获取PFN（page frame number），最终的物理地址用PFN：：offset来获取。Virtual page：VPN：PTE=1：1：1
+<img src="/media/virtual-memory-05.png" alt="Paging Translate" title="Paging Translate" />Translate</p>
 
-<h4 id="虚拟化">虚拟化</h4>
+<h2 id="虚拟内存地址向物理内存地址的转换">虚拟内存地址向物理内存地址的转换</h2>
 
-<ul>
-<li>KVM/QEMU/Virtio-XX/Vhost/Vhost-User</li>
-<li>Container</li>
-</ul>
+<p>文档<a href="https://www.kernel.org/doc/Documentation/vm/pagemap.txt" title="https://www.kernel.org/doc/Documentation/vm/pagemap.txt">https://www.kernel.org/doc/Documentation/vm/pagemap.txt</a>给出了pagemap的数据格式，利用pagemap可以找到虚拟页对应的pfn，从而最终计算出虚拟页映射到的物理地址</p>
 
-<h4 id="分布式系统">分布式系统</h4>
+<pre><code class="language-html">* /proc/pid/pagemap.  This file lets a userspace process find out which
+   physical frame each virtual page is mapped to.  It contains one 64-bit
+   value for each virtual page, containing the following data (from
+   fs/proc/task_mmu.c, above pagemap_read):
 
-<ul>
-<li>分布式存储</li>
-<li>分布式K-V</li>
-</ul>
+    * Bits 0-54  page frame number (PFN) if present
+    * Bits 0-4   swap type if swapped
+    * Bits 5-54  swap offset if swapped
+    * Bit  55    pte is soft-dirty (see Documentation/vm/soft-dirty.txt)
+    * Bit  56    page exclusively mapped (since 4.2)
+    * Bits 57-60 zero
+    * Bit  61    page is file-page or shared-anon (since 3.5)
+    * Bit  62    page swapped
+    * Bit  63    page present
+</code></pre>
 
-<h4 id="中间件">中间件</h4>
+<p>文章<a href="https://zhoujianshi.github.io/articles/2017/Linux%20%E8%8E%B7%E5%8F%96%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E5%AF%B9%E5%BA%94%E7%9A%84%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80/index.html" title="https://zhoujianshi.github.io/articles/2017/Linux%20%E8%8E%B7%E5%8F%96%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E5%AF%B9%E5%BA%94%E7%9A%84%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80/index.html">https://zhoujianshi.github.io/articles/2017/Linux%20%E8%8E%B7%E5%8F%96%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E5%AF%B9%E5%BA%94%E7%9A%84%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80/index.html</a>给出了基于此实现的虚拟地址向物理地址转换的C函数实现，摘录如下：</p>
 
-<ul>
-<li>数据库中间件</li>
-<li>消息中间件</li>
-</ul>
+<pre><code class="language-c">#include &lt;fcntl.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;stdint.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
 
-<h4 id="加速技术">加速技术</h4>
-
-<ul>
-<li>DPDK/SPDK</li>
-<li>QAT</li>
-</ul>
-
-<hr />
-
-<h2 id="想做的事">想做的事</h2>
-
-<p>always something different &amp; fun</p>
+size_t virtual_to_physical(size_t addr)
+{
+    int fd = open(&quot;/proc/self/pagemap&quot;, O_RDONLY);
+    if(fd &lt; 0)
+    {
+        printf(&quot;open '/proc/self/pagemap' failed!\n&quot;);
+        return 0;
+    }
+    size_t pagesize = getpagesize();
+    size_t offset = (addr / pagesize) * sizeof(uint64_t);
+    if(lseek(fd, offset, SEEK_SET) &lt; 0)
+    {
+        printf(&quot;lseek() failed!\n&quot;);
+        close(fd);
+        return 0;
+    }
+    uint64_t info;
+    if(read(fd, &amp;info, sizeof(uint64_t)) != sizeof(uint64_t))
+    {
+        printf(&quot;read() failed!\n&quot;);
+        close(fd);
+        return 0;
+    }
+    if((info &amp; (((uint64_t)1) &lt;&lt; 63)) == 0)
+    {
+        printf(&quot;page is not present!\n&quot;);
+        close(fd);
+        return 0;
+    }
+    size_t frame = info &amp; ((((uint64_t)1) &lt;&lt; 55) - 1);
+    size_t phy = frame * pagesize + addr % pagesize;
+    close(fd);
+    return phy;
+}
+</code></pre>
 
 
                 
 
                 <hr>
                 <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/post/cloud-computing-v2/" data-toggle="tooltip" data-placement="top" title="五分钟见解-云计算续">&larr;
+                            Previous Post</a>
+                    </li>
                     
                     
                 </ul>

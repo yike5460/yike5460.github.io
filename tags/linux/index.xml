@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Memory on </title>
-    <link>https://www.cloudnotes.cc/tags/memory/</link>
-    <description>Recent content in Memory on </description>
+    <title>Linux on </title>
+    <link>https://www.cloudnotes.cc/tags/linux/</link>
+    <description>Recent content in Linux on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 29 May 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://www.cloudnotes.cc/tags/memory/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.cloudnotes.cc/tags/linux/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -18,15 +18,6 @@
       
       <guid>https://www.cloudnotes.cc/post/virtual-memory/</guid>
       <description>内存管理目的 基于编程的抽象 最小的开销获取最大的执行效率 内存管理机制 物理和虚拟地址 固定分区和可变分区 页表 为何使用虚拟地址 节省内存，程序只有在需</description>
-    </item>
-    
-    <item>
-      <title>聊聊内存（分页）</title>
-      <link>https://www.cloudnotes.cc/post/talk-about-memory-page/</link>
-      <pubDate>Thu, 27 Dec 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://www.cloudnotes.cc/post/talk-about-memory-page/</guid>
-      <description>分页单元 分页单元把线性地址转化成物理地址，其关键任务之一就是将所请求的访问类型同线性地址的权限相比较，如果该次内存访问是无效的，就会产生一个</description>
     </item>
     
   </channel>
