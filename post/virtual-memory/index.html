@@ -250,19 +250,21 @@
 <img src="/media/virtual-memory-02.png" alt="Page Table Entry" title="Page Table Entry" />
 <img src="/media/virtual-memory-03.png" alt="TLB Module" title="TLB Module" />
 TLB本身就是一种cache，根据cache与内存映射算法的不同，cache分成全关联型（full associative），直接关联型（direct mapped）和组关联型（N-ways associative）三种，通过进一步了解不同架构不同型号芯片所使用的TLB类型，我们可以更好的了解实际系统的处理能力。从<a href="https://software.intel.com/en-us/articles/how-memory-is-accessed" title="https://software.intel.com/en-us/articles/how-memory-is-accessed">https://software.intel.com/en-us/articles/how-memory-is-accessed</a>
-摘录intel某款芯片TLB规格如下：
-&gt; For example the Intel® Core™ i7-6700 processor has two levels of TLBs:
+摘录intel某款芯片TLB规格如下：</p>
+
+<pre><code class="language-html">For example the Intel® Core™ i7-6700 processor has two levels of TLBs:
 First level
 TLBs for data can map 1-GB sets of contiguous pages (4-way set associative, 4 entries) or 4-KB pages (4-way set associative, 64 entries)
 TLBs for instructions can map 4-KB pages (8-way set associative, 64 entries)
-Second level has TLBs for both data and instructions and can map either 4-KB or 2-MB pages (6-way associative, 1536 entries) and 1-GB pages (4-way associative, 16 entries)</p>
+Second level has TLBs for both data and instructions and can map either 4-KB or 2-MB pages (6-way associative, 1536 entries) and 1-GB pages (4-way associative, 16 entries)
+</code></pre>
 
 <h2 id="页表">页表</h2>
 
 <p>注意到物理内存中的页面是不连续的，应用中只能访问其看到的虚拟地址，实现了内存访问的隔离性。
 <img src="/media/virtual-memory-04.png" alt="Paging Layout" title="Paging Layout" />
 页表的地址转换，其中虚拟地址包括VPN（virtual page number）和offset两部分，VPN用于指向PTE（page table entry）以获取PFN（page frame number），最终的物理地址用PFN：：offset来获取。Virtual page：VPN：PTE=1：1：1
-<img src="/media/virtual-memory-05.png" alt="Paging Translate" title="Paging Translate" />Translate</p>
+<img src="/media/virtual-memory-05.png" alt="Paging Translate" title="Paging Translate" /></p>
 
 <h2 id="虚拟内存地址向物理内存地址的转换">虚拟内存地址向物理内存地址的转换</h2>
 
