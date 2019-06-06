@@ -6,10 +6,19 @@
     <description>Recent content in Memory on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 29 May 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 06 Jun 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://www.cloudnotes.cc/tags/memory/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>聊聊cache</title>
+      <link>https://www.cloudnotes.cc/post/talk-about-cache/</link>
+      <pubDate>Thu, 06 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/post/talk-about-cache/</guid>
+      <description>cache的分类 按照缓存和内存之间的映射关系不同，缓存可分成组关联型，直接关联型和全关联型，其中后两者属于组关联型的特殊情况，分别在 Set associative cache (n-way</description>
+    </item>
     
     <item>
       <title>内存映射</title>

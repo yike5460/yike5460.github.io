@@ -15,9 +15,9 @@
     
 
     
-    <meta name="title" content="平衡" />
-    <meta property="og:title" content="平衡" />
-    <meta property="twitter:title" content="平衡" />
+    <meta name="title" content="聊聊cache" />
+    <meta property="og:title" content="聊聊cache" />
+    <meta property="twitter:title" content="聊聊cache" />
     
 
     
@@ -34,9 +34,9 @@
     <meta name="keyword"  content="cloud computing, distributed system, container, lazy shell tools">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>平衡-Aaron&#39;s Notes</title>
+    <title>聊聊cache-Aaron&#39;s Notes</title>
 
-    <link rel="canonical" href="/post/about-balance/">
+    <link rel="canonical" href="/post/talk-about-cache/">
 
     <link rel="stylesheet" href="/css/iDisqus.min.css"/>
 	
@@ -160,12 +160,16 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/introspection" title="introspection">
-                            introspection
+                        <a class="tag" href="/tags/memory" title="memory">
+                            memory
+                        </a>
+                        
+                        <a class="tag" href="/tags/cache" title="cache">
+                            cache
                         </a>
                         
                     </div>
-                    <h1>平衡</h1>
+                    <h1>聊聊cache</h1>
                     <h2 class="subheading"></h2>
                     <span class="meta">
 			Posted by 
@@ -173,7 +177,7 @@
 			         Aaron
 			 
 			on 
-			Friday, May 3, 2019
+			Thursday, June 6, 2019
                         
                     </span>
                 </div>
@@ -203,43 +207,155 @@
 <ul>
 <li>
 <ul>
-<li><a href="#平衡">平衡</a>
+<li><a href="#cache的分类">cache的分类</a>
 <ul>
-<li><a href="#软件工程和业务场景的平衡">软件工程和业务场景的平衡</a></li>
-<li><a href="#技术管理和动手实践的平衡">技术管理和动手实践的平衡</a></li>
-<li><a href="#团队合作和个人价值的平衡">团队合作和个人价值的平衡</a></li>
-<li><a href="#赚钱养家和工作满足的平衡">赚钱养家和工作满足的平衡</a></li>
-<li><a href="#工作和生活的平衡">工作和生活的平衡</a></li>
-<li><a href="#我的价值是什么">我的价值是什么</a></li>
-<li><a href="#我想要什么">我想要什么</a></li>
-<li><a href="#我不想要什么">我不想要什么</a></li>
+<li><a href="#set-associative-cache-n-way-m-set-associative">Set associative cache (n-way m set associative)</a></li>
+<li><a href="#direct-map-1-way-n-set-associative">Direct map (1-way n set associative)</a></li>
+<li><a href="#full-associative-n-way-1-set-associative">Full associative (n-way 1 set associative)</a></li>
 </ul></li>
+<li><a href="#cache的分级策略">cache的分级策略</a></li>
+<li><a href="#cache的一致性">cache的一致性</a>
+<ul>
+<li><a href="#一致性问题">一致性问题</a></li>
+<li><a href="#一致性协议">一致性协议</a></li>
+</ul></li>
+<li><a href="#cache-line伪共享-false-sharing">cache line伪共享（false sharing）</a></li>
+<li><a href="#cache的写入方式">cache的写入方式</a></li>
+<li><a href="#透明页共享">透明页共享</a></li>
+<li><a href="#cache性能评估">cache性能评估</a>
+<ul>
+<li><a href="#计算miss-penalty">计算miss penalty</a></li>
+<li><a href="#减少miss-penalty">减少miss penalty</a></li>
+</ul></li>
+<li><a href="#不同微架构下的cache">不同微架构下的cache</a></li>
 </ul></li>
 </ul>
 </nav>
                 
                 
 
-<h2 id="平衡">平衡</h2>
+<h2 id="cache的分类">cache的分类</h2>
 
-<p>国人喜欢中庸，很多成语不愠不火，张弛有道，恰到好处等等这些成语揭示的都是对于万事万物的平衡的期许，对于打破平衡，走向极端的情况我们也会有过犹不及，事倍功半来加以评价。一个人的一生有很多角色，很多抉择，很多大大小小的事情需要我们来做出最合常理，符合内心，收益最高的选择，但往往站在十字路口上的我们就像走上了钢丝，仰望并接受着生活给予的任务，并小心的维持着自己的平衡，即使我们很大概率不会从钢丝上摔下来，但是维持平衡本身就充满了挑战，它需要智慧，需要反思，需要实践，你可能会感到焦虑，可能会感到懈怠，我们能做的是认识到不平衡的存在并缓解它。
-我希望通过梳理并写下我的感受，能让我在今后的工作和生活更加明白自己的价值，想要什么，不想要什么</p>
+<p>按照缓存和内存之间的映射关系不同，缓存可分成组关联型，直接关联型和全关联型，其中后两者属于组关联型的特殊情况，分别在</p>
 
-<h3 id="软件工程和业务场景的平衡">软件工程和业务场景的平衡</h3>
+<h3 id="set-associative-cache-n-way-m-set-associative">Set associative cache (n-way m set associative)</h3>
 
-<h3 id="技术管理和动手实践的平衡">技术管理和动手实践的平衡</h3>
+<p>优势和劣势介于下面两种类型之间，简单理解先做直接关联找到对应的组之后，再进行全关联查找
+<img src="/media/cache-type-01.png" alt="Set associative" title="Set associative" /></p>
 
-<h3 id="团队合作和个人价值的平衡">团队合作和个人价值的平衡</h3>
+<h3 id="direct-map-1-way-n-set-associative">Direct map (1-way n set associative)</h3>
 
-<h3 id="赚钱养家和工作满足的平衡">赚钱养家和工作满足的平衡</h3>
+<p>块冲突大（多个内存地址映射到一个固定的缓存时，只有一个内存块能够缓存，其他块需要被换出），实现简单匹配快
+<img src="/media/cache-type-02.png" alt="Direct map" title="Direct map" /></p>
 
-<h3 id="工作和生活的平衡">工作和生活的平衡</h3>
+<h3 id="full-associative-n-way-1-set-associative">Full associative (n-way 1 set associative)</h3>
 
-<h3 id="我的价值是什么">我的价值是什么</h3>
+<p>块冲突小（直接利用内存地址本身进行全值匹配），缓存利用率高，实现复杂成本高
+<img src="/media/cache-type-03.png" alt="Full associative" title="Full associative" /></p>
 
-<h3 id="我想要什么">我想要什么</h3>
+<h2 id="cache的分级策略">cache的分级策略</h2>
 
-<h3 id="我不想要什么">我不想要什么</h3>
+<ul>
+<li>inclusive
+cache miss时将数据同时载入L1和L2，而退化时只从L1中移除，L1的数据是中包含在L2中</li>
+<li>exclusive
+cache miss时仅载入L1，L2的数据是从L2退化下来的数据，与L2不完全相同</li>
+</ul>
+
+<h2 id="cache的一致性">cache的一致性</h2>
+
+<h3 id="一致性问题">一致性问题</h3>
+
+<p>cache一致性问题的根源是因为多个处理器独占的cache</p>
+
+<h3 id="一致性协议">一致性协议</h3>
+
+<p>基于目录的协议（directory based）和总线窥探协议（bus snooping）</p>
+
+<p>MESI协议</p>
+
+<p><img src="/media/cache-coherency-01.png" alt="MSEI状态迁移表" title="MSEI状态迁移表" /></p>
+
+<h2 id="cache-line伪共享-false-sharing">cache line伪共享（false sharing）</h2>
+
+<h2 id="cache的写入方式">cache的写入方式</h2>
+
+<p>摘自<a href="https://blog.csdn.net/china_video_expert/article/details/7690625" title="https://blog.csdn.net/china_video_expert/article/details/7690625 ">https://blog.csdn.net/china_video_expert/article/details/7690625 </a>：
+1．直写式系统： CPU对Cache写入时，将数据同时写入到主存储器中，这样可保证Cache中的内容与主存储器的内容完全一致。这种方式比较直观，而且简单、可靠，但由于每次对Cache更新时都要对主存储器进行写操作，而这必须通过系统总线来完成，因此总线工作频繁，系统运行速度就会受到影响。</p>
+
+<p>2．缓冲直写式系统：为解决直写式系统对总线速度的影响问题，在主存储器的数据写入时增加缓冲器区。当要写入主存储器的数据被缓冲器锁存后，CPU 便可执行下一个周期的操作，不必等待数据写入主存储器 。 这相对于给主存储器增加了一个单向单次高速缓存。比如，在写入周期之后可以紧接着一个数据已存在于Cache中的读取周期，这样就可避免直写式系统造成的 操作延时。但这个缓冲器只能存储一次写入的数据，当连续两次写操作发生时，CPU仍需等待。</p>
+
+<p>3．回写式系统：以前的两种写入方式系统，都是在 写Cache的同时，对主存储器进行写操作。实际上这不仅是对总线带宽的占用，浪费了宝贵的执行时间，而且对于有的情况是不必要的，可以通过增加额外的标准来判断是否有必要更新数据。回写式系统就是通过在Cache中的每一数据块的标志字段中加入一更新位，解决主存储器不必要的写操作。比如，若Cache 中的数据曾被CPU更新过但还未同时更新主存储器，则该更新位被置1。每次CPU将一块新内容写入Cache时，首先，检查Cache中该数据块的更新 位，若更新位为0，则将数据直接写入Cache；反之,若更新位为1，则先将 Cache 中的该项内容写入到主存储器中相应的位置，再将新数据写回到Cache中。</p>
+
+<h2 id="透明页共享">透明页共享</h2>
+
+<h2 id="cache性能评估">cache性能评估</h2>
+
+<p>Assume that 33% of the instructions in a program are data accesses. The
+cache hit ratio is 97% and the hit time is one cycle, but the miss penalty
+is 20 cycles.
+Memory stall cycles = Memory accesses x Miss rate x Miss penalty
+= 0.33 I x 0.03 x 20 cycles
+= 0.2 I cycles
+ If I instructions are executed, then the number of wasted cycles will be
+0.2 x I.
+This code is 1.2 times slower than a program with a “perfect” CPI of 1!
+CPU time = (CPU execution cycles + Memory stall cycles) x Cycle time</p>
+
+<p>Refer back to Amdahl’s Law from textbook page 101.
+— Speeding up only part of a system has diminishing returns</p>
+
+<p>AMAT = Hit time + (Miss rate x Miss penalty)
+Memory stall cycles = Memory accesses x miss rate x miss penalty
+CPU time = (CPU execution cycles + Memory stall cycles) x Cycle time</p>
+
+<h3 id="计算miss-penalty">计算miss penalty</h3>
+
+<p>让我们简单假设，cpu-cache-memory之间的总线宽度是1字节，当cache需要从memory中加载数据时，需要执行三个步骤：
+1. 将地址发送到memory需要1个CPU周期;
+2. 每个memory访问都有15个CPU周期的延迟;
+3. 从memory返回数据需要1个CPU周期;
+获取n字节数据的整个执行需要n × (1 + 15 + 1 = 17)个时钟周期；
+获取4字节数据的整个执行需要4 × (1 + 15 + 1 = 17)=68个时钟周期；</p>
+
+<pre><code class="language-html"> CPU
+ ||
+ Cache
+ ||
+ Memory
+</code></pre>
+
+<h3 id="减少miss-penalty">减少miss penalty</h3>
+
+<ul>
+<li>增加cache和memory总线带宽，这样我们能够一次从内存读取多个字节块，之前的计算变成1 + 15 + 1 = 17 cycles
+<code>html
+CPU
+||
+Cache
+|||||
+Memory
+</code></li>
+<li>内存的interleave，通过增加对应行列的decoder和外部逻辑，将整块内存划分成独立的内存阵列（bank），通过cs片选信号选择不同的物理bank（类似单片机的cs寻址），这样我们能够进行字节块的同时访问，之前的计算变成1 + 15 + (4 x 1) = 20 cycles
+<code>html
+CPU
+||
+Cache
+||
+Memory
+口口口口
+</code>
+在实际的cache-memory通路上，应该是cache-imc-memory，其中cache-imc属于芯片内部链接，数据暂不可查（一说是32bit宽度），imc-memory常见走的就是ddr通道（比如ddr4 2666）</li>
+</ul>
+
+<h2 id="不同微架构下的cache">不同微架构下的cache</h2>
+
+<p>Each CHA supports a (up to) 1.375 MB Last Level Cache (LLC) with DECTED noninclusive 11-ways associative, a 1 MB Mid Level Cache (MLC), and a 1.5 MB Snoop
+Filter structure to tracks ownership of the cache lines for LLC and MLC non-inclusive
+cache support.
+The LLC in the processor is Non-Inclusive with the MLC. Non-inclusive cache hierarchy
+means LLC is no longer inclusive of the core cache structure. A snoop filter structure
+resides in the CHA to track cache lines cached in the core.</p>
 
 
                 
@@ -248,15 +364,10 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/post/notes-about-hybrid-whitepaper/" data-toggle="tooltip" data-placement="top" title="五分钟笔记-《混合云白皮书》">&larr;
+                        <a href="/post/virtual-memory/" data-toggle="tooltip" data-placement="top" title="内存映射">&larr;
                             Previous Post</a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/post/install-openstack/" data-toggle="tooltip" data-placement="top" title="OpenStack部署笔记">Next
-                            Post &rarr;</a>
-                    </li>
                     
                 </ul>
 

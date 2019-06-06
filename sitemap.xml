@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://www.cloudnotes.cc/post/talk-about-cache/</loc>
+    <lastmod>2019-06-06T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://www.cloudnotes.cc/post/virtual-memory/</loc>
     <lastmod>2019-05-29T00:00:00+00:00</lastmod>
   </url>
@@ -99,7 +104,7 @@
   
   <url>
     <loc>https://www.cloudnotes.cc/</loc>
-    <lastmod>2019-05-29T00:00:00+00:00</lastmod>
+    <lastmod>2019-06-06T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -118,6 +123,12 @@
   <url>
     <loc>https://www.cloudnotes.cc/tags/cdn/</loc>
     <lastmod>2019-01-09T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.cloudnotes.cc/tags/cache/</loc>
+    <lastmod>2019-06-06T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -164,7 +175,7 @@
   
   <url>
     <loc>https://www.cloudnotes.cc/tags/memory/</loc>
-    <lastmod>2019-05-29T00:00:00+00:00</lastmod>
+    <lastmod>2019-06-06T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -188,7 +199,7 @@
   
   <url>
     <loc>https://www.cloudnotes.cc/post/</loc>
-    <lastmod>2019-05-29T00:00:00+00:00</lastmod>
+    <lastmod>2019-06-06T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
