@@ -328,25 +328,29 @@ CPU time = (CPU execution cycles + Memory stall cycles) x Cycle time</p>
 <h3 id="减少miss-penalty">减少miss penalty</h3>
 
 <ul>
-<li>增加cache和memory总线带宽，这样我们能够一次从内存读取多个字节块，之前的计算变成1 + 15 + 1 = 17 cycles
-<code>html
-CPU
-||
-Cache
-|||||
-Memory
-</code></li>
-<li>内存的interleave，通过增加对应行列的decoder和外部逻辑，将整块内存划分成独立的内存阵列（bank），通过cs片选信号选择不同的物理bank（类似单片机的cs寻址），这样我们能够进行字节块的同时访问，之前的计算变成1 + 15 + (4 x 1) = 20 cycles
-<code>html
-CPU
-||
-Cache
-||
-Memory
-口口口口
-</code>
-在实际的cache-memory通路上，应该是cache-imc-memory，其中cache-imc属于芯片内部链接，数据暂不可查（一说是32bit宽度），imc-memory常见走的就是ddr通道（比如ddr4 2666）</li>
+<li>增加cache和memory总线带宽，这样我们能够一次从内存读取多个字节块，之前的计算变成1 + 15 + 1 = 17 cycles</li>
 </ul>
+
+<pre><code class="language-html"> CPU
+ ||
+ Cache
+ |||||
+ Memory
+</code></pre>
+
+<ul>
+<li>内存的interleave，通过增加对应行列的decoder和外部逻辑，将整块内存划分成独立的内存阵列（bank），通过cs片选信号选择不同的物理bank（类似单片机的cs寻址），这样我们能够进行字节块的同时访问，之前的计算变成1 + 15 + (4 x 1) = 20 cycles</li>
+</ul>
+
+<pre><code class="language-html"> CPU
+ ||
+ Cache
+ ||
+ Memory
+ 口口口口
+</code></pre>
+
+<p>在实际的cache-memory通路上，应该是cache-imc-memory，其中cache-imc属于芯片内部链接，数据暂不可查（一说是32bit宽度），imc-memory常见走的就是ddr通道（比如ddr4 2666）</p>
 
 <h2 id="不同微架构下的cache">不同微架构下的cache</h2>
 
