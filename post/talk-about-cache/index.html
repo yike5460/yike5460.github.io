@@ -358,9 +358,12 @@ Memory
 
 <h3 id="目前主流的芯片平台">目前主流的芯片平台</h3>
 
-<p>按照官方给出的资料，我们可以看出Broadwell和Purley平台下cache部分的主要区别在于MLC/LLC改变（MLC这里可以理解成L2 cache），LLC由Boardwell的2.5MB/core (inclusive)变成Purley下的1.375/core (non-inclusive)，L2缓存由Boardwell的256KB/core (private)变成Purley下的1MB/core (private)，L2缓存在Purley下变成主缓存，LLC作为补充缓存，同时LLC归属到单个core，意味着如果某个core的LLC miss，需要通过snoop到其他核来查找相应内容，比起前一代Broadwell会有时延上的升高。</p>
+<p>按照官方给出的资料，我们可以看出Broadwell和Purley平台下cache部分的主要区别在于MLC/LLC改变（MLC这里可以理解成L2 cache），LLC由Boardwell的2.5MB/core (inclusive)变成Purley下的1.375/core (non-inclusive)，L2缓存由Boardwell的256KB/core (private)变成Purley下的1MB/core (private)，L2缓存在Purley下变成主缓存，LLC作为补充缓存，同时LLC归属到单个core，意味着如果某个core的LLC miss，需要通过snoop到其他核来查找相应内容，比起前一代Broadwell会有时延上的升高。
+在整个架构上，由Broadwell的双环结构变成了mesh结构，每个core都有独立的HCA，横向的时钟延迟（cpu cycle）为1-3-2-3-1。</p>
 
 <p><img src="/media/micro-arch-01.png" alt="Purley平台" title="Purley平台" /></p>
+
+<p>业务由Broadwell平台向Purley平台迁移的一些考虑：</p>
 
 <ul>
 <li>Boardwell上针对较大LLC有较高命中率的业务，在新的平台需要提高L2缓存的命中率来减少向LLC的访问，具体操作参考如下：</li>
