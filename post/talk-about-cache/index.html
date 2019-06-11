@@ -227,7 +227,10 @@
 <li><a href="#计算miss-penalty">计算miss penalty</a></li>
 <li><a href="#减少miss-penalty">减少miss penalty</a></li>
 </ul></li>
-<li><a href="#不同微架构下的cache">不同微架构下的cache</a></li>
+<li><a href="#不同微架构下的cache">不同微架构下的cache</a>
+<ul>
+<li><a href="#目前主流的芯片平台">目前主流的芯片平台</a></li>
+</ul></li>
 </ul></li>
 </ul>
 </nav>
@@ -236,7 +239,7 @@
 
 <h2 id="cache的分类">cache的分类</h2>
 
-<p>按照缓存和内存之间的映射关系不同，缓存可分成组关联型，直接关联型和全关联型，其中后两者属于组关联型的特殊情况，分别在</p>
+<p>按照缓存和内存之间的映射关系不同，缓存可分成组关联型，直接关联型和全关联型，其中后两者属于组关联型的特殊情况，分别是</p>
 
 <h3 id="set-associative-cache-n-way-m-set-associative">Set associative cache (n-way m set associative)</h3>
 
@@ -264,9 +267,11 @@ cache miss时仅载入L1，L2的数据是从L2退化下来的数据，与L2不�
 
 <h2 id="cache的一致性">cache的一致性</h2>
 
+<p>TBD</p>
+
 <h3 id="一致性问题">一致性问题</h3>
 
-<p>cache一致性问题的根源是因为多个处理器独占的cache</p>
+<p>cache一致性问题的根源是因为多个处理器独占cache</p>
 
 <h3 id="一致性协议">一致性协议</h3>
 
@@ -278,10 +283,17 @@ cache miss时仅载入L1，L2的数据是从L2退化下来的数据，与L2不�
 
 <h2 id="cache-line伪共享-false-sharing">cache line伪共享（false sharing）</h2>
 
+<p>摘录自<a href="http://oliveryang.net/2018/01/cache-false-sharing-debug/" title="http://oliveryang.net/2018/01/cache-false-sharing-debug/">http://oliveryang.net/2018/01/cache-false-sharing-debug/</a></p>
+
+<p>Cache Line 伪共享问题，就是由多个 CPU 上的多个线程同时修改自己的变量引发的。这些变量表面上是不同的变量，但是实际上却存储在同一条 Cache Line 里。 在这种情况下，由于 Cache 一致性协议，两个处理器都存储有相同的 Cache Line 拷贝的前提下，本地 CPU 变量的修改会导致本地 Cache Line 变成 Modified 状态，然后在其它共享此 Cache Line 的 CPU 上， 引发 Cache Line 的 Invaidate 操作，导致 Cache Line 变为 Invalidate 状态，从而使 Cache Line 再次被访问时，发生本地 Cache Miss，从而伤害到应用的性能。 在此场景下，多个线程在不同的 CPU 上高频反复访问这种 Cache Line 伪共享的变量，则会因 Cache 颠簸引发严重的性能问题。</p>
+
+<p><img src="/media/false-sharing-01.png" alt="cache line伪共享" title="cache line伪共享" /></p>
+
 <h2 id="cache的写入方式">cache的写入方式</h2>
 
-<p>摘自<a href="https://blog.csdn.net/china_video_expert/article/details/7690625" title="https://blog.csdn.net/china_video_expert/article/details/7690625 ">https://blog.csdn.net/china_video_expert/article/details/7690625 </a>：
-1．直写式系统： CPU对Cache写入时，将数据同时写入到主存储器中，这样可保证Cache中的内容与主存储器的内容完全一致。这种方式比较直观，而且简单、可靠，但由于每次对Cache更新时都要对主存储器进行写操作，而这必须通过系统总线来完成，因此总线工作频繁，系统运行速度就会受到影响。</p>
+<p>摘自<a href="https://blog.csdn.net/china_video_expert/article/details/7690625" title="https://blog.csdn.net/china_video_expert/article/details/7690625 ">https://blog.csdn.net/china_video_expert/article/details/7690625 </a>：</p>
+
+<p>1．直写式系统： CPU对Cache写入时，将数据同时写入到主存储器中，这样可保证Cache中的内容与主存储器的内容完全一致。这种方式比较直观，而且简单、可靠，但由于每次对Cache更新时都要对主存储器进行写操作，而这必须通过系统总线来完成，因此总线工作频繁，系统运行速度就会受到影响。</p>
 
 <p>2．缓冲直写式系统：为解决直写式系统对总线速度的影响问题，在主存储器的数据写入时增加缓冲器区。当要写入主存储器的数据被缓冲器锁存后，CPU 便可执行下一个周期的操作，不必等待数据写入主存储器 。 这相对于给主存储器增加了一个单向单次高速缓存。比如，在写入周期之后可以紧接着一个数据已存在于Cache中的读取周期，这样就可避免直写式系统造成的 操作延时。但这个缓冲器只能存储一次写入的数据，当连续两次写操作发生时，CPU仍需等待。</p>
 
@@ -291,23 +303,15 @@ cache miss时仅载入L1，L2的数据是从L2退化下来的数据，与L2不�
 
 <h2 id="cache性能评估">cache性能评估</h2>
 
-<p>Assume that 33% of the instructions in a program are data accesses. The
-cache hit ratio is 97% and the hit time is one cycle, but the miss penalty
-is 20 cycles.
+<p>假设某程序33%的指令都是数据访问，cache的命中率是97%，同时命中时耗费一个CPU时钟周期，cache miss耗费的时钟周期是20个（miss penalty），那么运行I条指令时内存的等待时钟周期如下
 Memory stall cycles = Memory accesses x Miss rate x Miss penalty
 = 0.33 I x 0.03 x 20 cycles
-= 0.2 I cycles
- If I instructions are executed, then the number of wasted cycles will be
-0.2 x I.
-This code is 1.2 times slower than a program with a “perfect” CPI of 1!
+= 0.2 I cycles</p>
+
+<p>该例子中cache miss导致CPU有着20%的性能下降，整个CPU耗费的时钟周期如下
 CPU time = (CPU execution cycles + Memory stall cycles) x Cycle time</p>
 
-<p>Refer back to Amdahl’s Law from textbook page 101.
-— Speeding up only part of a system has diminishing returns</p>
-
-<p>AMAT = Hit time + (Miss rate x Miss penalty)
-Memory stall cycles = Memory accesses x miss rate x miss penalty
-CPU time = (CPU execution cycles + Memory stall cycles) x Cycle time</p>
+<p>根据Amdahl’s Law，仅提升系统部分模块性能而忽视其中瓶颈部分的带来的损耗（penalty），所能提升的性能是非常有限的。</p>
 
 <h3 id="计算miss-penalty">计算miss penalty</h3>
 
@@ -328,18 +332,16 @@ CPU time = (CPU execution cycles + Memory stall cycles) x Cycle time</p>
 <h3 id="减少miss-penalty">减少miss penalty</h3>
 
 <ul>
-<li>增加cache和memory总线带宽，这样我们能够一次从内存读取多个字节块，之前的计算变成1 + 15 + 1 = 17 cycles</li>
-</ul>
+<li><p>增加cache和memory总线带宽，这样我们能够一次从内存读取多个字节块，之前的计算变成1 + 15 + 1 = 17 cycles</p>
 
-<pre><code class="language-html"> CPU
- ||
- Cache
- |||||
- Memory
-</code></pre>
+<pre><code class="language-html">CPU
+||
+Cache
+|||||
+Memory
+</code></pre></li>
 
-<ul>
-<li>内存的interleave，通过增加对应行列的decoder和外部逻辑，将整块内存划分成独立的内存阵列（bank），通过cs片选信号选择不同的物理bank（类似单片机的cs寻址），这样我们能够进行字节块的同时访问，之前的计算变成1 + 15 + (4 x 1) = 20 cycles</li>
+<li><p>内存的interleave，通过增加对应行列的decoder和外部逻辑，将整块内存划分成独立的内存阵列（bank），通过cs片选信号选择不同的物理bank（类似单片机的cs寻址），这样我们能够进行字节块的同时访问，之前的计算变成1 + 15 + (4 x 1) = 20 cycles</p></li>
 </ul>
 
 <pre><code class="language-html"> CPU
@@ -353,6 +355,35 @@ CPU time = (CPU execution cycles + Memory stall cycles) x Cycle time</p>
 <p>在实际的cache-memory通路上，应该是cache-imc-memory，其中cache-imc属于芯片内部链接，数据暂不可查（一说是32bit宽度），imc-memory常见走的就是ddr通道（比如ddr4 2666）</p>
 
 <h2 id="不同微架构下的cache">不同微架构下的cache</h2>
+
+<h3 id="目前主流的芯片平台">目前主流的芯片平台</h3>
+
+<p>按照官方给出的资料，我们可以看出Broadwell和Purley平台下cache部分的主要区别在于MLC/LLC改变（MLC这里可以理解成L2 cache），LLC由Boardwell的2.5MB/core (inclusive)变成Purley下的1.375/core (non-inclusive)，L2缓存由Boardwell的256KB/core (private)变成Purley下的1MB/core (private)，L2缓存在Purley下变成主缓存，LLC作为补充缓存，同时LLC归属到单个core，意味着如果某个core的LLC miss，需要通过snoop到其他核来查找相应内容，比起前一代Broadwell会有时延上的升高。</p>
+
+<p><img src="/media/micro-arch-01.png" alt="Purley平台" title="Purley平台" /></p>
+
+<ul>
+<li>Boardwell上针对较大LLC有较高命中率的业务，在新的平台需要提高L2缓存的命中率来减少向LLC的访问，具体操作参考如下：</li>
+</ul>
+
+<ol>
+<li><p>查看L2本核的命中率</p>
+
+<pre><code class="language-shell"># perf stat -a -d -d -d -I 1000 -e cache-misses -p [app id]
+</code></pre></li>
+
+<li><p>查看LLC跨核的比率</p>
+
+<pre><code class="language-shell"># perf c2c report
+</code></pre></li>
+
+<li><p>通过VTune或Perf等工具确定热点函数，进行写频繁变量/mutex的cache line对齐，比如编译器的align选项；读和写频繁对象的cache line分离，比如padding；</p></li>
+</ol>
+
+<ul>
+<li>打开SNC（Sub NUMA Cluster）来实现内部内存的逻辑划分，降低cache访问时延；</li>
+<li>避免业务的核间通信，通过在网卡实现业务的offload，再将流量送至对应的core。</li>
+</ul>
 
 
                 
