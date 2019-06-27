@@ -6,10 +6,19 @@
     <description>Recent content on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 06 Jun 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 27 Jun 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://www.cloudnotes.cc/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>内存映射</title>
+      <link>https://www.cloudnotes.cc/post/pd-manual/</link>
+      <pubDate>Thu, 27 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/post/pd-manual/</guid>
+      <description>也说产品经理 从与SA横向对比开始 同SA（Solution Architector）一样，PM（Product Manager）也是作为整个产品部</description>
+    </item>
     
     <item>
       <title>聊聊cache</title>

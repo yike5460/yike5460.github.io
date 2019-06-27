@@ -15,9 +15,9 @@
     
 
     
-    <meta name="title" content="五分钟见解-云计算续" />
-    <meta property="og:title" content="五分钟见解-云计算续" />
-    <meta property="twitter:title" content="五分钟见解-云计算续" />
+    <meta name="title" content="内存映射" />
+    <meta property="og:title" content="内存映射" />
+    <meta property="twitter:title" content="内存映射" />
     
 
     
@@ -34,9 +34,9 @@
     <meta name="keyword"  content="cloud computing, distributed system, container, lazy shell tools">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>五分钟见解-云计算续-Aaron&#39;s Notes</title>
+    <title>内存映射-Aaron&#39;s Notes</title>
 
-    <link rel="canonical" href="/post/cloud-computing-v2/">
+    <link rel="canonical" href="/post/pd-manual/">
 
     <link rel="stylesheet" href="/css/iDisqus.min.css"/>
 	
@@ -160,16 +160,12 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/cloud" title="cloud">
-                            cloud
-                        </a>
-                        
-                        <a class="tag" href="/tags/notes" title="notes">
-                            notes
+                        <a class="tag" href="/tags/product" title="product">
+                            product
                         </a>
                         
                     </div>
-                    <h1>五分钟见解-云计算续</h1>
+                    <h1>内存映射</h1>
                     <h2 class="subheading"></h2>
                     <span class="meta">
 			Posted by 
@@ -177,7 +173,7 @@
 			         Aaron
 			 
 			on 
-			Friday, May 17, 2019
+			Thursday, June 27, 2019
                         
                     </span>
                 </div>
@@ -207,60 +203,29 @@
 <ul>
 <li>
 <ul>
-<li><a href="#云计算为什么出现">云计算为什么出现</a></li>
-<li><a href="#云计算的核心">云计算的核心</a></li>
-<li><a href="#云计算带来额外思考">云计算带来额外思考</a></li>
+<li><a href="#也说产品经理">也说产品经理</a>
+<ul>
+<li><a href="#从与sa横向对比开始">从与SA横向对比开始</a></li>
+<li><a href="#拉一个清单">拉一个清单</a></li>
+<li><a href="#tbd">TBD</a></li>
+</ul></li>
 </ul></li>
 </ul>
 </nav>
                 
                 
 
-<h2 id="云计算为什么出现">云计算为什么出现</h2>
+<h2 id="也说产品经理">也说产品经理</h2>
 
-<p>云计算概念的提出早在2005年由IBM，Google和亚马逊提出，真正成为焦点进入我们视线的应该是最近五年时间，任何技术的繁荣依赖的是对应底层基础设施的成熟和商业市场的推动，包括：</p>
+<h3 id="从与sa横向对比开始">从与SA横向对比开始</h3>
 
-<ol>
-<li><p>CPU能力，不论是客户端还是数据中心，CPU的处理能力相较2005年有了数量级的提升，尤其是在用户消费终端方面（PC端和移动终端），CPU性能的提升为客户端向云端的数据接入提供了计算能力方面的保障，比如用户端的数据解压缩，加解密，图像渲染等等功能。简单对比一下Intel在2006年发布的奔腾D系列（9XX系列）和2015年发布的Core i7系列：</p>
+<p>同SA（Solution Architector）一样，PM（Product Manager）也是作为整个产品部门的重要角色，两个角色都是作为售前和工程团队中间的一环，需要在客户需求，市场定位和工程技术，软件架构中间做出平衡的人，区别在于SA定位某一个或多个产品之上，这些产品包括硬件平台，也包括背后的软件特性，在有了软硬件作为基础的前提上针对某个垂直行业，某个客户商业产品，某个实际应用场景等进行端到端的解决方案的整合，并向客户负责前提的呈现，中间的沟通和后期的交付，同时需要针对特定的需求梳理出行业或者产品本身的共性，向后端的工程团队反馈。PM的角色偏向于商务，如果说SA立足于现有的软硬件作为基础，那么PM应该就是立足于客户的痛点，客户的价值实现，立足于上下游行业的趋势和公司的未来战略定位，站在客户的角度为客户发声，衡量，改进并提升产品真正的市场价值，PM就是产品本身的第一责任人，周边的不论是工程，运维，营销，销售等等部门都是需要拉通的一切资源，其价值的最重要的衡量点就是产品营收。在能力体系方面，SA需要把握旗下的产品特性，背后的技术栈演进，现有或潜在应用场景的分析，捕捉到客户的本质的工程痛点，下沉到技术但能浮出的人，PM需要有敏锐的市场观察判断能力，汇聚信息，处理信息并抽象信息的能力，避免陷入技术泥潭而站在商业的角度尽快将产品商业化的人，跳脱出技术窠臼但能基于数据理性分析的人。</p>
 
-<p>Presler (Pentium D) 65 nm
-2 physical cores without HT
-2MB+2MB L2 cache
-800 MHz system bus</p>
+<h3 id="拉一个清单">拉一个清单</h3>
 
-<p>Skylake (Core i7 6th Generation) 14nm
-4 physical cores/8 threads
-8 MB L3 cache
-2-channel DDR3L-<sup>1333</sup>&frasl;<sub>1600</sub>, DDR4-<sup>1866</sup>&frasl;<sub>2133</sub>
-Integrated GPU Intel HD Graphics 530</p></li>
+<p><img src="/media/PD-manual.png" alt="PD Manual" title="PD Manual" /></p>
 
-<li><p>网络能力，家用或商用的网络带宽和速度从之前的1M到现今的百兆，千兆，移动端的数据接入也从之前的2G到今天的4G和进行中的5G，网络速度，带宽和稳定性的提升为数据向云端的迁移提供了必要的迁移，不论是娱乐，办公，人们已经感知不到应用在本地和云端在体验上的区别</p></li>
-
-<li><p>存储能力，随着存储介质的演进（SATA-SSD），分布式存储软件（HDFS，Ceph）的成熟，支撑上层业务的存储在容量，吞吐和时延方面都有了成倍的提升，更大的容量意味着支持数量更多，质量更高的媒体流，更多的吞吐意味着更高的数据通道效率和更低的运营成本，更低的时延意味着更多的用户可容忍场景和潜在垂直行业的兴起</p></li>
-
-<li><p>行业标准，跟传统的通信行业的标准组织一样，有了标准意味有了生态，有了生态意味有了商业市场，有了商业市场才能让技术真正从实验室和PPT走到消费者的手上</p></li>
-</ol>
-
-<h2 id="云计算的核心">云计算的核心</h2>
-
-<ol>
-<li><p>存储，高可用，高可靠，高持久作为基本的KPI考核，同时设备本身的针对终端用户的便携性也是需要考虑的一个因素（SSD替代SATA）</p></li>
-
-<li><p>资源处理，包括分布式系统，物理资源的虚拟化和管理系统</p></li>
-
-<li><p>信息安全，包括用户/服务端加解密，用户的鉴权，服务的划分，网络的隔离</p></li>
-
-<li><p>系统工程，包括数据中心本身的建设，基础通信设施如光纤，基站的架设</p></li>
-
-<li><p>API接口，服务的可消费性，云计算子模块提供的对内或者对外的服务需要通过类似RESTful API的机制暴露给消费端</p></li>
-
-<li><p>行业标准，统一的行业标准包括服务能力，质量评价，运行维护，安全管理和能效管理</p></li>
-</ol>
-
-<h2 id="云计算带来额外思考">云计算带来额外思考</h2>
-
-<p>云计算的兴起带来了应用服务的上云，轻客户端的趋势慢慢已经形成，浏览器成为用户访问数据最好的窗口，现在除了Google，暂时还没有看到哪家能将云计算平台（Google Cloud）和浏览器Cloud(Chrome)两项业务收纳在自己手中。
-云平台或者说公有云/私有云的出现铺垫好了未来应用服务发展的基础设施，上层的开发应用平台（PaaS）的推广和普及才是能真正保证企业开发粘性，应用生态健康发展的重要指标。现在针对不同业务或垂直行业（比如针对特定AI场景）的PaaS在国内有将近千家，然而按照市场发展的普遍规律看，极有可能是第一名抢占50%左右市场，第二名抢占20～30%市场，剩下的前十企业瓜分剩下的20%甚至更少的市场。</p>
+<h3 id="tbd">TBD</h3>
 
 
                 
@@ -269,15 +234,10 @@ Integrated GPU Intel HD Graphics 530</p></li>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/post/install-openstack/" data-toggle="tooltip" data-placement="top" title="OpenStack部署笔记">&larr;
+                        <a href="/post/talk-about-cache/" data-toggle="tooltip" data-placement="top" title="聊聊cache">&larr;
                             Previous Post</a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/post/virtual-memory/" data-toggle="tooltip" data-placement="top" title="内存映射">Next
-                            Post &rarr;</a>
-                    </li>
                     
                 </ul>
 
