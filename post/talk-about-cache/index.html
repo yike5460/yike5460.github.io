@@ -222,6 +222,7 @@
 <li><a href="#cache-line伪共享-false-sharing">cache line伪共享（false sharing）</a></li>
 <li><a href="#cache的写入方式">cache的写入方式</a></li>
 <li><a href="#透明页共享">透明页共享</a></li>
+<li><a href="#tlb">TLB</a></li>
 <li><a href="#cache性能评估">cache性能评估</a>
 <ul>
 <li><a href="#计算miss-penalty">计算miss penalty</a></li>
@@ -300,6 +301,12 @@ cache miss时仅载入L1，L2的数据是从L2退化下来的数据，与L2不�
 <p>3．回写式系统：以前的两种写入方式系统，都是在 写Cache的同时，对主存储器进行写操作。实际上这不仅是对总线带宽的占用，浪费了宝贵的执行时间，而且对于有的情况是不必要的，可以通过增加额外的标准来判断是否有必要更新数据。回写式系统就是通过在Cache中的每一数据块的标志字段中加入一更新位，解决主存储器不必要的写操作。比如，若Cache 中的数据曾被CPU更新过但还未同时更新主存储器，则该更新位被置1。每次CPU将一块新内容写入Cache时，首先，检查Cache中该数据块的更新 位，若更新位为0，则将数据直接写入Cache；反之,若更新位为1，则先将 Cache 中的该项内容写入到主存储器中相应的位置，再将新数据写回到Cache中。</p>
 
 <h2 id="透明页共享">透明页共享</h2>
+
+<p>TBD</p>
+
+<h2 id="tlb">TLB</h2>
+
+<p>TLB作为cache的一种，缓存了进程虚拟地址（vpn）和实际内存物理地址（pfn）的映射关系，实现了查找性能的提升，之前文章<a href="https://www.cloudnotes.cc/post/virtual-memory/#tlb" title="内存映射">内存映射</a>有提到基本原理。同普通cache一样，TLB也存在一致性的问题，普通cache属于硬件上的物理内存，CPU来实现cache和内存的一致性，而TLB属于软件上的数据结构，需要从系统软件上实现维护TLB的一致性。TLB在两种情况下会被invalidate/flush，第一种情况页表PTE内容变化，页面换出需要做unmmap解除映射，这个flush直接将该TLB中对应表项删除，而不会做类似普通cache的向磁盘的持久化写入；第二种情况进程进行上下文切换，包括通过系统调用进入kernel，kernel处理完毕后返回用户空间，和进程切换（user mode-&gt;kernel mode-&gt;user mode）。为了避免进程页表和内核页表对应的TLB entry刷新造成性能上的下降，针对进程页表，TLB中存在一个叫做PCID（Process Context Identifiers）或ASID（Address Space Identifiers）的字段，用作标识对应进程的TLB表项，避免了相同虚拟地址的两个进程错误刷新到对方的TLB entry造成的性能下降；针对内核页表，TLB新增了一个G（global）bit，当CR3寄存器中的内容被更新，即发生进程切换，默认会flush整个TLB。如果在CR4寄存器里置位了PGE（page global enable），则TLB里的G标志位就生效了，含有G的TLB entry就不会被flush。</p>
 
 <h2 id="cache性能评估">cache性能评估</h2>
 
