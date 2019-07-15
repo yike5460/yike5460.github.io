@@ -15,9 +15,9 @@
     
 
     
-    <meta name="title" content="搭个ip-san（iscsi）" />
-    <meta property="og:title" content="搭个ip-san（iscsi）" />
-    <meta property="twitter:title" content="搭个ip-san（iscsi）" />
+    <meta name="title" content="K8S tutorial ep1" />
+    <meta property="og:title" content="K8S tutorial ep1" />
+    <meta property="twitter:title" content="K8S tutorial ep1" />
     
 
     
@@ -34,9 +34,9 @@
     <meta name="keyword"  content="cloud computing, distributed system, container, lazy shell tools">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>搭个ip-san（iscsi）-Aaron&#39;s Notes</title>
+    <title>K8S tutorial ep1-Aaron&#39;s Notes</title>
 
-    <link rel="canonical" href="/post/build-ip-san/">
+    <link rel="canonical" href="/post/k8s-01/">
 
     <link rel="stylesheet" href="/css/iDisqus.min.css"/>
 	
@@ -160,24 +160,24 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/ip-san" title="ip-san">
-                            ip-san
+                        <a class="tag" href="/tags/container" title="container">
+                            container
                         </a>
                         
-                        <a class="tag" href="/tags/hands-on" title="hands-on">
-                            hands-on
+                        <a class="tag" href="/tags/k8s" title="k8s">
+                            k8s
                         </a>
                         
                     </div>
-                    <h1>搭个ip-san（iscsi）</h1>
+                    <h1>K8S tutorial ep1</h1>
                     <h2 class="subheading"></h2>
                     <span class="meta">
 			Posted by 
 			
-			         &#34;Aaron&#34;
+			         Aaron
 			 
 			on 
-			Monday, January 14, 2019
+			Monday, July 15, 2019
                         
                     </span>
                 </div>
@@ -205,286 +205,183 @@
                 </header>
                 <nav id="TableOfContents">
 <ul>
-<li>
+<li><a href="#overall-install">overall install</a>
 <ul>
-<li><a href="#拓扑">拓扑</a></li>
-<li><a href="#安装配置">安装配置</a></li>
+<li><a href="#install-docker">install docker</a></li>
+<li><a href="#http-https-proxy-optional">HTTP/HTTPS proxy (optional)</a></li>
+<li><a href="#install-main-packages">install main packages</a></li>
+<li><a href="#master-node">master node</a></li>
+<li><a href="#flannel-network">Flannel network</a></li>
+<li><a href="#on-each-slave-nodes">on each slave nodes</a></li>
+<li><a href="#processes-running-in-master">processes running in master:</a></li>
+<li><a href="#processes-running-in-nodes">processes running in nodes:</a></li>
 </ul></li>
+<li><a href="#hands-on-objects">hands on objects</a>
+<ul>
+<li><a href="#job">job</a></li>
+</ul></li>
+<li><a href="#reference">reference</a></li>
 </ul>
 </nav>
                 
                 
 
-<h2 id="拓扑">拓扑</h2>
+<h1 id="overall-install">overall install</h1>
 
-<p>两个节点，一个initiator，一个target，中间通过交换机或者网线直连</p>
+<h2 id="install-docker">install docker</h2>
 
-<p>initiator(192.168.1.100) &lt;——–&gt; target (192.168.1.200)</p>
+<pre><code class="language-shell"># sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+# curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+# sudo add-apt-repository &quot;deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable&quot;
+# apt-get update &amp;&amp; apt-get install -y docker-ce
 
-<h2 id="安装配置">安装配置</h2>
-
-<p>###target</p>
-
-<pre><code class="language-shell"># apt-cache search scsi | grep target
-# apt-get install tgt
-# mkdir -p /var/lib/iscsi_disks
 </code></pre>
 
-<p>虚拟出一块10G的磁盘</p>
+<h2 id="http-https-proxy-optional">HTTP/HTTPS proxy (optional)</h2>
 
-<pre><code class="language-shell"># dd if=/dev/zero of=/var/lib/iscsi_disks/disk01.img count=0 bs=1 seek=10G
-# vim /etc/tgt/conf.d/target01.conf
-# naming rule : [ iqn.(year)-(month).(reverse of domain name):(any name you like) ]
-&lt;target iqn.2019-01.aaron2cloud.blog:target01&gt;
-# provided devicce as a iSCSI target
-backing-store /var/lib/iscsi_disks/disk01.img
-# iSCSI Initiator’s IQN you allow to connect to this Target
-initiator-name iqn.2019-01.net.aaron2cloud.blog:initiator01
-# authentication info ( set any name you like for “username”, “password” )
-incominguser aaron 2cloud
-&lt;/target&gt;
-# systemctl restart tgt
-# tgtadm -L iscsi -o show -m target
-Target 1: iqn.2019-01.aaron2cloud.blog:target01
-System information:
-Driver: iscsi
-State: ready
-I_T nexus information:
-I_T nexus: 2
-Initiator: iqn.2019-01.net.aaron2cloud.blog:initiator01 alias: ceph-bj-osd-01
-Connection: 0
-IP Address: 172.16.182.122
-LUN information:
-LUN: 0
-Type: controller
-SCSI ID: IET 00010000
-SCSI SN: beaf10
-Size: 0 MB, Block size: 1
-Online: Yes
-Removable media: No
-Prevent removal: No
-Readonly: No
-SWP: No
-Thin-provisioning: No
-Backing store type: null
-Backing store path: None
-Backing store flags:
-LUN: 1
-Type: disk
-SCSI ID: IET 00010001
-SCSI SN: beaf11
-Size: 10737 MB, Block size: 512
-Online: Yes
-Removable media: No
-Prevent removal: No
-Readonly: No
-SWP: No
-Thin-provisioning: No
-Backing store type: rdwr
-Backing store path: /var/lib/iscsi_disks/disk01.img
-Backing store flags:
-Account information:
-ACL information:
-ALL
-iqn.2019-01.net.aaron2cloud.blog:initiator01
+<pre><code class="language-shell"># docker pull rancher/server
+Using default tag: latest
+Error response from daemon: Get https://registry-1.docker.io/v2/: net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)
+# mkdir /etc/systemd/system/docker.service.d
+# vim /etc/systemd/system/docker.service.d/http-proxy.conf
+[Service]
+Environment=&quot;HTTP_PROXY=http://proxy.example.com:80/&quot;
+Environment=&quot;HTTPS_PROXY=https://proxy.example.com:80/&quot;
+Or
+[Service]
+Environment=&quot;HTTP_PROXY=http://proxy.example.com:80/&quot; &quot;NO_PROXY=localhost,127.0.0.1&quot;
+
+# systemctl daemon-reload
+# systemctl show --property Environment docker
+Environment=HTTP_PROXY=http://proxy.example.com:80/ HTTPS_PROXY=https://child-prc.intel.com:913/
+# systemctl restart docker
 </code></pre>
 
-<p>###initiator</p>
+<h2 id="install-main-packages">install main packages</h2>
 
-<pre><code class="language-shell"># apt-get install open-iscsi
-# vim /etc/iscsi/iscsid.conf （注意这里的user/pass需要和target配置对应，作为鉴权信息）
-# To enable CHAP authentication set node.session.auth.authmethod
-# to CHAP. The default is None.
-node.session.auth.authmethod = CHAP
+<pre><code class="language-shell"># systemctl disable firewalld.service
+# systemctl stop firewalld.service
 
-# To set a CHAP username and password for initiator
-# authentication by the target(s), uncomment the following lines:
-node.session.auth.username = aaron
-node.session.auth.password = 2cloud
+# apt-get update &amp;&amp; apt-get install -y apt-transport-https
+# curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+# cat &lt;&lt;EOF &gt;/etc/apt/sources.list.d/kubernetes.list
+deb http://apt.kubernetes.io/ kubernetes-xenial main 
+EOF
+# apt-get update &amp;&amp; apt-get install -y kubelet kubeadm kubectl
+# create /etc/docker/daemon.json
+{
+  &quot;exec-opts&quot;: [&quot;native.cgroupdriver=systemd&quot;]
+}
 
-# service iscsi restart
-# service iscsid restart
-
-# iscsiadm -m discovery -t st -p 192.168.1.200
-
-192.168.1.200:3260,1 iqn.2019-01.aaron2cloud.blog:target01
-
-# iscsiadm -m node -T iqn.2019-01.aaron2cloud.blog:target01 -p 192.168.1.200 -l
-Logging in to [iface: default, target: iqn.2019-01.aaron2cloud.blog:target01, portal: 192.168.1.200,3260] (multiple)
-Login to [iface: default, target: iqn.2019-01.aaron2cloud.blog:target01, portal: 192.168.1.200,3260] successful.
-
-# fdisk -l
-
-…
-Disk /dev/sdb: 10 GiB, 10737418240 bytes, 20971520 sectors
-Units: sectors of 1 * 512 = 512 bytes
-Sector size (logical/physical): 512 bytes / 4096 bytes
-I/O size (minimum/optimal): 4096 bytes / 4096 bytes
-
-…
-
-# lsblk
-NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINT
-…
-sdb 8:16 0 10G 0 disk
-…
-
-# mkfs.ext4 /dev/sdb
-
-# mkdir -p /mnt/tmp
-# mount /dev/sdb /mnt/tmp
-# touch /mnt/tmp/done
-# echo done &gt; /mnt/tmp/done
-# cat /mnt/tmp/done
-done
-
-# date
-Mon Jan 14 09:31:05 PST 2019
+# systemctl restart docker
+# docker info | grep Cgroup
+Cgroup Driver: systemd
 </code></pre>
 
-<p>由于作为示例并未挂载实际分区，可在target节点上通过时间戳确认数据源被远程写入</p>
+<h2 id="master-node">master node</h2>
 
-<pre><code class="language-shell"># ls -alt /var/lib/iscsi_disks/
-total 297684
--rw-r–r– 1 root root 10737418240 Jan 14 09:31 disk01.img
+<pre><code class="language-shell"># kubeadm init --apiserver-advertise-address &lt;host IP address&gt; --pod-network-cidr=10.244.0.0/16
 </code></pre>
 
-<p>查看日志，看到新磁盘已正常挂载</p>
+<p>continue after you see hint info below
+<img src="/media/k8s-01.png" alt="init successful" title="init successful" /></p>
 
-<pre><code class="language-shell"># dmesg | grep sd
-
-[600285.477744] sd 8:0:0:1: Attached scsi generic sg2 type 0
-[600285.477749] sd 8:0:0:1: [sdb] 20971520 512-byte logical blocks: (10.7 GB/10.0 GiB)
-[600285.477755] sd 8:0:0:1: [sdb] 4096-byte physical blocks
-[600285.478108] sd 8:0:0:1: [sdb] Write Protect is off
-[600285.478113] sd 8:0:0:1: [sdb] Mode Sense: 69 00 10 08
-[600285.478282] sd 8:0:0:1: [sdb] Write cache: enabled, read cache: enabled, supports DPO and FUA
-[600285.481047] sd 8:0:0:1: [sdb] Attached SCSI disk
+<pre><code class="language-shell"># mkdir -p $HOME/.kube
+# sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+# sudo chown $(id -u):$(id -g) $HOME/.kube/config
+# echo &quot;source &lt;(kubectl completion bash)&quot; &gt;&gt; ~/.bashrc
 </code></pre>
 
-<p>tgtadm和iscsiadm常用选项说明
-1、服务端配置管理工具tgtadm的使用</p>
+<h2 id="flannel-network">Flannel network</h2>
 
-<p>语法：tgtadm –lld [driver] –op [operation] –mode [mode] [OPTION]…</p>
-
-<p>添加一个新的 target 且其ID为 [id]， 名字为 [name].</p>
-
-<blockquote>
-<p>–lld [driver] –op new –mode target –tid=[id] –targetname [name]</p>
-</blockquote>
-
-<p>显示所有或某个特定的target:</p>
-
-<blockquote>
-<p>–lld [driver] –op show –mode target [–tid=[id]]</p>
-</blockquote>
-
-<p>向某ID为[id]的设备上添加一个新的LUN，其号码为[lun]，且此设备提供给initiator使用。[path]是某“块设备”的路径，此块设备也可以是raid或lvm设备。lun0已经被系统预留。</p>
-
-<blockquote>
-<p>–lld [driver] –op new –mode=logicalunit –tid=[id] –lun=[lun] –backing-store [path]</p>
-</blockquote>
-
-<p>删除ID为[id]的target:</p>
-
-<blockquote>
-<p>–lld [driver] –op delete –mode target –tid=[id]</p>
-</blockquote>
-
-<p>删除target [id]中的LUN [lun]：</p>
-
-<blockquote>
-<p>–lld [driver] –op delete –mode=logicalunit –tid=[id] –lun=[lun]</p>
-</blockquote>
-
-<p>定义某target的基于主机的访问控制列表，其中，[address]表示允许访问此target的initiator客户端的列表：</p>
-
-<blockquote>
-<p>–lld [driver] –op bind –mode=target –tid=[id] –initiator-address=[address]</p>
-</blockquote>
-
-<p>解除target [id]的访问控制列表中[address]的访问控制权限：</p>
-
-<blockquote>
-<p>–lld [driver] –op unbind –mode=target –tid=[id] –initiator-address=[address]</p>
-</blockquote>
-
-<p>例如：</p>
-
-<p>(1)创建一个target:</p>
-
-<pre><code class="language-shell"># tgtadm --lld iscsi --op new --mode target --tid 1 -T iqn.2013-05.com.example:tsan.disk1
+<pre><code class="language-shell"># kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 </code></pre>
 
-<p>(2)显示所有：</p>
+<h2 id="on-each-slave-nodes">on each slave nodes</h2>
 
-<pre><code class="language-shell"># tgtadm --lld iscsi --op show --mode target
+<pre><code class="language-shell"># one master node check the command to join: 'kubeadm token create --print-join-command'
+# kubeadm reset (optinal)
+# kubeadm join 10.109.181.110:6443 --token ztwxpd.qbp9iaiqsd8v97gg --discovery-token-ca-cert-hash 
+sha256:79ac20fc3f33ab41e23701923f246f997977a70ff3cb40ab10431aee4bf098b3
 </code></pre>
 
-<p>(3)显示刚创建的target:</p>
-
-<pre><code class="language-shell"># tgtadm --lld iscsi --op show --mode target --tid 1
-</code></pre>
-
-<p>(4)创建LUN，号码为1:</p>
-
-<pre><code class="language-shell"># tgtadm --lld iscsi --op new --mode logicalunit --tid 1 --lun 1 -b /dev/sda5
-</code></pre>
-
-<p>(5)开放给192.168.0.0/24网络中的主机访问：</p>
-
-<pre><code class="language-shell"># tgtadm --lld iscsi --op bind --mode target --tid 1 -I 192.168.0.0/16
-</code></pre>
-
-<p>其中的-I相当于–initiator-address</p>
-
-<p>(6)Create a new account:</p>
-
-<pre><code class="language-shell"># tgtadm --lld iscsi --op new --mode account --user christina --password 123456
-# tgtadm --lld iscsi --op show --mode account
-</code></pre>
-
-<p>Assign this account to a target:</p>
-
-<pre><code class="language-shell"># tgtadm --lld iscsi --op bind --mode account --tid 1 --user christina
-# tgtadm --lld iscsi --op show --mode target
-</code></pre>
-
-<p>(7)Set up an outgoing account. First, you need to create a new account like the previous example</p>
-
-<pre><code class="language-shell"># tgtadm --lld iscsi --op new --mode account --user clyde --password 123456
-# tgtadm --lld iscsi --op show --mode account
-# tgtadm --lld iscsi --op bind --mode account --tid 1 --user clyde --outgoing
-# tgtadm --lld iscsi --op show --mode target
-</code></pre>
-
-<p>2、iscsiadm工具的使用</p>
-
-<p>iscsiadm是个模式化的工具，其模式可通过-m或–mode选项指定，常见的模式有discovery、node、fw、session、host、iface几个，如果没有额外指定其它选项，则discovery和node会显示其相关的所有记录；session用于显示所有的活动会话和连接，fw显示所有的启动固件值，host显示所有的iSCSI主机，iface显示/var/lib/iscsi/ifaces目录中的所有ifaces设定。</p>
-
-<p>语法：iscsiadm -m discovery [ -d debug_level ] [ -P printlevel ] [ -I iface -t type -p ip:port [ -l ] ]</p>
-
-<p>iscsiadm -m node [ -d debug_level ] [ -P printlevel ] [ -L all,manual,automatic ] [ -U all,manual,automatic ] [ [ -T tar-getname -p ip:port -I iface ] [ -l | -u | -R | -s] ] [ [ -o operation ]</p>
+<h2 id="processes-running-in-master">processes running in master:</h2>
 
 <ul>
-<li><p>-d, –debug=debug_level   显示debug信息，级别为0-8；</p></li>
+<li><p>kube-controller-manager
+&ndash; Node Controller: Responsible for noticing and responding when nodes go down.
+&ndash; Replication Controller: Responsible for maintaining the correct number of pods for every replication controller object in the system.
+&ndash; Endpoints Controller: Populates the Endpoints object (that is, joins Services &amp; Pods).
+&ndash; Service Account &amp; Token Controllers: Create default accounts and API access tokens for new namespaces.</p></li>
 
-<li><p>-l, –login</p></li>
+<li><p>kube-scheduler
+&ndash; Component on the master that watches newly created pods that have no node assigned, and selects a node for them to run on</p></li>
 
-<li><p>-t, –type=type  这里可以使用的类型为sendtargets(可简写为st)、slp、fw和 isns，此选项仅用于discovery模式，且目前仅支持st、fw和isns；其中st表示允许每个iSCSI target发送一个可用target列表给initiator；</p></li>
+<li><p>kube-apiserver
+&ndash; Component on the master that exposes the Kubernetes API. It is the front-end for the Kubernetes control plane</p></li>
 
-<li><p>-p, –portal=ip[:port]  指定target服务的IP和端口；</p></li>
+<li><p>/usr/bin/kubelet
+&ndash; An agent that runs on each node in the cluster. It makes sure that containers are running in a pod.
+&ndash; The kubelet takes a set of PodSpecs that are provided through various mechanisms and ensures that the containers described in those PodSpecs are running and healthy. The kubelet doesn’t manage containers which were not created by Kubernetes</p></li>
 
-<li><p>-m, –mode op  可用的mode有discovery, node, fw, host iface 和 session</p></li>
+<li><p>/usr/local/bin/kube-proxy
+&ndash; kube-proxy is a network proxy that runs on each node in the cluster.
+&ndash; It enables the Kubernetes service abstraction by maintaining network rules on the host and performing connection forwarding.
+&ndash; kube-proxy is responsible for request forwarding. kube-proxy allows TCP and UDP stream forwarding or round robin TCP and UDP forwarding across a set of backend functions.</p></li>
 
-<li><p>-T, –targetname=targetname  用于指定target的名字</p></li>
+<li><p>Etcd
+&ndash; Consistent and highly-available key value store used as Kubernetes’ backing store for all cluster data.</p></li>
 
-<li><p>-u, –logout</p></li>
-
-<li><p>-o, –op=OPEARTION：指定针对discoverydb数据库的操作，其仅能为new、delete、update、show和nonpersistent其中之一；</p></li>
-
-<li><p>-I, –interface=[iface]：指定执行操作的iSCSI接口，这些接口定义在/var/lib/iscsi/ifaces中</p></li>
+<li><p>/opt/bin/flanneld (/opt/bin/flanneld &ndash;ip-masq &ndash;kube-subnet-mgr)
+&ndash; Specific network plugin
+<img src="/media/k8s-02.png" alt="show pods" title="show pods" /></p></li>
 </ul>
+
+<h2 id="processes-running-in-nodes">processes running in nodes:</h2>
+
+<ul>
+<li><p>/usr/bin/kubelet</p></li>
+
+<li><p>/usr/local/bin/kube-proxy
+&ndash; kube-proxy is a network proxy that runs on each node in the cluster.
+&ndash; It enables the Kubernetes service abstraction by maintaining network rules on the host and performing connection forwarding.
+&ndash; kube-proxy is responsible for request forwarding. kube-proxy allows TCP and UDP stream forwarding or round robin TCP and UDP forwarding across a set of backend functions.</p></li>
+
+<li><p>/opt/bin/flanneld (/opt/bin/flanneld &ndash;ip-masq &ndash;kube-subnet-mgr)
+&ndash; Specific network plugin</p></li>
+</ul>
+
+<h1 id="hands-on-objects">hands on objects</h1>
+
+<p><img src="/media/k8s-03.png" alt="object tree" title="object tree" /></p>
+
+<h2 id="job">job</h2>
+
+<p>create job.yaml below</p>
+
+<pre><code class="language-yaml">apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi
+spec:
+  template:
+    spec:
+      containers:
+      - name: pi
+        image: perl
+        command: [&quot;perl&quot;,  &quot;-Mbignum=bpi&quot;, &quot;-wle&quot;, &quot;print bpi(2000)&quot;]
+      restartPolicy: Never
+  backoffLimit: 4
+</code></pre>
+
+<pre><code class="language-shell"># kubectl apply -f ./job.yaml
+# kubectl describe jobs/pi
+# kubectl logs $(kubectl get pods --selector=job-name=pi --output=jsonpath='{.items[*].metadata.name}')
+</code></pre>
+
+<h1 id="reference">reference</h1>
+
+<p><a href="https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/" title="https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/">https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/</a></p>
 
 
                 
@@ -493,15 +390,10 @@ total 297684
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/post/talk-about-cdn/" data-toggle="tooltip" data-placement="top" title="聊聊CDN中的加速">&larr;
+                        <a href="/post/pd-manual/" data-toggle="tooltip" data-placement="top" title="也说产品经理">&larr;
                             Previous Post</a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/post/build-redis-cluster/" data-toggle="tooltip" data-placement="top" title="搭个redis cluster">Next
-                            Post &rarr;</a>
-                    </li>
                     
                 </ul>
 
