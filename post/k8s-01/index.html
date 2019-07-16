@@ -216,9 +216,13 @@
 <li><a href="#processes-running-in-master">processes running in master:</a></li>
 <li><a href="#processes-running-in-nodes">processes running in nodes:</a></li>
 </ul></li>
-<li><a href="#hands-on-objects">hands on objects</a>
+<li><a href="#hands-on-objects">hands on objects</a></li>
+<li><a href="#configuration-file-overall">configuration file overall</a>
 <ul>
-<li><a href="#job">job</a></li>
+<li><a href="#general-template">general template</a></li>
+<li><a href="#pod">Pod</a></li>
+<li><a href="#job">Job</a></li>
+<li><a href="#replicaset">ReplicaSet</a></li>
 </ul></li>
 <li><a href="#reference">reference</a></li>
 </ul>
@@ -355,9 +359,7 @@ sha256:79ac20fc3f33ab41e23701923f246f997977a70ff3cb40ab10431aee4bf098b3
 
 <p><img src="/media/k8s-03.png" alt="object tree" title="object tree" /></p>
 
-<h2 id="job">job</h2>
-
-<p>create job.yaml below</p>
+<p>for example, creat job.yaml below</p>
 
 <pre><code class="language-yaml">apiVersion: batch/v1
 kind: Job
@@ -377,6 +379,90 @@ spec:
 <pre><code class="language-shell"># kubectl apply -f ./job.yaml
 # kubectl describe jobs/pi
 # kubectl logs $(kubectl get pods --selector=job-name=pi --output=jsonpath='{.items[*].metadata.name}')
+</code></pre>
+
+<h1 id="configuration-file-overall">configuration file overall</h1>
+
+<h2 id="general-template">general template</h2>
+
+<pre><code class="language-yaml">apiVersion: xx
+kind: xx
+metadata: xx
+  name: xx
+  labels:
+    xx: xx
+spec:
+  template:
+    spec:
+      restartPolicy:
+  containers:
+      - name: xx
+        image: xx
+        command: [&quot;xx&quot;,  &quot;xx&quot;]
+  restartPolicy: OnFailure/Never
+  selector:
+  completions:
+  parallelism:
+  backoffLimit:xx
+  activeDeadlineSeconds: xx
+  manualSelector: true/false
+</code></pre>
+
+<h2 id="pod">Pod</h2>
+
+<pre><code class="language-yaml">apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+  labels:
+    app: myapp
+spec:
+  containers:
+  - name: myapp-container
+    image: busybox
+    command: ['sh', '-c', 'echo Hello Kubernetes! &amp;&amp; sleep 3600']
+</code></pre>
+
+<h2 id="job">Job</h2>
+
+<pre><code class="language-yaml">apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi
+spec:
+  template:
+    spec:
+      containers:
+      - name: pi
+        image: perl
+        command: [&quot;perl&quot;,  &quot;-Mbignum=bpi&quot;, &quot;-wle&quot;, &quot;print bpi(2000)&quot;]
+      restartPolicy: Never
+  backoffLimit: 4
+</code></pre>
+
+<h2 id="replicaset">ReplicaSet</h2>
+
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: frontend
+  labels:
+    app: guestbook
+    tier: frontend
+spec:
+  # modify replicas according to your case
+  replicas: 3
+  selector:
+    matchLabels:
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        tier: frontend
+    spec:
+      containers:
+      - name: php-redis
+        image: gcr.io/google_samples/gb-frontend:v3
 </code></pre>
 
 <h1 id="reference">reference</h1>
