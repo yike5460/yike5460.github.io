@@ -217,6 +217,14 @@
 <li><a href="#processes-running-in-nodes">processes running in nodes:</a></li>
 </ul></li>
 <li><a href="#hands-on-objects">hands on objects</a></li>
+<li><a href="#configuration-file-overall">configuration file overall</a>
+<ul>
+<li><a href="#pod">Pod</a></li>
+<li><a href="#deployment">Deployment</a></li>
+<li><a href="#job">Job</a></li>
+<li><a href="#replicaset">ReplicaSet</a></li>
+</ul></li>
+<li><a href="#key-takeaway-for-various-controller">key takeaway for various controller</a></li>
 <li><a href="#reference">reference</a></li>
 </ul>
 </nav>
@@ -373,6 +381,110 @@ spec:
 # kubectl describe jobs/pi
 # kubectl logs $(kubectl get pods --selector=job-name=pi --output=jsonpath='{.items[*].metadata.name}')
 </code></pre>
+
+<h1 id="configuration-file-overall">configuration file overall</h1>
+
+<h2 id="pod">Pod</h2>
+
+<p>In general, Controllers use a Pod Template that you provide to create the Pods for which it is responsible.</p>
+
+<pre><code class="language-yaml">apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+  labels:
+    app: myapp
+spec:
+  containers:
+  - name: myapp-container
+    image: busybox
+    command: ['sh', '-c', 'echo Hello Kubernetes! &amp;&amp; sleep 3600']
+</code></pre>
+
+<h2 id="deployment">Deployment</h2>
+
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template: ----------------------------------------&gt; pod template without apiVersion, kind field
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.7.9
+        ports:
+        - containerPort: 80
+</code></pre>
+
+<h2 id="job">Job</h2>
+
+<p><a href="https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/" title="https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/">https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/</a></p>
+
+<pre><code class="language-yaml">apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi
+spec:
+  template: ----------------------------------------&gt; pod template is the only required field of the .spec
+    spec:
+      containers:
+      - name: pi
+        image: perl
+        command: [&quot;perl&quot;,  &quot;-Mbignum=bpi&quot;, &quot;-wle&quot;, &quot;print bpi(2000)&quot;]
+      restartPolicy: Never
+  backoffLimit: 4
+</code></pre>
+
+<h2 id="replicaset">ReplicaSet</h2>
+
+<p>refer to <a href="https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/#" title="https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/#">https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/#</a></p>
+
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: frontend
+  labels:
+    app: guestbook
+    tier: frontend
+spec:
+  # modify replicas according to your case
+  replicas: 3
+  selector:
+    matchLabels:
+      tier: frontend
+  template: ----------------------------------------&gt; pod template without apiVersion, kind field
+    metadata:
+      labels:
+        tier: frontend
+    spec:
+      containers:
+      - name: php-redis
+        image: gcr.io/google_samples/gb-frontend:v3
+</code></pre>
+
+<h1 id="key-takeaway-for-various-controller">key takeaway for various controller</h1>
+
+<ul>
+<li><p>A Deployment controller provides declarative updates for Pods and ReplicaSets.
+You describe a desired state in a Deployment, and the Deployment controller changes the actual state to the desired state at a controlled rate. You can define Deployments to create new ReplicaSets, or to remove existing Deployments and adopt all their resources with new Deployments.</p></li>
+
+<li><p>A ReplicaSet ensures that a specified number of pod replicas are running at any given time. However, a Deployment is a higher-level concept that manages ReplicaSets and provides declarative updates to Pods along with a lot of other useful features. Therefore, we recommend using Deployments instead of directly using ReplicaSets, unless you require custom update orchestration or don’t require updates at all.
+This actually means that you may never need to manipulate ReplicaSet objects: use a Deployment instead, and define your application in the spec section</p></li>
+
+<li><p>ReplicaSets are the successors to ReplicationControllers. The two serve the same purpose, and behave similarly, except that a ReplicationController does not support set-based selector requirements as described in the labels user guide. As such, ReplicaSets are preferred over ReplicationControllers</p></li>
+
+<li><p>Once the original is deleted, you can create a new ReplicaSet to replace it. As long as the old and new .spec.selector are the same, then the new one will adopt the old Pods. However, it will not make any effort to make existing Pods match a new, different pod template. To update Pods to a new spec in a controlled way, use a Deployment, as ReplicaSets do not support a rolling update directly.</p></li>
+</ul>
 
 <h1 id="reference">reference</h1>
 
