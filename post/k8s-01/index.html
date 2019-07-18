@@ -223,6 +223,7 @@
 <li><a href="#deployment">Deployment</a></li>
 <li><a href="#job">Job</a></li>
 <li><a href="#replicaset">ReplicaSet</a></li>
+<li><a href="#statefulset">StatefulSet</a></li>
 </ul></li>
 <li><a href="#key-takeaway-for-various-controller">key takeaway for various controller</a></li>
 <li><a href="#reference">reference</a></li>
@@ -473,6 +474,61 @@ spec:
         image: gcr.io/google_samples/gb-frontend:v3
 </code></pre>
 
+<h2 id="statefulset">StatefulSet</h2>
+
+<p>refer to <a href="https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#" title="https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#">https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#</a>
+note that pv need to create before apply yaml below</p>
+
+<pre><code class="language-yaml">apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  ports:
+  - port: 80
+    name: web
+  clusterIP: None
+  selector:
+    app: nginx
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: web
+spec:
+  selector:
+    matchLabels:
+      app: nginx # has to match .spec.template.metadata.labels
+  serviceName: &quot;nginx&quot;
+  replicas: 3 # by default is 1
+  template:
+    metadata:
+      labels:
+        app: nginx # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: nginx
+        image: k8s.gcr.io/nginx-slim:0.8
+        ports:
+        - containerPort: 80
+          name: web
+        volumeMounts:
+        - name: www
+          mountPath: /usr/share/nginx/html
+  volumeClaimTemplates:
+  - metadata:
+      name: www
+    spec:
+      accessModes: [ &quot;ReadWriteOnce&quot; ]
+      storageClassName: &quot;my-storage-class&quot;
+      resources:
+        requests:
+          storage: 1Gi
+</code></pre>
+
 <h1 id="key-takeaway-for-various-controller">key takeaway for various controller</h1>
 
 <ul>
@@ -489,6 +545,10 @@ This actually means that you may never need to manipulate ReplicaSet objects: us
 <li><p>ReplicaSets are the successors to ReplicationControllers. The two serve the same purpose, and behave similarly, except that a ReplicationController does not support set-based selector requirements as described in the labels user guide. As such, ReplicaSets are preferred over ReplicationControllers</p></li>
 
 <li><p>Once the original is deleted, you can create a new ReplicaSet to replace it. As long as the old and new .spec.selector are the same, then the new one will adopt the old Pods. However, it will not make any effort to make existing Pods match a new, different pod template. To update Pods to a new spec in a controlled way, use a Deployment, as ReplicaSets do not support a rolling update directly.</p></li>
+
+<li><p>Like a Deployment, a StatefulSet manages Pods that are based on an identical container spec. Unlike a Deployment, a StatefulSet maintains a sticky identity for each of their Pods. These pods are created from the same spec, but are not interchangeable: each has a persistent identifier that it maintains across any rescheduling.</p></li>
+
+<li><p>Deployment, RS are both stateless scheduler while StatefulSet provide ordered persistence across Pod (re)scheduling.</p></li>
 </ul>
 
 <h1 id="reference">reference</h1>
