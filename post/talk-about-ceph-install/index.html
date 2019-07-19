@@ -248,7 +248,7 @@
 <h3 id="安装ceph-deploy-所有节点">安装ceph-deploy（所有节点）：</h3>
 
 <pre><code class="language-shell">echo deb http://download.ceph.com/debian-infernalis/ $(lsb_release -sc) main | sudo tee /etc/apt/sources.list.d/ceph.list
-wget -q -O- ‘https://download.ceph.com/keys/release.asc’ | sudo apt-key add –
+wget -q -O- ‘https://download.ceph.com/keys/release.asc’ | sudo apt-key add - 
 sudo apt-get update &amp;&amp; sudo apt-get install ceph-deploy -y
 </code></pre>
 
@@ -277,7 +277,7 @@ Host ceph-bj-osd-02
   User root
 </code></pre>
 
-<p>设置本地repo</p>
+<p>设置本地repo (optional)</p>
 
 <pre><code class="language-shell">#export CEPH_DEPLOY_REPO_URL=http://mirrors.163.com/ceph/debian-luminous/
 #export CEPH_DEPLOY_GPG_URL=https://mirrors.163.com/ceph/keys/release.asc
@@ -328,6 +328,15 @@ osd crush chooseleaf type = 1
 #ceph-deploy osd activate ceph-bj-osd-01:/dev/nvme0n1p1:/dev/nvme1n1p1 ceph-bj-osd-02:/dev/nvme0n1p1:/dev/nvme1n1p1
 </code></pre>
 
+<p>note that command above is deprecated after luminous version, use commands below instead</p>
+
+<pre><code class="language-shell">#ceph-deploy disk zap {osd-node} /dev/nvme1n1
+#ceph-deploy osd create --data /dev/nvme0n1 {osd-node}
+#ceph-deploy osd create --data /dev/nvme1n1 {osd-node}
+#ceph-deploy osd create --data /dev/nvme2n1 {osd-node}
+#ceph-deploy mgr create {primary mon node} {backup node/osd node}
+</code></pre>
+
 <p>分发key</p>
 
 <pre><code class="language-shell">#ceph-deploy admin dcg-bj-02 ceph-bj-monitor-01 ceph-bj-osd-01 ceph-bj-osd-02
@@ -337,7 +346,7 @@ osd crush chooseleaf type = 1
 <h2 id="检查ceph状态">检查Ceph状态</h2>
 
 <pre><code class="language-shell"># ceph health（health ok就是安装成功了）
-# ceph -w
+# ceph -w (info may be bit different per version)
 
     cluster 44eb667d-b061-4ef0-900b-6a173559d702
 
@@ -378,8 +387,8 @@ ID WEIGHT  TYPE NAME              UP/DOWN REWEIGHT PRIMARY-AFFINITY
 
 <h3 id="osd节点">osd节点</h3>
 
-<pre><code class="language-shell">#sudo rm -rf –one-file-system – /var/lib/ceph
-#sudo rm -rf –one-file-system – /etc/ceph/
+<pre><code class="language-shell">#sudo rm -rf -one-file-system - /var/lib/ceph
+#sudo rm -rf -one-file-system - /etc/ceph/
 #rm -rf ./my_ceph
 </code></pre>
 
@@ -426,7 +435,7 @@ ID WEIGHT TYPE NAME UP/DOWN REWEIGHT PRIMARY-AFFINITY
 
 <h2 id="基本的rbd操作">基本的RBD操作</h2>
 
-<pre><code class="language-shell"># rbd create test_image –size 10240
+<pre><code class="language-shell"># rbd create test_image -size 10240
 # rbd list
 test_image
 </code></pre>
