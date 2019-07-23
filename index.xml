@@ -209,5 +209,14 @@
       <description>virtio virtio作为一种半虚拟化（para-virtualization）的标准框架，统一了虚机中不同设备的实现标准，为未来新设备的扩展提供了</description>
     </item>
     
+    <item>
+      <title>公有云浅析</title>
+      <link>https://www.cloudnotes.cc/post/pub-comp/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/post/pub-comp/</guid>
+      <description>公有云服务对比 计算资源横向对比 AWS/Azure/GCP/Bluemix AWS/Azure/AliCloud 网络资源横向对比 存储资源横向对比 数据库横向对比 管理监控横向对比 安全认证鉴权横向对比 阿里云本地化服务梳理</description>
+    </item>
+    
   </channel>
 </rss>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Public cloud on </title>
+    <link>https://www.cloudnotes.cc/tags/public-cloud/</link>
+    <description>Recent content in Public cloud on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    
+	<atom:link href="https://www.cloudnotes.cc/tags/public-cloud/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>公有云浅析</title>
+      <link>https://www.cloudnotes.cc/post/pub-comp/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/post/pub-comp/</guid>
+      <description>公有云服务对比 计算资源横向对比 AWS/Azure/GCP/Bluemix AWS/Azure/AliCloud 网络资源横向对比 存储资源横向对比 数据库横向对比 管理监控横向对比 安全认证鉴权横向对比 阿里云本地化服务梳理</description>
+    </item>
+    
+  </channel>
+</rss>
