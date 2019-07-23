@@ -232,11 +232,6 @@
   </url>
   
   <url>
-    <loc>https://www.cloudnotes.cc/tags/public-cloud/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>https://www.cloudnotes.cc/tags/redis/</loc>
     <lastmod>2019-02-21T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -252,14 +247,6 @@
     <loc>https://www.cloudnotes.cc/tags/virtio/</loc>
     <lastmod>2019-03-12T00:00:00+00:00</lastmod>
     <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.cloudnotes.cc/post/pub-comp-new/</loc>
-  </url>
-  
-  <url>
-    <loc>https://www.cloudnotes.cc/post/pub-comp/</loc>
   </url>
   
 </urlset>
