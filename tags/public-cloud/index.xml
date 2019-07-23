@@ -12,6 +12,15 @@
     
     <item>
       <title>公有云浅析</title>
+      <link>https://www.cloudnotes.cc/post/pub-comp-new/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/post/pub-comp-new/</guid>
+      <description>公有云服务对比 计算资源横向对比 AWS/Azure/GCP/Bluemix AWS/Azure/AliCloud 网络资源横向对比 存储资源横向对比 数据库横向对比 管理监控横向对比 安全认证鉴权横向对比 阿里云本地化服务梳理</description>
+    </item>
+    
+    <item>
+      <title>公有云浅析</title>
       <link>https://www.cloudnotes.cc/post/pub-comp/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
