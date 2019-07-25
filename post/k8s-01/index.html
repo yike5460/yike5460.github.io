@@ -224,6 +224,12 @@
 <li><a href="#job">Job</a></li>
 <li><a href="#replicaset">ReplicaSet</a></li>
 <li><a href="#statefulset">StatefulSet</a></li>
+<li><a href="#service">Service</a>
+<ul>
+<li><a href="#kube-proxy-mode">kube-proxy mode</a></li>
+<li><a href="#service-discovery">service discovery</a></li>
+<li><a href="#service-publish">service publish</a></li>
+</ul></li>
 </ul></li>
 <li><a href="#key-takeaway-for-various-controller">key takeaway for various controller</a></li>
 <li><a href="#reference">reference</a></li>
@@ -530,6 +536,38 @@ spec:
         requests:
           storage: 1Gi
 </code></pre>
+
+<h2 id="service">Service</h2>
+
+<p>refer to <a href="https://kubernetes.io/docs/concepts/services-networking/service/" title="https://kubernetes.io/docs/concepts/services-networking/service/">https://kubernetes.io/docs/concepts/services-networking/service/</a></p>
+
+<h3 id="kube-proxy-mode">kube-proxy mode</h3>
+
+<ul>
+<li>user space proxy, For each Service it opens a port (randomly chosen) on the local node. Any connections to this “proxy port” is proxied to one of the Service’s backend Pods (as reported via Endpoints). kube-proxy installs iptables rules which capture traffic to the Service’s clusterIP (which is virtual) and port. The rules redirect that traffic to the proxy port which proxies the backend Pod.</li>
+<li>iptables proxy mode, For each Service it opens a port (randomly chosen) on the local node. Any connections to this “proxy port” is proxied to one of the Service’s backend Pods (as reported via Endpoints). traffic is handled by Linux netfilter without the need to switch between userspace and the kernel space.</li>
+<li>IPVS proxy mode, similar with iptables proxy mode, such model calls netlink interface to create IPVS rules accordingly and synchronizes IPVS rules with Kubernetes Services and Endpoints periodically. This control loop ensures that IPVS status matches the desired state. When accessing a Service, IPVS directs traffic to one of the backend Pods.</li>
+</ul>
+
+<h3 id="service-discovery">service discovery</h3>
+
+<ul>
+<li>Environment variables, When a Pod is run on a Node, the kubelet adds a set of environment variables for each active Service</li>
+<li>DNS, adds on like CoreDNS, a flexible, extensible DNS server which can be installed as the in-cluster DNS for pods</li>
+</ul>
+
+<h3 id="service-publish">service publish</h3>
+
+<ul>
+<li>ClusterIP: Exposes the Service on a cluster-internal IP. Choosing this value makes the Service only reachable from within the cluster. This is the default ServiceType.</li>
+<li>NodePort: Exposes the Service on each Node’s IP at a static port (the NodePort). A ClusterIP Service, to which the NodePort Service routes, is automatically created. You’ll be able to contact the NodePort Service, from outside the cluster, by requesting <NodeIP>:<NodePort>.</li>
+<li>LoadBalancer: Exposes the Service externally using a cloud provider’s load balancer. NodePort and ClusterIP Services, to which the external load balancer routes, are automatically created.</li>
+<li>ExternalName: Maps the Service to the contents of the externalName field (e.g. foo.bar.example.com), by returning a CNAME record with its value. No proxying of any kind is set up.
+note you can also use Ingress to expose your Service. Ingress is not a Service type, but it acts as the entry point for your cluster. It lets you consolidate your routing rules into a single resource as it can expose multiple services under the same IP address
+```yaml</li>
+</ul>
+
+<p>```</p>
 
 <h1 id="key-takeaway-for-various-controller">key takeaway for various controller</h1>
 
