@@ -537,9 +537,9 @@ spec:
 <li><p>A Deployment controller provides declarative updates for Pods and ReplicaSets.
 You describe a desired state in a Deployment, and the Deployment controller changes the actual state to the desired state at a controlled rate. You can define Deployments to create new ReplicaSets, or to remove existing Deployments and adopt all their resources with new Deployments.</p></li>
 
-<li><p>when you roll back to an earlier revision, only the Deployment’s Pod template part is rolled back.</p></li>
+<li><p>When you roll back to an earlier revision, only the Deployment’s Pod template part is rolled back.</p></li>
 
-<li><p>any changes into the PodTemplateSpec of the paused Deployment will not trigger new rollouts as long as it is paused</p></li>
+<li><p>Any changes into the PodTemplateSpec of the paused Deployment will not trigger new rollouts as long as it is paused</p></li>
 
 <li><p>A ReplicaSet ensures that a specified number of pod replicas are running at any given time. However, a Deployment is a higher-level concept that manages ReplicaSets and provides declarative updates to Pods along with a lot of other useful features. Therefore, we recommend using Deployments instead of directly using ReplicaSets, unless you require custom update orchestration or don’t require updates at all.
 This actually means that you may never need to manipulate ReplicaSet objects: use a Deployment instead, and define your application in the spec section</p></li>
@@ -550,12 +550,12 @@ This actually means that you may never need to manipulate ReplicaSet objects: us
 
 <li><p>Like a Deployment, a StatefulSet manages Pods that are based on an identical container spec. Unlike a Deployment, a StatefulSet maintains a sticky identity for each of their Pods. These pods are created from the same spec, but are not interchangeable: each has a persistent identifier that it maintains across any rescheduling.</p></li>
 
-<li><p>Deployment, RS are both stateless scheduler while StatefulSet provide ordered persistence across Pod (re)scheduling.</p></li>
+<li><p>Deployment, StatefulSet are both stateless scheduler while StatefulSet provide ordered persistence across Pod (re)scheduling.</p></li>
 </ul>
 
 <h1 id="reference">reference</h1>
 
-<p><a href="https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/" title="https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/">https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/</a></p>
+<p><a href="https://kubernetes.io/docs/concepts/workloads/controllers/" title="https://kubernetes.io/docs/concepts/workloads/controllers/">https://kubernetes.io/docs/concepts/workloads/controllers/</a></p>
 
 
                 
