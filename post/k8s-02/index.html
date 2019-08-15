@@ -263,8 +263,9 @@ or making dashboard service can be access by other nodes rather than localhost i
 # kubectl proxy --address='0.0.0.0' --port=8001 --accept-hosts='^*$' &amp;
 </code></pre>
 
-<p>then you can login to web browser with <a href="http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/">http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/</a> or http://<node ip>:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/.
-and if you change to NodePort, login with https://<node ip>:<port> (port 30155 in my case)
+<p>then you can login to web browser with <a href="http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/">http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/</a> or http://[node ip]:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/</p>
+
+<p>and if you change to NodePort, login with https://[node ip]:<a href="port 30155 in my case">port</a>
 <img src="/media/k8s-02-04.png" alt="check port" title="check port" /></p>
 
 <h2 id="create-kubeconfig-file-for-logging-optional-if-you-skip-in-logging-ui">create kubeconfig file for logging (optional if you &lsquo;skip&rsquo; in logging UI)</h2>
