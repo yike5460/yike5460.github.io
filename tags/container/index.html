@@ -183,17 +183,10 @@
             K8S tutorial EP2
         </h2>
 	
-        <h3 class="post-subtitle">
-            dashboard, efk etc.
-        </h3>
-	
         <div class="post-content-preview">
 	
-            basic service with official template # kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml  check status, note that ClusterIP is used and dashboard service can only be accessed by proxy
-# kubectl --namespace=kube-system get service kubernetes-dashboard  if you prefer to access dashborad by https://:, then edit service and change type: ClusterIP to type: NodePort
-# kubectl --namespace=kube-system edit service kubernetes-dashboard  make sure service and pod are running properly
-add admin priviledge # cat dashboard-admin.
-       
+            dashboard, efk etc.
+        
         </div>
     </a>
     <p class="post-meta">
