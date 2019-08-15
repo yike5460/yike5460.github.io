@@ -15,9 +15,9 @@
     
 
     
-    <meta name="title" content="五分钟笔记-《混合云白皮书》" />
-    <meta property="og:title" content="五分钟笔记-《混合云白皮书》" />
-    <meta property="twitter:title" content="五分钟笔记-《混合云白皮书》" />
+    <meta name="title" content="K8S tutorial EP2" />
+    <meta property="og:title" content="K8S tutorial EP2" />
+    <meta property="twitter:title" content="K8S tutorial EP2" />
     
 
     
@@ -34,9 +34,9 @@
     <meta name="keyword"  content="cloud computing, distributed system, container, lazy shell tools">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>五分钟笔记-《混合云白皮书》-Aaron&#39;s Notes</title>
+    <title>K8S tutorial EP2-Aaron&#39;s Notes</title>
 
-    <link rel="canonical" href="/post/notes-about-hybrid-whitepaper/">
+    <link rel="canonical" href="/post/k8s-02/">
 
     <link rel="stylesheet" href="/css/iDisqus.min.css"/>
 	
@@ -160,16 +160,24 @@
                 <div class="post-heading">
                     <div class="tags">
                         
+                        <a class="tag" href="/tags/container" title="container">
+                            container
+                        </a>
+                        
+                        <a class="tag" href="/tags/k8s" title="k8s">
+                            k8s
+                        </a>
+                        
                     </div>
-                    <h1>五分钟笔记-《混合云白皮书》</h1>
-                    <h2 class="subheading"></h2>
+                    <h1>K8S tutorial EP2</h1>
+                    <h2 class="subheading">dashboard, efk etc.</h2>
                     <span class="meta">
 			Posted by 
 			
-		            
+			         Aaron
 			 
 			on 
-			Saturday, April 27, 2019
+			Thursday, August 15, 2019
                         
                     </span>
                 </div>
@@ -195,40 +203,84 @@
                 <header>
                     <h2>TOC</h2>
                 </header>
+                <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#basic-service-with-official-template">basic service with official template</a></li>
+<li><a href="#add-admin-priviledge">add admin priviledge</a></li>
+<li><a href="#login-with-proxy-or-not">login with proxy or not</a></li>
+<li><a href="#create-kubeconfig-file-for-logging-optional-if-you-skip-in-logging-ui">create kubeconfig file for logging (optional if you &lsquo;skip&rsquo; in logging UI)</a></li>
+</ul></li>
+</ul>
+</nav>
                 
                 
-                <p>原白皮书链接：<a href="https://www.zstack.io/templets/default/pdf/wp.pdf" title="https://www.zstack.io/templets/default/pdf/wp.pdf">https://www.zstack.io/templets/default/pdf/wp.pdf</a></p>
 
-<p>混合云定义：云与传统IT资源的整合，目前的主流表现形式为公有云+私有云，相对于公有云和私有云有自己的商用平台（AWS）或者开源项目（OpenStack），混合云更像是一种业务部署，迁移，管理的方式，通过VPN/专线将拉通公有云和私有云资源，继承了公有云的资源可伸缩和私有云的安全性。</p>
+<h2 id="basic-service-with-official-template">basic service with official template</h2>
 
-<p>混合云发展：混合云的发展依赖于公有云和私有云在技术架构，商业模式上的成熟。其中公有云的迅速发展依赖于网络环境的更新换代，技术方案的成熟，行业标准的制定推出，市场上消费的主要客户来源于大量中小型企业推出的互联网应用，比如O2O，B2B/B2C等等。私有云的发展可以参见中国信息通信研究院的2018《中国私有云发展调查报告》，其主要目标在于提升IT运行效率，降低IT运营成本，应用在于企业内部管理系统和办公系统运维始终是私有云展开的痛点，同时安全领域始终是私有云未来重点。</p>
+<pre><code class="language-shell"># kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml
+</code></pre>
 
-<blockquote>
-<p>MarketsandMarkets 预测，到 2021 年，混合云的支出将年均增长 22.5%，达到近 920 亿美元
-云计算开源产业联盟
-2017 年中国私有云市场规模达到 426.8 亿元，相比 2016 年增长 23.8%。预计 2018-2021 年中国私有云市场仍将保持稳定增长
-<strong>中国信息通信研究院</strong></p>
-</blockquote>
+<p>check status, note that ClusterIP is used and dashboard service can only be accessed by proxy</p>
 
-<p>可以看出公有云的发展速度和市场占比都是排在私有云和混合云前列，相对私有云，混合云的体量更大，而且发展速度更快（私有云的体量基本在2016，2017年维持不变）</p>
+<pre><code class="language-shell"># kubectl --namespace=kube-system get service kubernetes-dashboard
+</code></pre>
 
-<p>混合云的优势：公有云无法很好适应企业的IT合规政策，私有云仅仅将原有物理设备虚拟化后进行统一管理，做到了资源的局部最优，但在大的业务场景下无法做到资源的scale in/out，限制了成本的进一步降低。同时在针对内部DevOps方面，混合云的部署方式为企业的新业务上云和原有业务迁移提供了一种过渡的方案。</p>
+<p>if you prefer to access dashborad by https://<node ip>:<port>, then edit service and change type: ClusterIP to type: NodePort</p>
 
-<p>混合云的商用产品目前提供的功能大同小异，核心都在于将公有云和私有云在IaaS上拉通，举例如下：
-- AWS（Snowball EDGE，Greengrass）
-- 阿里云，其中Cloudlink作为专线网络提供
-- 华为FusionBridge，个人理解本质是架设在公有云和私有元的上一层管理层，或者类似glue layer来接收用户的需求并转换成对应下层云平台的api调用，比如OpenStack API+AWS API。更多参见<a href="https://e.huawei.com/cn/cloud-computing/fusionbridge">https://e.huawei.com/cn/cloud-computing/fusionbridge</a>
-- 腾讯云的黑石系列，注意到其物理服务器全系采用Intel的skylake或e5系列</p>
+<pre><code class="language-shell"># kubectl --namespace=kube-system edit service kubernetes-dashboard
+</code></pre>
 
-<p>混合云的特性：需要拥有统一管理界面，实现多云平台，异构资源的整合，提供良好的服务编排和运维监控，让用户无需感知资源的底层实现而专注在上层的业务开发；白皮书中提出的高密度高效率（多核）和超融合架构，个人认为并非混合云的特性或者优势。多核的需求需要考虑到实际的应用，类似于公有云中的计算性实例，对于计算密集型或实时性要求较高的场景比如AI，自动驾驶，生命科学等，需要多核来实现任务的多并发，配合类似mapreduce的软件充分发挥出其效能，但不能简单对应多核就是高密度高效率，甚至划分成混合云的典型特性。</p>
+<p>make sure service and pod are running properly</p>
 
-<p>混合云的关键实现：加密IP网络（IPSec）或者专线，要实现多云平台的融合，首先要实现公有云和私有云两者网络的打通，之前提到的各个主流厂商都有自己的方案，但都依赖当前的运营商网络。白皮书中提到以来云网融合，但具体概念和实施细节并未作出说明，个人理解当前不论是走IP网的VPN还是走专线，都能较好的覆盖不同用户的需求，所提出的不足在当前的应用场景下看并没有实质的瓶颈，随着网络运营商的硬件设施升级，相应带来的带宽，时延，成本的优势会承接上新应用的更高要求。</p>
+<h2 id="add-admin-priviledge">add admin priviledge</h2>
 
-<p>混合云的发展趋势（直接引用）：</p>
+<pre><code class="language-shell"># cat dashboard-admin.yaml
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: kubernetes-dashboard
+  labels:
+    k8s-app: kubernetes-dashboard
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: kubernetes-dashboard
+  namespace: kube-system
+# kubectl apply -f dashboard-admin.yaml
+</code></pre>
 
-<p>混合云的发展趋势是进一步屏蔽底层物理细节和实现细节，减少用户的试错成本，帮助用户关注基于跨云的业务实现而不是关注如何部署一个跨云服务，从而真正将私有云的定制能力和公有云的共享及生态能力有机融合
-&gt; 混合云的发展趋势是进一步屏蔽底层物理细节和实现细节，减少用户的试错成本，帮助用户关注基于跨云的业务实现而不是关注如何部署一个跨云服务，从而真正将私有云的定制能力和公有云的共享及生态能力有机融合
-<strong>云计算开源产业联盟云计算开源产业联盟</strong></p>
+<h2 id="login-with-proxy-or-not">login with proxy or not</h2>
+
+<p>if you using default template(ClusterIP), then you should launch proxy before login to dashboard</p>
+
+<pre><code class="language-shell"># kubectl proxy
+or making dashboard service can be access by other nodes rather than localhost itself
+# kubectl proxy --address='0.0.0.0' --port=8001 --accept-hosts='^*$' &amp;
+</code></pre>
+
+<p>then you can login to web browser with <a href="http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/">http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/</a> or http://<node ip>:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/.
+and if you change to NodePort, login with https://<node ip>:<port> (port 30155 in my case)
+<img src="/media/k8s-02-04.png" alt="check port" title="check port" /></p>
+
+<h2 id="create-kubeconfig-file-for-logging-optional-if-you-skip-in-logging-ui">create kubeconfig file for logging (optional if you &lsquo;skip&rsquo; in logging UI)</h2>
+
+<pre><code class="language-shell"># kubectl get secret -n kube-system
+# kubectl describe secret kubernetes-dashboard --namespace=kube-system
+</code></pre>
+
+<p>find token in last line and append to ~/.kube/config, like below
+<img src="/media/k8s-02-01.png" alt="token" title="token" />
+<img src="/media/k8s-02-02.png" alt="token append in config" title="token append in config" /></p>
+
+<p>then attach such file as kubeconfig in the login page as follows
+<img src="/media/k8s-02-03.png" alt="login" title="login" /></p>
+
+<p>or paste the token directly in &lsquo;token&rsquo; option</p>
 
 
                 
@@ -237,15 +289,10 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/post/cloud-computing/" data-toggle="tooltip" data-placement="top" title="五分钟见解-云计算">&larr;
+                        <a href="/post/k8s-01/" data-toggle="tooltip" data-placement="top" title="K8S tutorial EP1">&larr;
                             Previous Post</a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/post/about-balance/" data-toggle="tooltip" data-placement="top" title="平衡">Next
-                            Post &rarr;</a>
-                    </li>
                     
                 </ul>
 

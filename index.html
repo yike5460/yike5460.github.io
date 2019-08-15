@@ -179,6 +179,31 @@
             
 
 <div class="post-preview">
+    <a href="https://www.cloudnotes.cc/post/k8s-02/">
+        <h2 class="post-title">
+            K8S tutorial EP2
+        </h2>
+	
+        <h3 class="post-subtitle">
+            dashboard, efk etc.
+        </h3>
+	
+        <div class="post-content-preview">
+	
+            basic service with official template # kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml  check status, note that ClusterIP is used and dashboard service can only be accessed by proxy
+# kubectl --namespace=kube-system get service kubernetes-dashboard  if you prefer to access dashborad by https://:, then edit service and change type: ClusterIP to type: NodePort
+# kubectl --namespace=kube-system edit service kubernetes-dashboard  make sure service and pod are running properly
+add admin priviledge # cat dashboard-admin.
+       
+        </div>
+    </a>
+    <p class="post-meta">
+    Posted by      Aaron Thursday, August 15, 2019
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="https://www.cloudnotes.cc/post/k8s-01/">
         <h2 class="post-title">
             K8S tutorial EP1
@@ -250,24 +275,6 @@
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="https://www.cloudnotes.cc/post/cloud-computing-v2/">
-        <h2 class="post-title">
-            五分钟见解-云计算续
-        </h2>
-	
-        <div class="post-content-preview">
-	
-            云计算为什么出现 云计算概念的提出早在2005年由IBM，Google和亚马逊提出，真正成为焦点进入我们视线的应该是最近五年时间，任何技术的繁
-       
-        </div>
-    </a>
-    <p class="post-meta">
-    Posted by      Aaron Friday, May 17, 2019
-    </p>
-</div>
-<hr>
-
 
             
 
@@ -311,6 +318,10 @@
                 
             
                 
+                    <a href="/tags/container" title="container">
+                        container
+                    </a>
+                
             
                 
                     <a href="/tags/hands-on" title="hands-on">
@@ -322,6 +333,10 @@
             
                 
             
+                
+                    <a href="/tags/k8s" title="k8s">
+                        k8s
+                    </a>
                 
             
                 

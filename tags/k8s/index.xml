@@ -6,10 +6,22 @@
     <description>Recent content in K8s on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 17 Jul 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 15 Aug 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://www.cloudnotes.cc/tags/k8s/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>K8S tutorial EP2</title>
+      <link>https://www.cloudnotes.cc/post/k8s-02/</link>
+      <pubDate>Thu, 15 Aug 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/post/k8s-02/</guid>
+      <description>basic service with official template # kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml  check status, note that ClusterIP is used and dashboard service can only be accessed by proxy
+# kubectl --namespace=kube-system get service kubernetes-dashboard  if you prefer to access dashborad by https://:, then edit service and change type: ClusterIP to type: NodePort
+# kubectl --namespace=kube-system edit service kubernetes-dashboard  make sure service and pod are running properly
+add admin priviledge # cat dashboard-admin.</description>
+    </item>
     
     <item>
       <title>K8S tutorial EP1</title>

@@ -178,6 +178,31 @@
             
 
 <div class="post-preview">
+    <a href="https://www.cloudnotes.cc/post/k8s-02/">
+        <h2 class="post-title">
+            K8S tutorial EP2
+        </h2>
+	
+        <h3 class="post-subtitle">
+            dashboard, efk etc.
+        </h3>
+	
+        <div class="post-content-preview">
+	
+            basic service with official template # kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml  check status, note that ClusterIP is used and dashboard service can only be accessed by proxy
+# kubectl --namespace=kube-system get service kubernetes-dashboard  if you prefer to access dashborad by https://:, then edit service and change type: ClusterIP to type: NodePort
+# kubectl --namespace=kube-system edit service kubernetes-dashboard  make sure service and pod are running properly
+add admin priviledge # cat dashboard-admin.
+       
+        </div>
+    </a>
+    <p class="post-meta">
+    Posted by      Aaron Thursday, August 15, 2019
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="https://www.cloudnotes.cc/post/k8s-01/">
         <h2 class="post-title">
             K8S tutorial EP1
@@ -229,6 +254,10 @@
                 
             
                 
+                    <a href="/tags/container" title="container">
+                        container
+                    </a>
+                
             
                 
                     <a href="/tags/hands-on" title="hands-on">
@@ -240,6 +269,10 @@
             
                 
             
+                
+                    <a href="/tags/k8s" title="k8s">
+                        k8s
+                    </a>
                 
             
                 
