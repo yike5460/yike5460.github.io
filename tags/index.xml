@@ -138,11 +138,29 @@
     </item>
     
     <item>
+      <title>Question</title>
+      <link>https://www.cloudnotes.cc/tags/question/</link>
+      <pubDate>Thu, 22 Aug 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/tags/question/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Redis</title>
       <link>https://www.cloudnotes.cc/tags/redis/</link>
       <pubDate>Thu, 21 Feb 2019 00:00:00 +0000</pubDate>
       
       <guid>https://www.cloudnotes.cc/tags/redis/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Summary</title>
+      <link>https://www.cloudnotes.cc/tags/summary/</link>
+      <pubDate>Thu, 22 Aug 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/tags/summary/</guid>
       <description></description>
     </item>
     

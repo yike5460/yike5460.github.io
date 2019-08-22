@@ -15,15 +15,15 @@
     
 
     
-    <meta name="title" content="五分钟见解-云计算" />
-    <meta property="og:title" content="五分钟见解-云计算" />
-    <meta property="twitter:title" content="五分钟见解-云计算" />
+    <meta name="title" content="Q &amp; A list" />
+    <meta property="og:title" content="Q &amp; A list" />
+    <meta property="twitter:title" content="Q &amp; A list" />
     
 
     
-    <meta name="description" content="人到中年，容易忘事，做点笔记方便以后查阅">
-    <meta property="og:description" content="人到中年，容易忘事，做点笔记方便以后查阅" />
-    <meta property="twitter:description" content="人到中年，容易忘事，做点笔记方便以后查阅" />
+    <meta name="description" content="问题少年的自白">
+    <meta property="og:description" content="问题少年的自白" />
+    <meta property="twitter:description" content="问题少年的自白" />
     
 
     
@@ -34,9 +34,9 @@
     <meta name="keyword"  content="cloud computing, distributed system, container, lazy shell tools">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>五分钟见解-云计算-Aaron&#39;s Notes</title>
+    <title>Q &amp; A list-Aaron&#39;s Notes</title>
 
-    <link rel="canonical" href="/post/cloud-computing/">
+    <link rel="canonical" href="/post/qa/">
 
     <link rel="stylesheet" href="/css/iDisqus.min.css"/>
 	
@@ -160,16 +160,24 @@
                 <div class="post-heading">
                     <div class="tags">
                         
+                        <a class="tag" href="/tags/question" title="question">
+                            question
+                        </a>
+                        
+                        <a class="tag" href="/tags/summary" title="summary">
+                            summary
+                        </a>
+                        
                     </div>
-                    <h1>五分钟见解-云计算</h1>
+                    <h1>Q &amp; A list</h1>
                     <h2 class="subheading"></h2>
                     <span class="meta">
 			Posted by 
 			
-		            
+			         Aaron
 			 
 			on 
-			Saturday, April 27, 2019
+			Thursday, August 22, 2019
                         
                     </span>
                 </div>
@@ -195,18 +203,29 @@
                 <header>
                     <h2>TOC</h2>
                 </header>
+                <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#什么是互联网思维">什么是互联网思维</a></li>
+<li><a href="#saas的中国市场现状">SaaS的中国市场现状</a></li>
+<li><a href="#cloud-native-service-mesh-微服务的关系和区别">cloud native，service mesh，微服务的关系和区别</a></li>
+<li><a href="#未来云计算的发展方向-业务增长点">未来云计算的发展方向，业务增长点</a></li>
+</ul></li>
+</ul>
+</nav>
                 
                 
-                <p>云计算已经不是什么新鲜事物，最早追溯到2005年由Google，IBM，亚马逊分别基于自己的商务模式提出了云计算的概念，现在业界也有各种的针对自身行业和业务倾向的定义，个人理解，云计算的本质在于：1. 对于个人用户，提供随时随地可获取的访问信息，处理信息和分发信息的能力；2. 对于企业用户，提供概念上容量无限，可伸缩，可管理，可消费的计算，存储，网络资源。</p>
 
-<p>云计算之所以能够在概念提出的十几年后的今天，作为web2.0后继的新一轮技术浪潮，很大程度在于底层网络基础设施在带宽，速度，时延等方面的更新换代（路由系统方面，从08年的10G，到12年的40G/100G，到如今的400G，移动终端方面，从2G-3G-4G一直到如今持续火热的5G），行业标准的提出，演进和商用（如ETSI的NFV）。为上游IT厂商业务发展的创新性，部署的灵活性，落地的可行性（成本，性能，消费需求）提供了巨大的想象空间。</p>
+<h2 id="什么是互联网思维">什么是互联网思维</h2>
 
-<p>云计算涉及的核心技术包括资源管理，存储，安全等方面，其中资源的管理我们熟悉的就是资源通过Hypervisor的虚拟化，或者说是整体服务器资源的‘池化’（Borg，RSD都是这方面的代表），用户消费的不再是一个个独立的物理主机服务器，而是将CPU，内存，磁盘，带宽等所有资源看作一个整体，通过Console/SDK/API进行消费；存储在云的环境下指的主要是分布式存储系统，通过将网络互联的物理服务器，对外作为一个整体提供数据（非结构化/结构化/半结构化）的存储服务，较早提出的比如Google的分布式文件系统GFS，分布式表格系统Bigtable，都是这方面的代表；安全方面包括了用户的认证鉴权管理，基础设施的安全策略，物理隔离，数据的分类，加解密，传输，恢复等众多技术方面的考量，也是当今用户或企业数据上云最为重要的考虑因素之一。</p>
+<h2 id="saas的中国市场现状">SaaS的中国市场现状</h2>
 
-<p>云计算的兴起对通信和IT产业的影响：
-1. 客户端软件（操作系统）和硬件（PC）的作用弱化，由于业务软件的上云，最极端的未来用户只需要一台配置浏览器可以上网的白盒就可以完成绝大部分的个人和企业需求；
-2. 硬件厂商（包括芯片厂商，内存厂商，磁盘厂商）业务重心从客户端迁移到数据中心的服务器端。这个比较好理解，个人和企业手中的终端简化或者减少了，另外对云上业务的性能要求提高了，自然导致对应硬件制造上的业务和技术重点会迁移过来；
-3. 基于公有云平台或者说SaaS/PaaS的上层业务应用将会进一步发展，可以期望（或者说已成现实）在将来AWS，Azure，阿里云等公有云已经成为类似微软操作系统的一个角色，为众多下游业务提供商提供最为基础的资源平台，进而垄断整个产业的生态链。这个重合了2019阿里云峰会上的一个表态：“我们希望行业的解决方案、实施、复制，交给我们的合作伙伴去做。阿里云只做最擅长的部分——基于技术的创新和突破。”</p>
+<h2 id="cloud-native-service-mesh-微服务的关系和区别">cloud native，service mesh，微服务的关系和区别</h2>
+
+<h2 id="未来云计算的发展方向-业务增长点">未来云计算的发展方向，业务增长点</h2>
+
+<p>~</p>
 
 
                 
@@ -215,15 +234,10 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/post/tech-arch-of-cosp-and-it/" data-toggle="tooltip" data-placement="top" title="五分钟见解-运营商和IT公司的技术栈">&larr;
+                        <a href="/post/k8s-02/" data-toggle="tooltip" data-placement="top" title="K8S tutorial EP2">&larr;
                             Previous Post</a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/post/notes-about-hybrid-whitepaper/" data-toggle="tooltip" data-placement="top" title="五分钟笔记-《混合云白皮书》">Next
-                            Post &rarr;</a>
-                    </li>
                     
                 </ul>
 
