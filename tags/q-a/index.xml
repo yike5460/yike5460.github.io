@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Q-a on </title>
+    <link>https://www.cloudnotes.cc/tags/q-a/</link>
+    <description>Recent content in Q-a on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    
+	<atom:link href="https://www.cloudnotes.cc/tags/q-a/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Q &amp; A list</title>
+      <link>https://www.cloudnotes.cc/post/q-a/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/post/q-a/</guid>
+      <description>什么是互联网思维 SaaS的中国市场现状 cloud native，service mesh，微服务的关系和区别 未来云计算的发展方向，业务增长点</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -221,5 +221,14 @@ add admin priviledge # cat dashboard-admin.</description>
       <description>virtio virtio作为一种半虚拟化（para-virtualization）的标准框架，统一了虚机中不同设备的实现标准，为未来新设备的扩展提供了</description>
     </item>
     
+    <item>
+      <title>Q &amp; A list</title>
+      <link>https://www.cloudnotes.cc/post/q-a/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.cloudnotes.cc/post/q-a/</guid>
+      <description>什么是互联网思维 SaaS的中国市场现状 cloud native，service mesh，微服务的关系和区别 未来云计算的发展方向，业务增长点</description>
+    </item>
+    
   </channel>
 </rss>
